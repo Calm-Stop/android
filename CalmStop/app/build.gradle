@@ -11,6 +11,18 @@ android {
         versionCode 1
         versionName "0.1"
     }
+
+    productFlavors {
+
+        officer {
+            applicationId "com.policestrategies.calm_stop.officer"
+        }
+
+        citizen {
+
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
