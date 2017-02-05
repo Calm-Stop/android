@@ -1,4 +1,4 @@
-package com.policestrategies.calm_stop.officer;
+package com.policestrategies.calm_stop.citizen;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.view.View;
 import com.policestrategies.calm_stop.R;
 
 /**
- * Allows the officer to log in or create an account.
+ * Allows the user to log in or create an account.
  */
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -17,23 +17,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        findViewById(R.id.button).setOnClickListener(this);
 
+        findViewById(R.id.button_signup).setOnClickListener(this);
     }
-
 
     @Override
     public void onClick(View v) {
 
         switch(v.getId()) {
 
-            case R.id.button:
+            case R.id.button_signup:
                 Intent i = new Intent(getBaseContext(), SignupActivity.class);
                 startActivity(i);
                 break;
 
         }
     }
-
 
 }

@@ -23,6 +23,19 @@ android {
         }
     }
 
+//    sourceSets {
+//
+//        officer {
+//            manifest.srcFile 'officer/AndroidManifest.xml'
+//        }
+//
+//        citizen {
+//            manifest.srcFile 'citizen/AndroidManifest.xml'
+//        }
+//
+//    }
+
+
     buildTypes {
         release {
             minifyEnabled false
