@@ -1,11 +1,14 @@
 package com.policestrategies.calm_stop.citizen;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,7 +29,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // References to the EditText (text fields) in activity_login.xml
     private EditText mEmailField;
     private EditText mPasswordField;
+
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseAuth mAuth;
+
+    private ProgressDialog mProgressDialog;
+    private Button mLoginButton;
+    private TextView mSignupButton;
+
     /**
      * onCreate is called immediately following the creation of an Activity.
      * Activity is opened -> onCreate is called.
@@ -43,8 +53,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mEmailField = (EditText) findViewById(R.id.input_email);
         mPasswordField = (EditText) findViewById(R.id.input_password);
 
-        findViewById(R.id.button_login).setOnClickListener(this);
-        findViewById(R.id.button_signup).setOnClickListener(this);
+        mLoginButton = (Button)findViewById(R.id.button_login);
+        mSignupButton = (EditText)findViewById(R.id.button_signup);
+
+        mLoginButton.setOnClickListener(this);
+        mSignupButton.setOnClickListener(this);
     }
 
     /**
