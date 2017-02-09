@@ -134,13 +134,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Log.w(TAG, "signInWithEmail:failed", task.getException());
                             Toast.makeText(LoginActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Validation failed.", Toast.LENGTH_SHORT).show();
+                        }
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                         }
 
                     }
                 });
         // [END sign_in_with_email]
 
-        Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
 
     }
 
