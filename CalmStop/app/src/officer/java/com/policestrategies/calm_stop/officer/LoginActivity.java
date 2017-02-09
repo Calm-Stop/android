@@ -2,12 +2,19 @@ package com.policestrategies.calm_stop.officer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.policestrategies.calm_stop.R;
 
 /**
@@ -19,6 +26,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // References to the EditText (text fields) in activity_login.xml
     private EditText mEmailField;
     private EditText mPasswordField;
+
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
+    private static final String TAG = "Login";
 
     /**
      * onCreate is called immediately following the creation of an Activity.
@@ -38,7 +50,46 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
+
+        // START initialize_auth so you can track when user signs in and signs out
+        mAuth = FirebaseAuth.getInstance();
+        // END initialize_auth
+
+        // START auth_state_listener
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
+        // END auth_state_listener
+
     }
+
+    // START on_start_add_listener
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    // Remove FirebaseAuth instance on onStop()
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+
 
     /**
      * Any onClicks that we register will be handled in here
@@ -49,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch(v.getId()) {
 
             case R.id.button_login: // The login button was pressed - let's run the login function
-                login();
+                login(mEmailField.getText().toString(), mPasswordField.getText().toString());
                 break;
 
             case R.id.button_signup: // Signup was pressed, begin the SignupActivity
@@ -63,17 +114,40 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     /**
      * Begins the login process. Validates the input and - if input is valid - attempts to log in.
      */
-    private void login() {
-
+    private void login(String email, String password) {
+        Log.d(TAG, "signIn" + email);
         if (!validateInput()) {
             return;
         }
 
-        // Now we need to attempt to log in - we'll add code for this later (once Firebase is integrated)
+        // [START sign_in_with_email]
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
 
-        Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInWithEmail:failed", task.getException());
+                            Toast.makeText(LoginActivity.this, R.string.auth_failed,
+                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Validation failed.", Toast.LENGTH_SHORT).show();
+                        }
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+        // [END sign_in_with_email]
+
 
     }
+
+
 
     /**
      * Validates the given email and password. Does not connect to server, simply ensures that
