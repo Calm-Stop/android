@@ -1,0 +1,37 @@
+{
+  "project_info": {
+    "project_number": "450429717120",
+    "firebase_url": "https://calm-stop.firebaseio.com",
+    "project_id": "calm-stop",
+    "storage_bucket": "calm-stop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450429717120:android:0d931afc1e8866ce",
+        "android_client_info": {
+          "package_name": "com.policestrategies.calm_stop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDE_tapztbwpjJ_xTa6J_pB9N0aP2Pgxvc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
