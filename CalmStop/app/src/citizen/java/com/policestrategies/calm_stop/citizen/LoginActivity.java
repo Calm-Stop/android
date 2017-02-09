@@ -3,6 +3,7 @@ package com.policestrategies.calm_stop.citizen;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
 import android.view.View;
@@ -11,6 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -88,13 +92,46 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (!validateInput()) {
             return;
         }
-
-        // Now we need to attempt to log in - we'll add code for this later (once Firebase is integrated)
-
         Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
 
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage("Logging in");
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.show();
+
+        authenticateLogin();
+
+    }
+    private void successfulLogin() {
+        mProgressDialog.dismiss();
+
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 
+    private void unsuccessfulLogin() {
+        mProgressDialog.dismiss();
+        Toast.makeText(LoginActivity.this, "Invalid login", Toast.LENGTH_SHORT).show();
+    }
+
+    private void authenticateLogin() {
+        String emailInput = mEmailField.getText().toString();
+        String passwordInput = mPasswordField.getText().toString();
+
+
+        mAuth.signInWithEmailAndPassword(emailInput, passwordInput)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            successfulLogin();
+                        } else {
+                            unsuccessfulLogin();
+                        }
+                    }
+                });
+    }
     /**
      * Validates the given email and password. Does not connect to server, simply ensures that
      * the user typed in an email address and a password.
