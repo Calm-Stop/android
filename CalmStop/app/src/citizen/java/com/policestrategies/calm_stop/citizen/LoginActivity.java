@@ -33,8 +33,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseAuth mAuth;
 
     private ProgressDialog mProgressDialog;
-    private Button mLoginButton;
-    private TextView mSignupButton;
 
     /**
      * onCreate is called immediately following the creation of an Activity.
@@ -52,11 +50,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mEmailField = (EditText) findViewById(R.id.input_email);
         mPasswordField = (EditText) findViewById(R.id.input_password);
 
-        mLoginButton = (Button)findViewById(R.id.button_login);
-        mSignupButton = (EditText)findViewById(R.id.button_signup);
-
-        mLoginButton.setOnClickListener(this);
-        mSignupButton.setOnClickListener(this);
+        findViewById(R.id.button_login).setOnClickListener(this);
+        findViewById(R.id.button_signup).setOnClickListener(this);
     }
 
     /**
