@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Calm Stop</string>
     <string name="app_name_officer">Calm Stop Officer</string>
+    <string name="auth_failed">Authentication failed</string>
 </resources>
