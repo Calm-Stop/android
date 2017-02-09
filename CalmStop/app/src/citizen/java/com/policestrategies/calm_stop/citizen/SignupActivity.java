@@ -1,12 +1,24 @@
 package com.policestrategies.calm_stop.citizen;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import com.policestrategies.calm_stop.R;
 
@@ -20,6 +32,11 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private EditText mEmailField;
     private EditText mPasswordField;
 
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +45,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         mNameField = (EditText) findViewById(R.id.input_name);
         mEmailField = (EditText) findViewById(R.id.input_email);
         mPasswordField = (EditText) findViewById(R.id.input_password);
+
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
@@ -59,14 +79,52 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
      * an account.
      */
     private void signup() {
+        final String name = mNameField.getText().toString();
+        final String email = mEmailField.getText().toString();
+        final String password = mPasswordField.getText().toString();
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage("Signing up");
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.show();
 
         if (!validateInput()) {
             return;
         }
+        Toast.makeText(SignupActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            successfulSignup();
+                            writeNewUser(email, task.getResult().getUser().getUid());
+                        } else {
+                            unsuccessfulSignup();
+                        }
+                    }
+                });
+
 
         // Now we need to attempt to signup - we'll add code for this later (once Firebase is integrated)
 
-        Toast.makeText(SignupActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void successfulSignup() {
+        mProgressDialog.dismiss();
+
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.putExtra("USERNAME", mEmailField.getText().toString());
+        startActivity(intent);
+        finish();
+    }
+
+    private void unsuccessfulSignup() {
+        mProgressDialog.dismiss();
+
+        Toast.makeText(SignupActivity.this, "Error creating account", Toast.LENGTH_SHORT).show();
     }
 
     private boolean validateInput() {
@@ -103,5 +161,12 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         return true;
 
     }
+
+    private void writeNewUser(String email, String uuid) {
+        System.out.println("Writing user: " + email + " " + uuid);
+        mDatabase.child("users").child(uuid).child("name").setValue(mNameField.getText().toString());
+    }
+
+
 
 } // end class SignupActivity
