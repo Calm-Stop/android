@@ -8,13 +8,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import com.policestrategies.calm_stop.R;
 
 /**
@@ -26,7 +19,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // References to the EditText (text fields) in activity_login.xml
     private EditText mEmailField;
     private EditText mPasswordField;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+
     /**
      * onCreate is called immediately following the creation of an Activity.
      * Activity is opened -> onCreate is called.
