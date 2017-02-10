@@ -17,7 +17,7 @@ import com.policestrategies.calm_stop.R;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     // References to the EditText (text fields) in activity_login.xml
-    private EditText mEmailField;
+    private static EditText mEmailField;
     private EditText mPasswordField;
 
     /**
@@ -66,12 +66,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void login() {
 
         if (!validateInput()) {
+            Toast.makeText(LoginActivity.this, "Validation Failed", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        //You've successfully logined in -> go to homepage
+        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        startActivity(i);
+
+
         // Now we need to attempt to log in - we'll add code for this later (once Firebase is integrated)
 
-        Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, "Validation Success!", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -101,6 +107,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         return true;
+    }
+
+    public static String getEmail(){
+        String emailInput = mEmailField.getText().toString();
+
+        //parse. Don't care about email after @....
+        String delimiter = "@";
+        //split into 2 after @
+        String[] token = emailInput.split(delimiter);
+        //first part
+        emailInput = token[0];
+        return emailInput;
     }
 
 } // end class LoginActivity

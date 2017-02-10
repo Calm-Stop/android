@@ -17,7 +17,7 @@ import com.policestrategies.calm_stop.R;
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText mNameField;
-    private EditText mEmailField;
+    private static EditText mEmailField;
     private EditText mPasswordField;
 
     @Override
@@ -65,6 +65,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         // Now we need to attempt to signup - we'll add code for this later (once Firebase is integrated)
+        //you signed up, CONGRATS
+        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        startActivity(i);
 
         Toast.makeText(SignupActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
     }
@@ -104,4 +107,15 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    public static String getEmail(){
+        String emailInput = mEmailField.getText().toString();
+
+        //parse. Don't care about email after @....
+        String delimiter = "@";
+        //split into 2 after @
+        String[] token = emailInput.split(delimiter);
+        //first part
+        emailInput = token[0];
+        return emailInput;
+    }
 } // end class SignupActivity
