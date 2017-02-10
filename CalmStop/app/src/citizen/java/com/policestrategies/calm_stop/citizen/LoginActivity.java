@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void successfulLogin() {
         mProgressDialog.dismiss();
 
-        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
     }
