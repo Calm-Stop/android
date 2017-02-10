@@ -20,6 +20,9 @@
         <activity
             android:name=".citizen.SignupActivity" />
 
+        <activity
+            android:name=".citizen.HomepageActivity" />
+
     </application>
 
 </manifest>

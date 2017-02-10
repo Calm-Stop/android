@@ -26,7 +26,7 @@ import static android.R.attr.password;
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText mNameField;
-    private EditText mEmailField;
+    private static EditText mEmailField;
     private EditText mPasswordField;
 
     private static final String TAG = "Signup";
@@ -121,6 +121,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         // Now we need to attempt to signup - we'll add code for this later (once Firebase is integrated)
+        //you signed up, CONGRATS
+        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        startActivity(i);
 
         // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -180,4 +183,15 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    public static String getEmail(){
+        String emailInput = mEmailField.getText().toString();
+
+        //parse. Don't care about email after @....
+        String delimiter = "@";
+        //split into 2 after @
+        String[] token = emailInput.split(delimiter);
+        //first part
+        emailInput = token[0];
+        return emailInput;
+    }
 } // end class SignupActivity

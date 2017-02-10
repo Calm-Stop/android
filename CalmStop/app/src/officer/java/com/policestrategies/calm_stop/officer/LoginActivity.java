@@ -24,7 +24,7 @@ import com.policestrategies.calm_stop.R;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     // References to the EditText (text fields) in activity_login.xml
-    private EditText mEmailField;
+    private static EditText mEmailField;
     private EditText mPasswordField;
 
     private FirebaseAuth mAuth;
@@ -117,6 +117,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void login(String email, String password) {
         Log.d(TAG, "signIn" + email);
         if (!validateInput()) {
+            Toast.makeText(LoginActivity.this, "Validation Failed", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -175,6 +176,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         return true;
+    }
+
+    public static String getEmail(){
+        String emailInput = mEmailField.getText().toString();
+
+        //parse. Don't care about email after @....
+        String delimiter = "@";
+        //split into 2 after @
+        String[] token = emailInput.split(delimiter);
+        //first part
+        emailInput = token[0];
+        return emailInput;
     }
 
 } // end class LoginActivity
