@@ -163,7 +163,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
 
         if (emailInput.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
-            mEmailField.setError("Please enter a valid email address");
+            mEmailField.setError("Enter a valid email address.");
             mEmailField.requestFocus();
             return false;
         } else {
