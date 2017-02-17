@@ -96,7 +96,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
 
         switch(v.getId()) {
-
             case R.id.button_login:
                 Intent i = new Intent(getBaseContext(), LoginActivity.class);
                 startActivity(i);
@@ -121,10 +120,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         // Now we need to attempt to signup - we'll add code for this later (once Firebase is integrated)
-        //you signed up, CONGRATS
-        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
-        startActivity(i);
-
         // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -144,6 +139,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 });
         // [END create_user_with_email]
+        //you signed up, CONGRATS
+        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        startActivity(i);
 
         Toast.makeText(SignupActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
     }

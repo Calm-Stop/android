@@ -47,6 +47,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
     private void logout() {
         //You want to logout -> login page
+        FirebaseAuth.getInstance().signOut();
         Intent i = new Intent(getBaseContext(), LoginActivity.class);
         startActivity(i);
 

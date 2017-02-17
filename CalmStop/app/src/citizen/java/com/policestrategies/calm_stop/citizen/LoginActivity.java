@@ -149,7 +149,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
         // [END sign_in_with_email]
-
+        //you signed up, CONGRATS
+        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        startActivity(i);
 
     }
 
