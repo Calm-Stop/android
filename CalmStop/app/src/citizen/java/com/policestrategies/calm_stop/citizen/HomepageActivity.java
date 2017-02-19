@@ -25,7 +25,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
         findViewById(R.id.button_logout).setOnClickListener(this);
 
-        Toast.makeText(HomepageActivity.this, "Welcome!", Toast.LENGTH_LONG).show();
+        //Toast.makeText(HomepageActivity.this, "Welcome!", Toast.LENGTH_LONG).show();
     }
 
     @Override
