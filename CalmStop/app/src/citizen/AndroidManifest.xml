@@ -23,6 +23,21 @@
         <activity
             android:name=".citizen.HomepageActivity" />
 
+        <activity
+            android:name=".citizen.ProfileActivity" />
+
+        <activity
+            android:name=".citizen.PreviousStopsActivity" />
+
+        <activity
+            android:name=".citizen.HelpActivity" />
+
+        <activity
+            android:name=".citizen.AboutUsActivity" />
+
+        <activity
+            android:name=".citizen.SettingsActivity" />
+
     </application>
 
 </manifest>

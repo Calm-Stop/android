@@ -18,9 +18,8 @@ import com.policestrategies.calm_stop.R;
  */
 
 public class HomepageActivity extends AppCompatActivity implements View.OnClickListener {
+
     //welcome citizen
-    //private String user = LoginActivity.getEmail();
-    //private String uuser = SignupActivity.getEmail();
     private ListView mDrawerList;
     private ArrayAdapter<String> mAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -38,38 +37,50 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         mDrawerList = (ListView)findViewById(R.id.navList);
         mActivityTitle = getTitle().toString();
 
-        mMenuList = new String[]{"Profile", "Previous Stops", "Help", "About Us", "Settings"};
+        mMenuList = new String[]{"Profile", "Previous Stops", "Help", "About Us", "Settings", "Logout"};
 
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mMenuList);
-        mDrawerList.setAdapter(mAdapter);
-
-        //addDrawerItems();
+        addDrawerItems();
         setupDrawer();
-
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(HomepageActivity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        findViewById(R.id.button_logout).setOnClickListener(this);
+        //findViewById(R.id.button_logout).setOnClickListener(this);
 
         //Toast.makeText(HomepageActivity.this, "Welcome!", Toast.LENGTH_LONG).show();
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "Profile", "Previous Stops", "Help", "About Us", "Settings" };
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mMenuList);
         mDrawerList.setAdapter(mAdapter);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(HomepageActivity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
+                switch(position){
+                    case 0:
+                        profile();
+                        break;
+                    case 1:
+                        previousStops();
+                        break;
+                    case 2:
+                        help();
+                        break;
+                    case 3:
+                        aboutUs();
+                        break;
+                    case 4:
+                        settings();
+                        break;
+                    case 5:
+                        logout();
+                        break;
+
+
+                }
+
+                //Toast.makeText(HomepageActivity.this, "position= " + position, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -103,22 +114,45 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
 
         switch(v.getId()) {
-
+/*
             case R.id.button_logout: // The login button was pressed - let's run the login function
                 logout();
                 break;
-
+*/
         }
     }
 
 
+    private void profile() {
+        Intent i = new Intent(getBaseContext(), ProfileActivity.class);
+        startActivity(i);
+
+    }
+
+    private void previousStops() {
+        Intent i = new Intent(getBaseContext(), PreviousStopsActivity.class);
+        startActivity(i);
+
+    }
+    private void help() {
+        Intent i = new Intent(getBaseContext(), HelpActivity.class);
+        startActivity(i);
+
+    }
+    private void aboutUs() {
+        Intent i = new Intent(getBaseContext(), AboutUsActivity.class);
+        startActivity(i);
+
+    }
+    private void settings() {
+        Intent i = new Intent(getBaseContext(), SettingsActivity.class);
+        startActivity(i);
+
+    }
     private void logout() {
         //You want to logout -> login page
         Intent i = new Intent(getBaseContext(), LoginActivity.class);
         startActivity(i);
 
-        // Now we need to attempt to log in - we'll add code for this later (once Firebase is integrated)
-
-        //Toast.makeText(LoginActivity.this, "Logging Out", Toast.LENGTH_SHORT).show();
     }
 }
