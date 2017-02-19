@@ -3,7 +3,12 @@ package com.policestrategies.calm_stop.citizen;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,16 +21,82 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     //welcome citizen
     //private String user = LoginActivity.getEmail();
     //private String uuser = SignupActivity.getEmail();
+    private ListView mDrawerList;
+    private ArrayAdapter<String> mAdapter;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+    private String mActivityTitle;
+
+    private String[] mMenuList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView)findViewById(R.id.navList);
+        mActivityTitle = getTitle().toString();
+
+        mMenuList = new String[]{"Profile", "Previous Stops", "Help", "About Us", "Settings"};
+
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mMenuList);
+        mDrawerList.setAdapter(mAdapter);
+
+        //addDrawerItems();
+        setupDrawer();
+
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(HomepageActivity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         findViewById(R.id.button_logout).setOnClickListener(this);
 
         //Toast.makeText(HomepageActivity.this, "Welcome!", Toast.LENGTH_LONG).show();
+    }
+
+    private void addDrawerItems() {
+        String[] osArray = { "Profile", "Previous Stops", "Help", "About Us", "Settings" };
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
+        mDrawerList.setAdapter(mAdapter);
+
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(HomepageActivity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void setupDrawer() {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.string.drawer_open, R.string.drawer_close) {
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle("Navigation!");
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle(mActivityTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
     }
 
     @Override
