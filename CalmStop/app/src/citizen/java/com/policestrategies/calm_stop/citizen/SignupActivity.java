@@ -142,10 +142,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             startActivity(i);
                             finish();
                         }
-                        else {
-                            Intent i = new Intent(getBaseContext(), HomepageActivity.class);
-                            startActivity(i);
-                        }
 
                     }
                 });
