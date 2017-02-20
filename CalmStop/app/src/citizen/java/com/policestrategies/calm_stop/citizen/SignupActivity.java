@@ -24,7 +24,6 @@ import com.policestrategies.calm_stop.R;
  */
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
-
     private EditText mNameField;
     private static EditText  mEmailField;
     private EditText mPasswordField;
