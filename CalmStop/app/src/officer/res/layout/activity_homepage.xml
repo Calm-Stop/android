@@ -29,6 +29,14 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="115dp"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Manage Beacon"
+            android:id="@+id/button_manage_beacon"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
     </RelativeLayout>
 
     <ListView
