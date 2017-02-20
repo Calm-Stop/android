@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.policestrategies.calm_stop.R;
 /**
  * Created by mariavizcaino on 2/9/17.
@@ -151,6 +152,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     }
     private void logout() {
         //You want to logout -> login page
+        FirebaseAuth.getInstance().signOut();
         Intent i = new Intent(getBaseContext(), LoginActivity.class);
         startActivity(i);
 
