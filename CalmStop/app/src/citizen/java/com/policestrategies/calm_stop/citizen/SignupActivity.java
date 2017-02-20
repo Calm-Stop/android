@@ -142,10 +142,16 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             startActivity(i);
                             finish();
                         }
+                        else {
+                            Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+                            startActivity(i);
+                        }
 
                     }
                 });
         // [END create_user_with_email]
+        //you signed up, CONGRATS
+
 
     }
 

@@ -147,6 +147,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                         if (task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
                         }
@@ -155,6 +156,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
         // [END sign_in_with_email]
         //you signed up, CONGRATS
+
 
     }
 
