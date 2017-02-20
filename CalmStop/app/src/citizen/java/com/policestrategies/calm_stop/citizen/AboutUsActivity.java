@@ -17,8 +17,6 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aboutus);
-
-        Toast.makeText(AboutUsActivity.this, "WELCOME TO THE ABOUT US PAGE", Toast.LENGTH_LONG).show();
     }
 
     @Override
