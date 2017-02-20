@@ -47,7 +47,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
         //findViewById(R.id.button_logout).setOnClickListener(this);
 
-        //Toast.makeText(HomepageActivity.this, "Welcome!", Toast.LENGTH_LONG).show();
+        Toast.makeText(HomepageActivity.this, "Swipe Right for Menu", Toast.LENGTH_LONG).show();
     }
 
     private void addDrawerItems() {
@@ -76,8 +76,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                     case 5:
                         logout();
                         break;
-
-
+                    
                 }
 
                 //Toast.makeText(HomepageActivity.this, "position= " + position, Toast.LENGTH_SHORT).show();
@@ -126,6 +125,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     private void profile() {
         Intent i = new Intent(getBaseContext(), ProfileActivity.class);
         startActivity(i);
+        finish();
 
     }
 

@@ -7,6 +7,8 @@ import android.view.View;
 
 import android.widget.Toast;
 
+import com.policestrategies.calm_stop.R;
+
 
 /**
  * Created by mariavizcaino on 2/19/17.
@@ -16,8 +18,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Intent i = getIntent();
-        Toast.makeText(ProfileActivity.this, "WELCOME TO YOUR PROFILE", Toast.LENGTH_LONG).show();
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile);
+
+        Toast.makeText(ProfileActivity.this, "WELCOME TO THE PROFILE PAGE", Toast.LENGTH_LONG).show();
     }
 
     @Override
