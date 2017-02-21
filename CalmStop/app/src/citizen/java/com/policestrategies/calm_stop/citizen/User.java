@@ -1,7 +1,7 @@
 package com.policestrategies.calm_stop.citizen;
 
 public class User {
-    String name, username, password;
+    String name, username, address, dlicenseNum, race, gender, password;
     int age;
 
     public User(String name, int age, String username, String password) {

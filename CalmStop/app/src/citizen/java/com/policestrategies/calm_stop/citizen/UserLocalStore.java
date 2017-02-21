@@ -29,7 +29,7 @@ public class UserLocalStore {
 
 // retrieves User user that is currently logged in (assumed data already stored in SP DB)
     public User getLoggedInUser() {
-        String name = userLocalDatabase.getString("name", "");
+        String name = userLocalDatabase.getString("name", "Citizen") == "" ? "Citizen" : userLocalDatabase.getString("name", "Citizen");
         String username = userLocalDatabase.getString("username", "");
         String password = userLocalDatabase.getString("password", "");
         int age = userLocalDatabase.getInt("age", -1);
