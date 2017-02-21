@@ -1,6 +1,7 @@
 package com.policestrategies.calm_stop.officer;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +18,7 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
+import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor;
 
 import java.util.Collection;
 
@@ -66,8 +68,9 @@ public class BeaconActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.beacon_debug:
                 System.out.println("Beacon debug has been pressed!");
                 try {
-                    mBeaconManager.startMonitoringBeaconsInRegion(new Region("uniqueId", null, null, null));
-                    mBeaconManager.startRangingBeaconsInRegion(new Region("uniqueId", null,null,null));
+                    Region region = new Region("all-beacons-region", null, null, null);
+                    mBeaconManager.startMonitoringBeaconsInRegion(region);
+                    mBeaconManager.startRangingBeaconsInRegion(region);
                 } catch (RemoteException e) {
                     System.out.println("Caught remote exception E");
                 }
@@ -104,8 +107,29 @@ public class BeaconActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
                 if (collection.size() > 0) {
-                    String out = "The first beacon I see is about "+collection.iterator().next().getDistance()+" meters away.";
+                    Beacon beacon = collection.iterator().next();
+                    String out = "The first beacon I see is about " + collection.iterator().next().getDistance() + " meters away.";
                     System.out.println(out);
+                    if (beacon.getExtraDataFields().size() > 0) {
+                        long telemetryVersion = beacon.getExtraDataFields().get(0);
+                        long batteryMilliVolts = beacon.getExtraDataFields().get(1);
+                        long pduCount = beacon.getExtraDataFields().get(3);
+                        long uptime = beacon.getExtraDataFields().get(4);
+
+                        System.out.println("Also got this info: " + telemetryVersion + " " + batteryMilliVolts + " " + pduCount + " " + uptime);
+
+                    }
+                    if (beacon.getServiceUuid() == 0xfeaa && beacon.getBeaconTypeCode() == 0x10) {
+                        // This is a Eddystone-URL frame
+                        String url = UrlBeaconUrlCompressor.uncompress(beacon.getId1().toByteArray());
+                        System.out.println("Got the url! " + url);
+                    }
+                    // FIXME: Not exactly what we want, but good for demo
+                    if (beacon.getDistance() > 1 ) {
+                        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
                 }
             }
         });
