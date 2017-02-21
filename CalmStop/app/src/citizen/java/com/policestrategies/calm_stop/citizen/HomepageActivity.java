@@ -10,8 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.policestrategies.calm_stop.R;
 /**
  * Created by mariavizcaino on 2/9/17.
@@ -20,6 +22,8 @@ import com.policestrategies.calm_stop.R;
 public class HomepageActivity extends AppCompatActivity implements View.OnClickListener {
 
     //welcome citizen
+    private TextView mHomeText;
+    private UserLocalStore localStore;
     private ListView mDrawerList;
     private ArrayAdapter<String> mAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -32,6 +36,12 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+
+        localStore = new UserLocalStore(this);
+        mHomeText = (TextView) findViewById(R.id.AboutUsTitle);
+
+        User user = localStore.getLoggedInUser();
+        mHomeText.setText("Hello " + user.name + "!\n\nSwipe from Left to Right -> to see menu!");
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mDrawerList = (ListView)findViewById(R.id.navList);
@@ -151,6 +161,9 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     }
     private void logout() {
         //You want to logout -> login page
+        UserLocalStore localStore = new UserLocalStore(this);
+        localStore.clearUserData();
+        FirebaseAuth.getInstance().signOut();
         Intent i = new Intent(getBaseContext(), LoginActivity.class);
         startActivity(i);
 

@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import com.policestrategies.calm_stop.R;
 /**
  * Created by mariavizcaino on 2/9/17.
@@ -25,7 +27,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
-
 
         findViewById(R.id.button_logout).setOnClickListener(this);
 

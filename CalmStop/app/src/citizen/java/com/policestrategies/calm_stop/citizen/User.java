@@ -1,18 +1,19 @@
 package com.policestrategies.calm_stop.citizen;
 
 public class User {
-    String name, username, address, dlicenseNum, race, gender, password;
+    String email, password;
+    String licenseNum, name, phone, address, gender;
     int age;
 
-    public User(String name, int age, String username, String password) {
+    public User(final String name, final int age, final String email, final String password) {
         this.name = name;
         this.age = age;
-        this.username = username;
+        this.email = email;
         this.password = password;
     }
 
-    public User(String username, String password) {
-        this.username = username;
+    public User(final String email, final String password) {
+        this.email = email;
         this.password = password;
         this.name = "";
         this.age = -1;

@@ -4,6 +4,20 @@
 
     <string name="auth_failed">Authentication failed</string>
 
+    <string-array name = "Genders">
+        <item>Female</item>
+        <item>Male</item>
+    </string-array>
+
+    <string-array name = "Ethnicity">
+        <item>American Indian</item>
+        <item>Asian</item>
+        <item>African American</item>
+        <item>Hispanic</item>
+        <item>Pacific Islander</item>
+        <item>White</item>
+    </string-array>
+
     <string user="Hello Citizen, ">Calm Stop Citizen Greeting</string>
 
     <string name="drawer_open">Open navigation drawer</string>
