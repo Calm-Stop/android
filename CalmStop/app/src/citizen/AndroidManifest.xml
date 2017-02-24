@@ -27,7 +27,8 @@
             android:name=".citizen.HomepageActivity" />
 
         <activity
-            android:name=".citizen.ProfileActivity" />
+            android:name=".citizen.ProfileActivity"
+            android:windowSoftInputMode="stateHidden" />
 
         <activity
             android:name=".citizen.PreviousStopsActivity" />

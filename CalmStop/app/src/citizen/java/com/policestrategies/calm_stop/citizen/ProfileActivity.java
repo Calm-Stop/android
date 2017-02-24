@@ -106,7 +106,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private void setUpGenderSetter() {
 
         final ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Genders, android.R.layout.simple_spinner_dropdown_item);
+                R.array.Gender, android.R.layout.simple_spinner_dropdown_item);
 
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         genderSetter.setAdapter(genderAdapter);
@@ -116,12 +116,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position) {
                     case 0:
-                        //female
+                        //blank
                         gen = 0;
                         break;
                     case 1:
-                        //male
+                        //female
                         gen = 1;
+                        break;
+                    case 2:
+                        //male
+                        gen = 2;
                         break;
                 }
             }
@@ -144,28 +148,32 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position) {
                     case 0:
-                        //American indian
+                        //blank
                         eth = 0;
                         break;
                     case 1:
-                        //asian
+                        //American indian
                         eth = 1;
                         break;
                     case 2:
-                        //African american
+                        //asian
                         eth = 2;
                         break;
                     case 3:
-                        //hispanic
+                        //African american
                         eth = 3;
                         break;
                     case 4:
-                        //pacific islander
+                        //hispanic
                         eth = 4;
                         break;
                     case 5:
-                        //white
+                        //pacific islander
                         eth = 5;
+                        break;
+                    case 6:
+                        //white
+                        eth = 6;
                         break;
                 }
             }
@@ -184,6 +192,5 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         Intent i = new Intent(getBaseContext(), HomepageActivity.class);
         startActivity(i);
     }
-
 
 }
