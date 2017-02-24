@@ -49,6 +49,13 @@ public class BeaconActivity extends AppCompatActivity implements View.OnClickLis
         mBeaconManager.getBeaconParsers().add(new BeaconParser().
                 setBeaconLayout(BeaconParser.EDDYSTONE_URL_LAYOUT));
 
+        mBeaconManager.getBeaconParsers().add(new BeaconParser().
+                setBeaconLayout(BeaconParser.ALTBEACON_LAYOUT));
+
+        mBeaconManager.getBeaconParsers().add(new BeaconParser().
+                setBeaconLayout(BeaconParser.URI_BEACON_LAYOUT));
+
+
         mBeaconManager.bind(this);
         mBeaconManager.setDebug(true);
 
