@@ -1,5 +1,6 @@
 package com.policestrategies.calm_stop.citizen;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,10 @@ import android.widget.Spinner;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,6 +46,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private String PhoneNumber;
 
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     private static final String TAG = "Profile Edit";
@@ -65,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         setUpGenderSetter();
         setUpEthnicitySetter();
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // Name, email address, and profile photo Url
             Name = user.getDisplayName();
@@ -95,10 +101,33 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.savebutton:
                 //FIXME
                 //TODO
-                //WRITE TO FIREBASE
+
                 Name = mname.getText().toString();
                 Email = memail.getText().toString();
                 PhoneNumber = mphoneNum.getText().toString();
+
+                //WRITE TO FIREBASE
+                user.updateEmail(Email)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "User email address updated.");
+                                }else {
+                                    AuthCredential credential = EmailAuthProvider
+                                            .getCredential(user.getEmail(), );
+
+                                    user.reauthenticate(credential)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    Log.d(TAG, "User re-authenticated.");
+                                                }
+                                            });
+                                }
+                            }
+                        });
+                recreate();
                 break;
         }
     }
