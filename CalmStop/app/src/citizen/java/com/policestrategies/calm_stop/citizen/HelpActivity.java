@@ -1,5 +1,6 @@
 package com.policestrategies.calm_stop.citizen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,11 +19,22 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
 
-        Toast.makeText(HelpActivity.this, "WELCOME TO THE HELP PAGE", Toast.LENGTH_LONG).show();
+        findViewById(R.id.backbutton).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.backbutton:
+                toHomepage();
+                break;
 
+        }
+
+    }
+
+    private void toHomepage() {
+        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        startActivity(i);
     }
 }

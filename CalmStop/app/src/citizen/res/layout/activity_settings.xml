@@ -7,10 +7,28 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
+    <Button
+        android:text="Back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/backbutton"
+        android:background="@android:color/background_light"
+        android:fontFamily="monospace"
+        android:typeface="monospace"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textColor="@android:color/background_dark" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello Citizen this is the settings page!"
-        android:id="@+id/AboutUsTitle" />
+        android:id="@+id/AboutUsTitle"
+        android:layout_below="@+id/backbutton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="130dp" />
 
 </RelativeLayout>
