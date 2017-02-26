@@ -90,19 +90,22 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         if (user != null) {
             // Name, email address, and profile photo Url
             Name = user.getDisplayName();
+            Toast.makeText(ProfileActivity.this, "Name to display: " + Name , Toast.LENGTH_SHORT).show();
             Email = user.getEmail();
+            Toast.makeText(ProfileActivity.this, "Email to display: " + Email , Toast.LENGTH_SHORT).show();
             Photo = user.getPhotoUrl();
-            //String uid = user.getUid();
+            String photStr = Photo.toString();
+            Toast.makeText(ProfileActivity.this, "Photo to display: " + photStr , Toast.LENGTH_SHORT).show();
         }
 
         mname.setText(Name);
         memail.setText(Email);
 
-        //if(Photo == "" ){
-
-        //}else
-        mphoto.setImageURI(Photo);
-
+        if(Photo == null) {
+            //mphoto.setImageURI();
+        }else {
+            mphoto.setImageURI(Photo);
+        }
 
     }
 
@@ -128,7 +131,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 PhoneNumber = mphoneNum.getText().toString();
 
                 //WRITE TO FIREBASE
-                //updateName();
+                updateName();
                 updatePhoto();
                 //updatePhoneNumber();
                 updateEmail();
@@ -312,6 +315,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "User profile updated.");
+                        }
+                        else {
+                            Toast.makeText(ProfileActivity.this, "Error Updating Name", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
