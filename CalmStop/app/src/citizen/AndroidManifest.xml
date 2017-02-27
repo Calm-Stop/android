@@ -22,6 +22,8 @@
 
         <activity
             android:name=".citizen.SignupActivity" />
+        <activity
+            android:name=".citizen.DocumentsActivity" />
 
         <activity
             android:name=".citizen.HomepageActivity" />

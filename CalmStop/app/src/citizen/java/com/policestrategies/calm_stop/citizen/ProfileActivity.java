@@ -90,12 +90,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         if (user != null) {
             // Name, email address, and profile photo Url
             Name = user.getDisplayName();
-            Toast.makeText(ProfileActivity.this, "Name to display: " + Name , Toast.LENGTH_SHORT).show();
             Email = user.getEmail();
-            Toast.makeText(ProfileActivity.this, "Email to display: " + Email , Toast.LENGTH_SHORT).show();
             Photo = user.getPhotoUrl();
             String photStr = Photo.toString();
-            Toast.makeText(ProfileActivity.this, "Photo to display: " + photStr , Toast.LENGTH_SHORT).show();
         }
 
         mname.setText(Name);
@@ -353,7 +350,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void toDocuments() {
-        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        Intent i = new Intent(getBaseContext(), DocumentsActivity.class);
         startActivity(i);
     }
 
