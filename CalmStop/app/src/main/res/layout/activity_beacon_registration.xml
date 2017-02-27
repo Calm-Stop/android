@@ -42,7 +42,6 @@
                 android:id="@+id/text_cardview_namespace_id"
                 android:layout_toRightOf="@+id/beacon_icon"
                 android:layout_alignParentTop="true"
-                android:textSize="30sp"
                 />
 
             <TextView
@@ -53,11 +52,13 @@
                 android:layout_below="@+id/text_cardview_namespace_id"
                 />
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content" -->
-                <!--android:id="@+id/beacon_range"-->
-                <!--android:layout_alignRight=""/>-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_cardview_beacon_range"
+                android:layout_alignParentRight="true"
+                android:textSize="30sp"
+                />
 
 
 

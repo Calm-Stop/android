@@ -20,6 +20,7 @@ import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * Allows the officer to associate his UUID with a beacon.
@@ -79,7 +80,6 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
 
         System.out.println("Scanning for beacons!");
 
-
         // TODO: This should only look for our specific beacons
         Region region = new Region("all-beacons-region", null, null, null);
 
@@ -117,6 +117,10 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
                         final String namespace = "Namespace ID: " + namespaceId;
                         final String instance = "Instance ID: " + instanceId;
 
+                        // Obtain distance from beacon, round to 1 decimal point
+                        final String range = String.format(Locale.getDefault(), "%.1f",
+                                beacon.getDistance()) + "m";
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -124,6 +128,8 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
                                         .setText(namespace);
                                 ((TextView) findViewById(R.id.text_cardview_instance_id))
                                         .setText(instance);
+                                ((TextView) findViewById(R.id.text_cardview_beacon_range))
+                                        .setText(range);
 
                                 try {
                                     mBeaconManager.stopRangingBeaconsInRegion(region);
@@ -135,7 +141,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
 
                                 mBeaconCardView.setVisibility(View.VISIBLE);
                                 findViewById(R.id.button_scan_beacon_registration)
-                                        .setVisibility(View.INVISIBLE);
+                                        .setVisibility(View.GONE);
 
                             }
                         });
