@@ -41,6 +41,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // hide the titlebar
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_signup);
 
         mNameField = (EditText) findViewById(R.id.input_name);
