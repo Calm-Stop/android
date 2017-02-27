@@ -1,6 +1,5 @@
 package com.policestrategies.calm_stop.citizen;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,13 +22,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
-import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.ValueEventListener;
 
+
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.policestrategies.calm_stop.R;
 
 
@@ -48,8 +44,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private static final int chosenImage = 1;
 
-    private int gen;
-    private int eth;
+    private int gen = 0;
+    private int eth = 0;
 
     private String Name;
     private String Email;
@@ -59,9 +55,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private Uri Photo;
 
-    private FirebaseAuth mAuth;
     private FirebaseUser user;
-    private FirebaseAuth.AuthStateListener mAuthListener;
 
     private static final String TAG = "Profile Edit";
 
