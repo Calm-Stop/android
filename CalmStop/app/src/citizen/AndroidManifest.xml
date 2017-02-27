@@ -22,12 +22,15 @@
 
         <activity
             android:name=".citizen.SignupActivity" />
+        <activity
+            android:name=".citizen.DocumentsActivity" />
 
         <activity
             android:name=".citizen.HomepageActivity" />
 
         <activity
-            android:name=".citizen.ProfileActivity" />
+            android:name=".citizen.ProfileActivity"
+            android:windowSoftInputMode="stateHidden" />
 
         <activity
             android:name=".citizen.PreviousStopsActivity" />
@@ -45,5 +48,7 @@
             android:name=".citizen.SignupFormActivity" />
 
     </application>
+    
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
 </manifest>
