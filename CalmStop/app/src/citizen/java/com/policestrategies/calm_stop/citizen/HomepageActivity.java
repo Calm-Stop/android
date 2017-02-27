@@ -40,8 +40,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         localStore = new UserLocalStore(this);
         mHomeText = (TextView) findViewById(R.id.AboutUsTitle);
 
-        User user = localStore.getLoggedInUser();
-        mHomeText.setText("Hello " + user.name + "!\n\nSwipe from Left to Right -> to see menu!");
+        mHomeText.setText("Hello " + "Citizen" + "!\n\nSwipe from Left to Right -> to see menu!");
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mDrawerList = (ListView)findViewById(R.id.navList);

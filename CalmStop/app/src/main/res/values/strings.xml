@@ -18,6 +18,15 @@
         <item>White</item>
     </string-array>
 
+    <string-array name = "Language">
+        <item>English</item>
+        <item>Spanish</item>
+        <item>Mandarin Chinese</item>
+        <item>Vietnamese</item>
+        <item>French</item>
+        <item>Arabic</item>
+    </string-array>
+
     <string user="Hello Citizen, ">Calm Stop Citizen Greeting</string>
 
     <string name="drawer_open">Open navigation drawer</string>

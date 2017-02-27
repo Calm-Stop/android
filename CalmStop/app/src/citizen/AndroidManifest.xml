@@ -41,6 +41,9 @@
         <activity
             android:name=".citizen.SettingsActivity" />
 
+        <activity
+            android:name=".citizen.SignupFormActivity" />
+
     </application>
 
 </manifest>
