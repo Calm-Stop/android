@@ -2,38 +2,36 @@ package com.policestrategies.calm_stop.citizen;
 
 import android.app.Application;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import com.policestrategies.calm_stop.R;
 
-import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.Identifier;
-import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 
-import java.util.Random;
-
 /**
  * Provides the ability to monitor for beacons in the background.
+ * TODO: Enter battery saving mode if < 20%
  * @author Talal Abou Haiba
  */
 public class ProximityApplication extends Application implements BootstrapNotifier {
-    private RegionBootstrap regionBootstrap;
 
+    private RegionBootstrap mRegionBootstrap;
     private BeaconManager mBeaconManager;
 
     public void onCreate() {
         super.onCreate();
 
         Region region = new Region("all", null, null, null);
-        regionBootstrap = new RegionBootstrap(this, region);
+        mRegionBootstrap = new RegionBootstrap(this, region);
 
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
         mBeaconManager.getBeaconParsers().add(new BeaconParser().
@@ -51,6 +49,7 @@ public class ProximityApplication extends Application implements BootstrapNotifi
 
 
         try {
+            // TODO: Validate bluetooth functionality
             mBeaconManager.startRangingBeaconsInRegion(region);
         } catch (Exception e) { }
 
@@ -58,10 +57,13 @@ public class ProximityApplication extends Application implements BootstrapNotifi
 
     @Override
     public void didEnterRegion(Region arg0) {
-//        Intent intent = new Intent(this, MainActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        System.out.println("Entered region!");
+        System.out.println("Entered region: " + arg0.toString());
+
+        Intent intent = new Intent(this, BeaconDetectionActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent beaconDetectionIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
         Uri defaultSoundUri = RingtoneManager.
                 getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
@@ -70,6 +72,7 @@ public class ProximityApplication extends Application implements BootstrapNotifi
                         .setContentTitle("Calm Stop")
                         .setAutoCancel(true)
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                        .setContentIntent(beaconDetectionIntent)
                         .setSound(defaultSoundUri);
         NotificationManager notificationManager =
                 (NotificationManager) getApplicationContext().
@@ -77,6 +80,7 @@ public class ProximityApplication extends Application implements BootstrapNotifi
 
         String success = "Beacon detected";
         notificationBuilder.setContentText(success);
+
         // Generate random number for notification ID to avoid duplicates.
         int notifId = 456358;
 
@@ -92,12 +96,12 @@ public class ProximityApplication extends Application implements BootstrapNotifi
 
     @Override
     public void didDetermineStateForRegion(int state, Region region) {
-        System.out.println("Nah");
+        System.out.println("Did determine state for region with state: " + state);
     }
 
     @Override
     public void didExitRegion(Region arg0) {
-        System.out.println("NAHHHH");
+        System.out.println("Did exit region: " + arg0.toString());
     }
 
 }
