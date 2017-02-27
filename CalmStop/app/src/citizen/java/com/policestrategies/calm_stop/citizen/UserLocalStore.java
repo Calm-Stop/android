@@ -19,23 +19,28 @@ public class UserLocalStore {
     public void StoreUserData(User user) {
         SharedPreferences.Editor spEditor = userLocalDatabase.edit();
 
-        spEditor.putString("name", user.name);
         spEditor.putString("email", user.email);
         spEditor.putString("password", user.password);
-        spEditor.putInt("age", user.age);
+        spEditor.putString("licenseNum", user.licenseNum);
+        spEditor.putString("gender", user.gender);
+        spEditor.putString("ethnicity", user.ethnicity);
+        spEditor.putString("phone", user.phone);
+
         spEditor.commit();
 
     }
 
 // retrieves User user that is currently logged in (assumed data already stored in SP DB)
     public User getLoggedInUser() {
-        String name = userLocalDatabase.getString("name", "Citizen") == "" ? "Citizen" : userLocalDatabase.getString("name", "Citizen");
-        String username = userLocalDatabase.getString("username", "");
         String email = userLocalDatabase.getString("email", "");
         String password = userLocalDatabase.getString("password", "");
+        String name = userLocalDatabase.getString("name", "Citizen") == "" ? "Citizen" : userLocalDatabase.getString("name", "Citizen");
+        String licenseNum = userLocalDatabase.getString("licenseNum", "");
+        String gender = userLocalDatabase.getString("gender", "");
+        String phone = userLocalDatabase.getString("phone", "");
         int age = userLocalDatabase.getInt("age", -1);
 
-        User user = new User(name, age, email, password);
+        User user = new User(email, password);
         return user;
     }
 
