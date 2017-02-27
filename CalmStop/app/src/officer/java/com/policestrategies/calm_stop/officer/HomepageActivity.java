@@ -45,7 +45,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
             case R.id.button_manage_beacon:
                 System.out.println("Beacon button pressed");
-                Intent i = new Intent(getBaseContext(), BeaconActivity.class);
+                Intent i = new Intent(getBaseContext(), BeaconRegistrationActivity.class);
                 startActivity(i);
                 break;
 
