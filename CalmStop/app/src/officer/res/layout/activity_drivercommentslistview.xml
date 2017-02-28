@@ -6,7 +6,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:padding="10dip"
-    android:textSize="16dip"
+    android:textSize="20sp"
     android:fontFamily="sans-serif-thin"
     android:textColor="@color/comments_color"
     android:textAlignment="center">

@@ -34,7 +34,7 @@ import static com.policestrategies.calm_stop.R.id.Name;
 public class RatingActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    String[] comments_array = {"\"Officer was very friendly.\"","\"I felt unfairly treated by the officer.\"","\"Officer gave me unnecessarily long lecture on why tail lights are important.\""};
+    String[] comments_array = {"\"Officer was very friendly.\"","\"I felt unfairly treated by the officer.\"","\"Officer gave me unnecessarily long lecture on why tail lights are important.\"","\"The traffic stop was professionally conducted.\"","\"I don't think I should have been pulled over for going 7 over the speed limit.\""};
 
     RatingBar officerStarRating;
 
