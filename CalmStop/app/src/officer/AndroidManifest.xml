@@ -25,6 +25,8 @@
         <activity
             android:name=".officer.HomepageActivity" />
 
+        <activity
+            android:name=".officer.SignupFormActivity" />
 
     </application>
 
