@@ -13,6 +13,13 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
+        <EditText
+            android:id="@+id/input_department"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="Department Number" />
+
         <!--  fName Label -->
         <EditText
             android:id="@+id/input_firstname"
@@ -91,13 +98,6 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:hint="Preferred Language" />
-
-        <EditText
-            android:id="@+id/input_department"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Department Number" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
