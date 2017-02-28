@@ -1,11 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rating_intro"
+            android:text="Your current rating:"
+            android:fontFamily="sans-serif"
+            android:textAllCaps="false"
+            android:textSize="24sp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorPrimary" />
+
+        <TextView
+            android:text="5.00"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/star_rating_digits"
+            android:layout_below="@+id/rating_intro"
+            android:textAlignment="center"
+            android:textSize="66sp"
+            android:fontFamily="sans-serif-light"
+            android:paddingTop="10dp"
+            android:paddingBottom="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/RatingBar"
+            android:id="@+id/officerStarRatingBar"
+            android:layout_below="@+id/star_rating_digits"
+            android:numStars="5"
+            android:stepSize=".1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            style="@style/Widget.AppCompat.RatingBar.Indicator" />
+    </RelativeLayout>
+
+    <TextView
+        android:text="Driver's comments:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Comments_intro"
+        android:fontFamily="sans-serif"
+        android:textSize="24sp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/colorPrimary"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/rating_line"
+        android:id="@+id/rating_line"
+        android:adjustViewBounds="false"
+        android:cropToPadding="false" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/driver_comments"
+        android:divider="@drawable/comments_line"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello Citizen this is the help page!"
+        android:id="@+id/AboutUsTitle"
+        android:layout_below="@+id/backbutton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="198dp" />
 
     <Button
         android:text="Back"
@@ -21,14 +101,4 @@
         android:textSize="14sp"
         android:textColor="@android:color/background_dark" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello Citizen this is the help page!"
-        android:id="@+id/AboutUsTitle"
-        android:layout_below="@+id/backbutton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="198dp" />
-
-</RelativeLayout>
+</LinearLayout>

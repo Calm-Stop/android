@@ -30,6 +30,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
         findViewById(R.id.button_logout).setOnClickListener(this);
         findViewById(R.id.button_manage_beacon).setOnClickListener(this);
+        findViewById(R.id.button_ratings).setOnClickListener(this);
 
         Toast.makeText(HomepageActivity.this, "Welcome!", Toast.LENGTH_LONG).show();
     }
@@ -41,6 +42,12 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
             case R.id.button_logout: // The login button was pressed - let's run the login function
                 logout();
+                break;
+
+            case R.id.button_ratings: // Ratings button was pressed
+                System.out.println("Rating button pressed");
+                Intent h = new Intent(getBaseContext(), RatingActivity.class);
+                startActivity(h);
                 break;
 
             case R.id.button_manage_beacon:
