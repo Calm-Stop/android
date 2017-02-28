@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
 
 import org.altbeacon.beacon.Beacon;
@@ -32,6 +35,10 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
     private BeaconManager mBeaconManager;
     private CardView mBeaconCardView;
 
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +47,8 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         verifyBluetooth();
 
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
 
         mBeaconManager.getBeaconParsers().add(new BeaconParser().
                 setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
@@ -64,7 +73,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
                 break;
 
             case R.id.beacon_card_view:
-                System.out.println("Clicked beacon card view");
+                synchronize_beacon();
                 break;
         }
 
@@ -93,6 +102,20 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         }
 
     } // end scanForBeacons
+
+    private void synchronize_beacon() {
+
+        String[] beaconInstanceId = ((TextView) findViewById(R.id.text_cardview_instance_id))
+                .getText().toString().split(" ");
+
+        System.out.println(mDatabase.toString());
+        DatabaseReference officerDatabaseReference = mDatabase.child("beacons")
+                .child(beaconInstanceId[beaconInstanceId.length - 1]).child("officer").getRef();
+
+        officerDatabaseReference.child("department").setValue("14566");
+        officerDatabaseReference.child("uid").setValue(mAuth.getCurrentUser().getUid());
+        
+    }
 
     @Override
     public void onBeaconServiceConnect() {
