@@ -114,7 +114,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
 
         officerDatabaseReference.child("department").setValue("14566");
         officerDatabaseReference.child("uid").setValue(mAuth.getCurrentUser().getUid());
-        
+
     }
 
     @Override
