@@ -25,6 +25,15 @@
         <activity
             android:name=".officer.HomepageActivity" />
 
+        <activity
+            android:name=".officer.AccountActivity" />
+
+        <activity
+            android:name=".officer.RatingActivity" />
+
+        <activity
+            android:name=".officer.HistoryActivity" />
+
 
     </application>
 
