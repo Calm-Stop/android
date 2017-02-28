@@ -5,7 +5,7 @@ package com.policestrategies.calm_stop.citizen;
  */
 
 public class Citizen {
-    String email, license_number,
+    public String email, license_number,
             first_name, last_name, phone_number, address, gender, language, date_of_birth;
 
     public Citizen(String email, String password, String licenseNum, String firstname,

@@ -192,7 +192,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             Toast.makeText(SignupFormActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             String uuid = user.getUid();
-                            databaseRef.child("citizen").child(uuid).setValue(mUser);
+                            databaseRef.child("citizen").child(uuid).child("profile").setValue(mUser);
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
                             finish();

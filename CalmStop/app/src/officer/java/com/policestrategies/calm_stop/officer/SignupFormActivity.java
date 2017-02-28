@@ -179,17 +179,22 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             Toast.makeText(SignupFormActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             String uuid = user.getUid();
-                            //email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth
-                            databaseRef.child("Officer").child(uuid).child(department).child("email").setValue(email);
-                            databaseRef.child("Officer").child(uuid).child(department).child("firstname").setValue(firstname);
-                            databaseRef.child("Officer").child(uuid).child(department).child("lastname").setValue(lastname);
-                            databaseRef.child("Officer").child(uuid).child(department).child("password").setValue(password);
-                            databaseRef.child("Officer").child(uuid).child(department).child("licensenum").setValue(licensenum);
-                            databaseRef.child("Officer").child(uuid).child(department).child("phone").setValue(phone);
-                            databaseRef.child("Officer").child(uuid).child(department).child("address").setValue(address);
-                            databaseRef.child("Officer").child(uuid).child(department).child("gender").setValue(gender);
-                            databaseRef.child("Officer").child(uuid).child(department).child("language").setValue(language);
-                            databaseRef.child("Officer").child(uuid).child(department).child("dateofbirth").setValue(dateofbirth);
+
+                            // Set up department
+                            DatabaseReference officerDatabaseRef = databaseRef.child("officer")
+                                    .child(department).child(uuid).child("profile").getRef();
+
+                            officerDatabaseRef.child("email").setValue(email);
+
+                            officerDatabaseRef.child("email").setValue(email);
+                            officerDatabaseRef.child("first_name").setValue(firstname);
+                            officerDatabaseRef.child("last_name").setValue(lastname);
+                            officerDatabaseRef.child("license_number").setValue(licensenum);
+                            officerDatabaseRef.child("phone_number").setValue(phone);
+                            officerDatabaseRef.child("address").setValue(address);
+                            officerDatabaseRef.child("gender").setValue(gender);
+                            officerDatabaseRef.child("language").setValue(language);
+                            officerDatabaseRef.child("date_of_birth").setValue(dateofbirth);
 
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
