@@ -5,26 +5,24 @@ package com.policestrategies.calm_stop.citizen;
  */
 
 public class Citizen {
-    String email, password, licensenum,
-                firstname, lastname, phone, address, gender, language, dateofbirth;
+    String email, license_number,
+            first_name, last_name, phone_number, address, gender, language, date_of_birth;
 
     public Citizen(String email, String password, String licenseNum, String firstname,
                    String lastname, String phone, String address, String gender, String language,
                    String dateofbirth) {
         this.email = email;
-        this.password = password;
-        this.licensenum = licenseNum;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.phone = phone;
+        this.license_number = licenseNum;
+        this.first_name = firstname;
+        this.last_name = lastname;
+        this.phone_number = phone;
         this.address = address;
         this.gender = gender;
         this.language = language;
-        this.dateofbirth = dateofbirth;
+        this.date_of_birth = dateofbirth;
     }
 
     public Citizen(final String email, final String password) {
         this.email = email;
-        this.password = password;
     }
 }
