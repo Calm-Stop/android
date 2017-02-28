@@ -27,6 +27,7 @@
         <item>Vietnamese</item>
         <item>French</item>
         <item>Arabic</item>
+        <item>German</item>
     </string-array>
 
     <string user="Hello Citizen, ">Calm Stop Citizen Greeting</string>

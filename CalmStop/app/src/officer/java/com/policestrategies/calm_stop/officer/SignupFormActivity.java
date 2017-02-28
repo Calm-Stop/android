@@ -1,4 +1,4 @@
-package com.policestrategies.calm_stop.citizen;
+package com.policestrategies.calm_stop.officer;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,11 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,8 +28,6 @@ import java.util.regex.Pattern;
  */
 
 public class SignupFormActivity extends AppCompatActivity implements View.OnClickListener {
-    private Spinner genderSetter;
-    private Spinner langSetter;
 
     private EditText mFirstNameField;
     private EditText mLastNameField;
@@ -43,10 +38,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private EditText mPhone;
     private EditText mAddress;
     private EditText mGender;
-    private EditText mlanguage;
-
-    private int gen = 0;
-    private int lang = 0;
+    private EditText mLanguage;
+    private EditText mDepartment;
 
     private static final String TAG = "Signup";
 
@@ -68,12 +61,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signupform);
 
-        genderSetter = (Spinner) findViewById(R.id.genderSetter);
-        langSetter = (Spinner) findViewById(R.id.ethnicitySetter);
-
-        setUpGenderSetter();
-        setUpLangSetter();
-
         mEmailField = (EditText) findViewById(R.id.input_email);
         mPasswordField = (EditText) findViewById(R.id.input_password);
         mLicenseNum = (EditText) findViewById(R.id.input_licenseNum);
@@ -83,7 +70,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         mAddress = (EditText) findViewById(R.id.input_address);
         mGender = (EditText) findViewById(R.id.input_gender);
         mDateOfBirth = (EditText) findViewById(R.id.input_DateOfBirth);
-        mlanguage = (EditText) findViewById(R.id.input_language);
+        mLanguage = (EditText) findViewById(R.id.input_language);
+        mDepartment = (EditText) findViewById(R.id.input_department);
 
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
@@ -152,25 +140,24 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
      * an account.
      */
     private void signup() {
-        String email = mEmailField.getText().toString();
-        String password = mPasswordField.getText().toString();
-        String licensenum = mLicenseNum.getText().toString();
-        String firstname = mFirstNameField.getText().toString();
-        String lastname = mLastNameField.getText().toString();
-        String phone = mPhone.getText().toString();
-        String address = mAddress.getText().toString();
-        String gender = mGender.getText().toString();
-        String language = mlanguage.getText().toString();
-        String dateofbirth = mDateOfBirth.getText().toString();
-//        gender = genderSetter.getSelectedItem().toString();
-//        language = langSetter.getSelectedItem().toString();
+        final String email = mEmailField.getText().toString();
+        final String password = mPasswordField.getText().toString();
+        final String licensenum = mLicenseNum.getText().toString();
+        final String firstname = mFirstNameField.getText().toString();
+        final String lastname = mLastNameField.getText().toString();
+        final String phone = mPhone.getText().toString();
+        final String address = mAddress.getText().toString();
+        final String gender = mGender.getText().toString();
+        final String language = mLanguage.getText().toString();
+        final String dateofbirth = mDateOfBirth.getText().toString();
+        final String department = mDepartment.getText().toString();
 
         Log.d(TAG, "createAccount:" + email);
 
         if (!validateInput(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth)) {
             return;
         }
-        final Citizen mUser = new Citizen(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth);
+
         // Now we need to attempt to signup - we'll add code for this later (once Firebase is integrated)
         // [START create_user_with_email]
 
@@ -192,7 +179,18 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             Toast.makeText(SignupFormActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             String uuid = user.getUid();
-                            databaseRef.child("Citizen").child(uuid).setValue(mUser);
+                            //email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth
+                            databaseRef.child("Officer").child(uuid).child(department).child("email").setValue(email);
+                            databaseRef.child("Officer").child(uuid).child(department).child("firstname").setValue(firstname);
+                            databaseRef.child("Officer").child(uuid).child(department).child("lastname").setValue(lastname);
+                            databaseRef.child("Officer").child(uuid).child(department).child("password").setValue(password);
+                            databaseRef.child("Officer").child(uuid).child(department).child("licensenum").setValue(licensenum);
+                            databaseRef.child("Officer").child(uuid).child(department).child("phone").setValue(phone);
+                            databaseRef.child("Officer").child(uuid).child(department).child("address").setValue(address);
+                            databaseRef.child("Officer").child(uuid).child(department).child("gender").setValue(gender);
+                            databaseRef.child("Officer").child(uuid).child(department).child("language").setValue(language);
+                            databaseRef.child("Officer").child(uuid).child(department).child("dateofbirth").setValue(dateofbirth);
+
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
                             finish();
@@ -268,113 +266,5 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         return emailInput;
     }
 
-    private void setUpGenderSetter() {
-
-        final ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Gender, android.R.layout.simple_spinner_dropdown_item);
-
-        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        genderSetter.setAdapter(genderAdapter);
-
-        genderSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch(position) {
-                    case 0:
-                        //blank
-                        gen = 0;
-                        break;
-                    case 1:
-                        //female
-                        gen = 1;
-                        break;
-                    case 2:
-                        //male
-                        gen = 2;
-                        break;
-                }
-            }
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-            }
-        });
-    }
-
-    private void setUpLangSetter() {
-
-        final ArrayAdapter<CharSequence> langAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Language, android.R.layout.simple_spinner_dropdown_item);
-
-        langAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        langSetter.setAdapter(langAdapter);
-
-        langSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch(position) {
-                    case 0:
-                        //English
-                        lang = 0;
-                        break;
-                    case 1:
-                        //Spanish
-                        lang = 1;
-                        break;
-                    case 2:
-                        //Mandarin Chinese
-                        lang = 2;
-                        break;
-                    case 3:
-                        //Vietnamese
-                        lang = 3;
-                        break;
-                    case 4:
-                        //French
-                        lang = 4;
-                        break;
-                    case 5:
-                        //Arabic
-                        lang = 5;
-                        break;
-                    case 6:
-                        //German
-                        lang = 6;
-                        break;
-                }
-            }
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-            }
-        });
-    }
-
-    /*
-     *  local private class
-     *  Citizen is used to store data that is dumped into firebase on account creation here
-     */
-/*    private class Citizen {
-        String email, password, licensenum,
-                firstname, lastname, phone, address, gender, language, dateofbirth;
-
-        public Citizen(String email, String password, String licenseNum, String firstname,
-                       String lastname, String phone, String address, String gender, String language,
-                       String dateofbirth) {
-            this.email = email;
-            this.password = password;
-            this.licensenum = licenseNum;
-            this.firstname = firstname;
-            this.lastname = lastname;
-            this.phone = phone;
-            this.address = address;
-            this.gender = gender;
-            this.language = language;
-            this.dateofbirth = dateofbirth;
-        }
-
-        public Citizen(final String email, final String password) {
-            this.email = email;
-            this.password = password;
-        }
-    }*/
-} // end class SignupActivity
+} // end class SignupformActivity
 

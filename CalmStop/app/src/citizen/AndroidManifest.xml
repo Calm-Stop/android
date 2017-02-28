@@ -23,6 +23,7 @@
 
         <activity
             android:name=".citizen.SignupActivity" />
+
         <activity
             android:name=".citizen.DocumentsActivity" />
 

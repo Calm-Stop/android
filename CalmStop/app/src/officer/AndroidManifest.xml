@@ -37,6 +37,8 @@
         <activity
             android:name=".officer.BeaconRegistrationActivity" />
 
+        <activity 
+	    android:name=".officer.SignupFormActivity" />
 
     </application>
 
