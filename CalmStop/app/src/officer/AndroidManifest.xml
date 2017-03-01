@@ -34,6 +34,18 @@
         <activity
             android:name=".officer.HistoryActivity" />
 
+        <activity
+            android:name=".officer.AboutUsActivity" />
+
+        <activity
+            android:name=".officer.HelpActivity" />
+
+        <activity
+            android:name=".officer.ProfileActivity" />
+
+        <activity
+            android:name=".officer.SettingsActivity" />
+
 
     </application>
 
