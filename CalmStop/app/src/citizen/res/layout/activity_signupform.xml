@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:hint="Gender" />
-
+<!--
         <TextView
             android:text="Gender:"
             android:layout_width="match_parent"
@@ -129,6 +129,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/ethnicitySetter"
             android:background="@android:color/background_light" />
+-->
         <EditText
             android:id="@+id/input_language"
             android:layout_width="match_parent"

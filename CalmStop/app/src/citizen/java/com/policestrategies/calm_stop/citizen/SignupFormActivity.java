@@ -71,8 +71,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         langSetter = (Spinner) findViewById(R.id.ethnicitySetter);
 
-        setUpGenderSetter();
-        setUpLangSetter();
+//        setUpGenderSetter();
+//        setUpLangSetter();
 
         mEmailField = (EditText) findViewById(R.id.input_email);
         mPasswordField = (EditText) findViewById(R.id.input_password);
@@ -267,7 +267,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         emailInput = token[0];
         return emailInput;
     }
-
+/*
     private void setUpGenderSetter() {
 
         final ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this,
@@ -347,7 +347,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             }
         });
     }
-
+*/
     /*
      *  local private class
      *  Citizen is used to store data that is dumped into firebase on account creation here
