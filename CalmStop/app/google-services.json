@@ -13,7 +13,24 @@
           "package_name": "com.policestrategies.calm_stop"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "450429717120-26q7o1d1glucn3g55sureupuh738nsam.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.policestrategies.calm_stop",
+            "certificate_hash": "2c7b4c76cc9999dec981630ceae4c7c2c1c94365"
+          }
+        },
+        {
+          "client_id": "450429717120-n1o66n2ag30pvdo6dr8lh7o872lso46v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.policestrategies.calm_stop",
+            "certificate_hash": "98b4069e2cc7c9c771e0c081ee5551af233cdeb6"
+          }
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDE_tapztbwpjJ_xTa6J_pB9N0aP2Pgxvc"
@@ -25,7 +42,15 @@
         },
         "appinvite_service": {
           "status": 2,
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "450429717120-cpasq1prsilbtm3t21mrg6eldhtc7or0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.douglassilva.CalmStopOfficer"
+              }
+            }
+          ]
         },
         "ads_service": {
           "status": 2
@@ -39,7 +64,24 @@
           "package_name": "com.policestrategies.calm_stop.officer"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "450429717120-4sc7j5qm52ip4nkc0pomkehihqthk31l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.policestrategies.calm_stop.officer",
+            "certificate_hash": "2c7b4c76cc9999dec981630ceae4c7c2c1c94365"
+          }
+        },
+        {
+          "client_id": "450429717120-mlukhtf58gvnrn3s7vq3bp7ro3ailemi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.policestrategies.calm_stop.officer",
+            "certificate_hash": "98b4069e2cc7c9c771e0c081ee5551af233cdeb6"
+          }
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDE_tapztbwpjJ_xTa6J_pB9N0aP2Pgxvc"
@@ -51,7 +93,15 @@
         },
         "appinvite_service": {
           "status": 2,
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "450429717120-cpasq1prsilbtm3t21mrg6eldhtc7or0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.douglassilva.CalmStopOfficer"
+              }
+            }
+          ]
         },
         "ads_service": {
           "status": 2

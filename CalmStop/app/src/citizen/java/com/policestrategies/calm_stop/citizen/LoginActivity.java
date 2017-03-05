@@ -37,7 +37,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String TAG = "Login";
 
-    private UserLocalStore localStore;
 
     /**
      * onCreate is called immediately following the creation of an Activity.
@@ -63,8 +62,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // START initialize_auth so you can track when user signs in and signs out
         mAuth = FirebaseAuth.getInstance();
         // END initialize_auth
-        //localStore initializes on current context
-        localStore = new UserLocalStore(this);
 
         // START auth_state_listener
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -156,8 +153,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         if (task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                             //Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
-                            User user = new User(m_email, m_password);
-                            localStore.StoreUserData(user);
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
                         }

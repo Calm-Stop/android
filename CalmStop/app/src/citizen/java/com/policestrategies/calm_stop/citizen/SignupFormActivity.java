@@ -7,14 +7,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
 
 import java.util.regex.Matcher;
@@ -25,6 +31,9 @@ import java.util.regex.Pattern;
  */
 
 public class SignupFormActivity extends AppCompatActivity implements View.OnClickListener {
+    private Spinner genderSetter;
+    private Spinner langSetter;
+
     private EditText mFirstNameField;
     private EditText mLastNameField;
     private static EditText  mEmailField;
@@ -36,6 +45,9 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private EditText mGender;
     private EditText mlanguage;
 
+    private int gen = 0;
+    private int lang = 0;
+
     private static final String TAG = "Signup";
 
     // [START declare_auth]
@@ -46,11 +58,21 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private FirebaseAuth.AuthStateListener mAuthListener;
     // [END declare_auth_listener]
 
+    // [START declare databaseRef & database]
+    private DatabaseReference databaseRef;
+    private FirebaseDatabase database;
+    // [END declare databaseRef & database]
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signupform);
 
+        genderSetter = (Spinner) findViewById(R.id.genderSetter);
+        langSetter = (Spinner) findViewById(R.id.ethnicitySetter);
+
+//        setUpGenderSetter();
+//        setUpLangSetter();
 
         mEmailField = (EditText) findViewById(R.id.input_email);
         mPasswordField = (EditText) findViewById(R.id.input_password);
@@ -66,6 +88,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
 
+        database = FirebaseDatabase.getInstance();
+        databaseRef = database.getReference();
         // START initialize_auth so you can track when user signs in and signs out
         mAuth = FirebaseAuth.getInstance();
         // END initialize_auth
@@ -130,21 +154,23 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private void signup() {
         String email = mEmailField.getText().toString();
         String password = mPasswordField.getText().toString();
-        String licenseNum = mLicenseNum.getText().toString();
+        String licensenum = mLicenseNum.getText().toString();
         String firstname = mFirstNameField.getText().toString();
         String lastname = mLastNameField.getText().toString();
         String phone = mPhone.getText().toString();
         String address = mAddress.getText().toString();
         String gender = mGender.getText().toString();
         String language = mlanguage.getText().toString();
-        String DateOfBirth = mDateOfBirth.getText().toString();
+        String dateofbirth = mDateOfBirth.getText().toString();
+//        gender = genderSetter.getSelectedItem().toString();
+//        language = langSetter.getSelectedItem().toString();
 
         Log.d(TAG, "createAccount:" + email);
 
-        if (!validateInput(email, password, licenseNum, firstname, lastname, phone, address, gender, language, DateOfBirth)) {
+        if (!validateInput(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth)) {
             return;
         }
-        User mUser = new User(email, password, licenseNum, firstname, lastname, phone, licenseNum, gender, language, DateOfBirth);
+        final Citizen mUser = new Citizen(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth);
         // Now we need to attempt to signup - we'll add code for this later (once Firebase is integrated)
         // [START create_user_with_email]
 
@@ -164,6 +190,9 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             startActivity(getIntent());
                         } else {
                             Toast.makeText(SignupFormActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            String uuid = user.getUid();
+                            databaseRef.child("citizen").child(uuid).child("profile").setValue(mUser);
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
                             finish();
@@ -177,8 +206,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private boolean validateInput(String email, String password, String licenseNum, String firstname,
-                                  String lastname, String phone, String address, String gender, String language, String DateOfBirth) {
+    private boolean validateInput(String email, String password, String licensenum, String firstname,
+                                  String lastname, String phone, String address, String gender, String language, String dateofbirth) {
 
         if(firstname.matches(".*\\d.*") || firstname.matches(".*\\s.*")) {
             mFirstNameField.setError("Please enter a valid first name.");
@@ -238,4 +267,114 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         emailInput = token[0];
         return emailInput;
     }
+/*
+    private void setUpGenderSetter() {
+
+        final ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Gender, android.R.layout.simple_spinner_dropdown_item);
+
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        genderSetter.setAdapter(genderAdapter);
+
+        genderSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position) {
+                    case 0:
+                        //blank
+                        gen = 0;
+                        break;
+                    case 1:
+                        //female
+                        gen = 1;
+                        break;
+                    case 2:
+                        //male
+                        gen = 2;
+                        break;
+                }
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
+
+    private void setUpLangSetter() {
+
+        final ArrayAdapter<CharSequence> langAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Language, android.R.layout.simple_spinner_dropdown_item);
+
+        langAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        langSetter.setAdapter(langAdapter);
+
+        langSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position) {
+                    case 0:
+                        //English
+                        lang = 0;
+                        break;
+                    case 1:
+                        //Spanish
+                        lang = 1;
+                        break;
+                    case 2:
+                        //Mandarin Chinese
+                        lang = 2;
+                        break;
+                    case 3:
+                        //Vietnamese
+                        lang = 3;
+                        break;
+                    case 4:
+                        //French
+                        lang = 4;
+                        break;
+                    case 5:
+                        //Arabic
+                        lang = 5;
+                        break;
+                    case 6:
+                        //German
+                        lang = 6;
+                        break;
+                }
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
+*/
+    /*
+     *  local private class
+     *  Citizen is used to store data that is dumped into firebase on account creation here
+     */
+/*    private class Citizen {
+        String email, password, licensenum,
+                firstname, lastname, phone, address, gender, language, dateofbirth;
+
+        public Citizen(String email, String password, String licenseNum, String firstname,
+                       String lastname, String phone, String address, String gender, String language,
+                       String dateofbirth) {
+            this.email = email;
+            this.password = password;
+            this.licensenum = licenseNum;
+            this.firstname = firstname;
+            this.lastname = lastname;
+            this.phone = phone;
+            this.address = address;
+            this.gender = gender;
+            this.language = language;
+            this.dateofbirth = dateofbirth;
+        }
+
+        public Citizen(final String email, final String password) {
+            this.email = email;
+            this.password = password;
+        }
+    }*/
 } // end class SignupActivity
+

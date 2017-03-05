@@ -46,6 +46,11 @@
         <activity
             android:name=".officer.SettingsActivity" />
 
+        <activity
+            android:name=".officer.beacon_registration.BeaconRegistrationActivity" />
+
+        <activity 
+	    android:name=".officer.SignupFormActivity" />
 
     </application>
 

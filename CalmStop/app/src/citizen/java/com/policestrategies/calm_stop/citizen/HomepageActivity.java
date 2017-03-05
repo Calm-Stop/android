@@ -23,7 +23,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
     //welcome citizen
     private TextView mHomeText;
-    private UserLocalStore localStore;
     private ListView mDrawerList;
     private ArrayAdapter<String> mAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -37,7 +36,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
-        localStore = new UserLocalStore(this);
         mHomeText = (TextView) findViewById(R.id.AboutUsTitle);
 
         mHomeText.setText("Hello " + "Citizen" + "!\n\nSwipe from Left to Right -> to see menu!");
@@ -160,8 +158,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     }
     private void logout() {
         //You want to logout -> login page
-        UserLocalStore localStore = new UserLocalStore(this);
-        localStore.clearUserData();
         FirebaseAuth.getInstance().signOut();
         Intent i = new Intent(getBaseContext(), LoginActivity.class);
         startActivity(i);

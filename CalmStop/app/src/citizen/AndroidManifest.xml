@@ -3,6 +3,7 @@
     package="com.policestrategies.calm_stop">
 
     <application
+        android:name=".citizen.ProximityApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,6 +23,7 @@
 
         <activity
             android:name=".citizen.SignupActivity" />
+
         <activity
             android:name=".citizen.DocumentsActivity" />
 
@@ -46,6 +48,9 @@
 
         <activity
             android:name=".citizen.SignupFormActivity" />
+
+        <activity
+            android:name=".citizen.BeaconDetectionActivity" />
 
     </application>
     

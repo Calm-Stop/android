@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.officer.beacon_registration.BeaconRegistrationActivity;
+
 /**
  * Created by mariavizcaino on 2/9/17.
  */
@@ -55,6 +57,11 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        findViewById(R.id.button_logout).setOnClickListener(this);
+        findViewById(R.id.button_manage_beacon).setOnClickListener(this);
+        findViewById(R.id.button_ratings).setOnClickListener(this);
+
+
         Toast.makeText(HomepageActivity.this, "Welcome!", Toast.LENGTH_LONG).show();
     }
 
@@ -62,11 +69,19 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
 
         switch(v.getId()) {
-/*
-            case R.id.button_logout: // The login button was pressed - let's run the login function
-                logout();
+
+            case R.id.button_ratings: // Ratings button was pressed
+                System.out.println("Rating button pressed");
+                Intent h = new Intent(getBaseContext(), RatingActivity.class);
+                startActivity(h);
                 break;
-*/
+
+            case R.id.button_manage_beacon:
+                System.out.println("Beacon button pressed");
+                Intent i = new Intent(getBaseContext(), BeaconRegistrationActivity.class);
+                startActivity(i);
+                break;
+
         }
     }
 

@@ -18,6 +18,12 @@
         android:layout_height="match_parent"
         android:src="@mipmap/ic_launcher"
         android:id="@+id/imageView" /> -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@mipmap/background_image"
+        android:scaleType="fitXY"
+        android:id="@+id/backgroundImage" />
 
     <ImageView
         android:layout_width="match_parent"

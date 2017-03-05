@@ -19,6 +19,32 @@
             android:text="Hello Officer!"
             android:id="@+id/AboutUsTitle" />
 
+        <Button
+            android:text="Ratings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_ratings"
+            android:textAlignment="center"
+            android:layout_alignParentLeft="false"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign Out"
+            android:id="@+id/button_logout"
+            android:layout_below="@+id/Name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="115dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Manage Beacon"
+            android:id="@+id/button_manage_beacon"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
     </RelativeLayout>
 
     <ListView
