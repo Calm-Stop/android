@@ -27,8 +27,6 @@ import com.policestrategies.calm_stop.officer.beacon_registration.BeaconRegistra
 
 public class HomepageActivity extends AppCompatActivity implements View.OnClickListener {
     //welcome Officer
-    //private String user = LoginActivity.getEmail();
-    //private String uuser = SignupActivity.getEmail();
 
     private ListView mDrawerList;
     private ArrayAdapter<String> mAdapter;
