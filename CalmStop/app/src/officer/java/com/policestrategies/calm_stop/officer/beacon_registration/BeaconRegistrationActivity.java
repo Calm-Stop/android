@@ -1,20 +1,20 @@
 package com.policestrategies.calm_stop.officer.beacon_registration;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.officer.LoginActivity;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -41,6 +41,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
     private FirebaseAuth mAuth;
 
     private RecyclerView mRecyclerView;
+    private String mUid;
 
 
     @Override
@@ -53,6 +54,15 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
+
+        if (mAuth.getCurrentUser() != null) {
+            mUid = mAuth.getCurrentUser().getUid();
+        } else {
+            mAuth.signOut();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        }
 
         mBeaconManager.getBeaconParsers().add(new BeaconParser().
                 setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
@@ -115,7 +125,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
                 .child(beaconInstanceId[beaconInstanceId.length - 1]).child("officer").getRef();
 
         officerDatabaseReference.child("department").setValue("14566");
-        officerDatabaseReference.child("uid").setValue(mAuth.getCurrentUser().getUid());
+        officerDatabaseReference.child("uid").setValue(mUid);
         finish(); // TODO: Validate success?
     }
 
