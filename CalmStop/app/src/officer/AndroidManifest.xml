@@ -35,7 +35,7 @@
             android:name=".officer.HistoryActivity" />
 
         <activity
-            android:name=".officer.BeaconRegistrationActivity" />
+            android:name=".officer.beacon_registration.BeaconRegistrationActivity" />
 
         <activity 
 	    android:name=".officer.SignupFormActivity" />

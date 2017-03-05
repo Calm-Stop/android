@@ -1,10 +1,12 @@
-package com.policestrategies.calm_stop.officer;
+package com.policestrategies.calm_stop.officer.beacon_registration;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,11 +20,12 @@ import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -33,10 +36,11 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         BeaconConsumer {
 
     private BeaconManager mBeaconManager;
-    private CardView mBeaconCardView;
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
+
+    private RecyclerView mRecyclerView;
 
 
     @Override
@@ -53,12 +57,11 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         mBeaconManager.getBeaconParsers().add(new BeaconParser().
                 setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
 
-        mBeaconCardView = ((CardView) findViewById(R.id.beacon_card_view));
-        mBeaconCardView.setVisibility(View.INVISIBLE);
-
         findViewById(R.id.button_scan_beacon_registration).setOnClickListener(this);
-        findViewById(R.id.beacon_card_view).setOnClickListener(this);
 
+        mRecyclerView = (RecyclerView)findViewById(R.id.beacon_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(null);
         mBeaconManager.bind(this);
 
     } // end onCreate
@@ -72,8 +75,8 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
                 scanForBeacons();
                 break;
 
-            case R.id.beacon_card_view:
-                synchronize_beacon();
+            case R.id.beacon_recycler_view:
+                System.out.println("Click!!!!!");
                 break;
         }
 
@@ -103,10 +106,9 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
 
     } // end scanForBeacons
 
-    private void synchronize_beacon() {
+    private void synchronize_beacon(BeaconObject beacon) {
 
-        String[] beaconInstanceId = ((TextView) findViewById(R.id.text_cardview_instance_id))
-                .getText().toString().split(" ");
+        String[] beaconInstanceId = beacon.getInstance().split(" ");
 
         System.out.println(mDatabase.toString());
         DatabaseReference officerDatabaseReference = mDatabase.child("beacons")
@@ -114,7 +116,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
 
         officerDatabaseReference.child("department").setValue("14566");
         officerDatabaseReference.child("uid").setValue(mAuth.getCurrentUser().getUid());
-
+        finish(); // TODO: Validate success?
     }
 
     @Override
@@ -124,59 +126,49 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         mBeaconManager.addRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> collection, final Region region) {
-                if (collection.size() > 0) {
-                    Beacon beacon = collection.iterator().next();
+
+                final List<BeaconObject> scannedBeacons = new ArrayList<>();
+
+                for (Beacon beacon : collection) {
                     if (beacon.getServiceUuid() == 0xfeaa && beacon.getBeaconTypeCode() == 0x00) {
 
-                        Identifier namespaceId = beacon.getId1();
-                        Identifier instanceId = beacon.getId2();
-
-
-                        String scannedID = "Found a beacon with namespaceID: " + namespaceId +
-                                " and" + " instanceID: " + instanceId;
-
-                        System.out.println(scannedID);
-
-                        final String namespace = "Namespace ID: " + namespaceId;
-                        final String instance = "Instance ID: " + instanceId;
-
-                        // Obtain distance from beacon, round to 1 decimal point
-                        final String range = String.format(Locale.getDefault(), "%.1f",
+                        String namespace = "Namespace ID: " + beacon.getId1();
+                        String instance = "Instance ID: " + beacon.getId2();
+                        String range = String.format(Locale.getDefault(), "%.1f",
                                 beacon.getDistance()) + "m";
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ((TextView) findViewById(R.id.text_cardview_namespace_id))
-                                        .setText(namespace);
-                                ((TextView) findViewById(R.id.text_cardview_instance_id))
-                                        .setText(instance);
-                                ((TextView) findViewById(R.id.text_cardview_beacon_range))
-                                        .setText(range);
-
-                                try {
-                                    mBeaconManager.stopRangingBeaconsInRegion(region);
-                                } catch (Exception e) {
-                                    Toast.makeText(BeaconRegistrationActivity.this,
-                                            "Failed to stop ranging beacons",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-
-                                mBeaconCardView.setVisibility(View.VISIBLE);
-                                findViewById(R.id.button_scan_beacon_registration)
-                                        .setVisibility(View.GONE);
-
-                            }
-                        });
-
+                        scannedBeacons.add(new BeaconObject(namespace, instance, range));
                     }
-
                 }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        mRecyclerView.setAdapter(new BeaconRegistrationAdapter(scannedBeacons,
+                                new BeaconRegistrationAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(BeaconObject item) {
+                                        synchronize_beacon(item);
+                                    }
+                                }));
+
+                        try {
+                            mBeaconManager.stopRangingBeaconsInRegion(region);
+                        } catch (Exception e) {
+                            Toast.makeText(BeaconRegistrationActivity.this,
+                                    "Failed to stop ranging beacons",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        findViewById(R.id.button_scan_beacon_registration).setVisibility(View.GONE);
+                    }
+                });
+
             }
         });
 
     } // end onBeaconServiceConnect
-
 
     private void verifyBluetooth() {
 
