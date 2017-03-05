@@ -79,7 +79,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         setUpGenderSetter();
         setUpEthnicitySetter();
-
+/*
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // Name, email address, and profile photo Url
@@ -97,7 +97,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }else {
             mphoto.setImageURI(Photo);
         }
-
+*/
     }
 
     @Override

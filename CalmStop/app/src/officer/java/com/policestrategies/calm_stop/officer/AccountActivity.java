@@ -21,6 +21,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
+        findViewById(R.id.aboutus_button).setOnClickListener(this);
+        findViewById(R.id.profile_button).setOnClickListener(this);
+        findViewById(R.id.settings_button).setOnClickListener(this);
+        findViewById(R.id.help_button).setOnClickListener(this);
+        findViewById(R.id.logout_button).setOnClickListener(this);
+        findViewById(R.id.backbutton).setOnClickListener(this);
         //localStore = new UserLocalStore(this);
 
     }
@@ -44,6 +50,9 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.help_button:
                 help();
+                break;
+            case R.id.backbutton:
+                toHomepage();
                 break;
 
         }
@@ -69,6 +78,11 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         Intent i = new Intent(getBaseContext(), SettingsActivity.class);
         startActivity(i);
 
+    }
+
+    private void toHomepage() {
+        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        startActivity(i);
     }
 
     private void logout() {

@@ -24,7 +24,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello Citizen this is the settings page!"
+        android:text="Hello Officer this is the settings page!"
         android:id="@+id/AboutUsTitle"
         android:layout_below="@+id/backbutton"
         android:layout_alignParentLeft="true"
