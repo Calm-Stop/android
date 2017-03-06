@@ -49,6 +49,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private EditText mDOB;
     private EditText maddress;
     private EditText mLicense;
+    private EditText mLanguage;
     private ImageView mphoto;
 
     private static final int chosenImage = 1;
@@ -91,6 +92,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mphoneNum = (EditText)findViewById(R.id.editPhonenum);
         mLicense= (EditText)findViewById(R.id.editLicenseNumber);
         maddress = (EditText)findViewById(R.id.editAddress);
+        mLanguage = (EditText)findViewById(R.id.editprefferedLang);
 
         mphoto = (ImageView)findViewById(R.id.profilePicture);
         mphoto.setOnClickListener(this);
@@ -126,7 +128,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
 
-        mDatabase.child(citizenUid) //.child("profile") <-not part of database
+        mDatabase.child(citizenUid).child("profile") //.child("profile") <-not part of database
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
@@ -140,6 +142,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         Language = snapshot.child("language").getValue().toString();
                         License = snapshot.child("license_number").getValue().toString();
                         PhoneNumber = snapshot.child("phone_number").getValue().toString();
+                        Language = snapshot.child("language").getValue().toString();
                         Ethnicity = "";
 
                         setEverything();
@@ -178,6 +181,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 DOB = mDOB.getText().toString();
                 License = mLicense.getText().toString();
                 Address = maddress.getText().toString();
+                Language = mLanguage.getText().toString();
 
                 //WRITE TO FIREBASE
                 updateFName();
@@ -188,6 +192,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 updateAddress();
                 updateDOB();
                 updateLicense();
+                updateLanguage();
                 updateGender();
 
                 recreate();
@@ -226,16 +231,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position) {
-                    case 0:
-                        //blank
+                    case 0: //blank
                         gen = 0;
                         break;
-                    case 1:
-                        //female
+                    case 1: //female
                         gen = 1;
                         break;
-                    case 2:
-                        //male
+                    case 2: //male
                         gen = 2;
                         break;
                 }
@@ -258,32 +260,25 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position) {
-                    case 0:
-                        //blank
+                    case 0: //blank
                         eth = 0;
                         break;
-                    case 1:
-                        //American indian
+                    case 1: //American indian
                         eth = 1;
                         break;
-                    case 2:
-                        //asian
+                    case 2: //asian
                         eth = 2;
                         break;
-                    case 3:
-                        //African american
+                    case 3: //African american
                         eth = 3;
                         break;
-                    case 4:
-                        //hispanic
+                    case 4: //hispanic
                         eth = 4;
                         break;
-                    case 5:
-                        //pacific islander
+                    case 5: //pacific islander
                         eth = 5;
                         break;
-                    case 6:
-                        //white
+                    case 6: //white
                         eth = 6;
                         break;
                 }
@@ -303,6 +298,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         maddress.setText(Address);
         mDOB.setText(DOB);
         mLicense.setText(License);
+        mLanguage.setText(Language);
         genderSetter.setSelection(setGen());
         ethnicitySetter.setSelection(setEth());
 
@@ -398,13 +394,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateFName() {
-        mDatabase.child(citizenUid).child("first_name").setValue(FName);
-        //mDatabase.child(citizenUid).child("profile").child("first_name").setValue(FName);
+        mDatabase.child(citizenUid).child("profile").child("first_name").setValue(FName);
     }
 
     private void updateLName() {
-        mDatabase.child(citizenUid).child("last_name").setValue(LName);
-        //mDatabase.child(citizenUid).child("profile").child("last_name").setValue(LName);
+        mDatabase.child(citizenUid).child("profile").child("last_name").setValue(LName);
     }
 
     private void updatePhoto() {
@@ -427,61 +421,51 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updatePhoneNumber() {
-        mDatabase.child(citizenUid).child("phone_number").setValue(PhoneNumber);
-        //mDatabase.child(citizenUid).child("profile").child("phone_number").setValue(PhoneNumber);
+        mDatabase.child(citizenUid).child("profile").child("phone_number").setValue(PhoneNumber);
     }
 
     private void updateAddress() {
         mDatabase.child(citizenUid).child("address").setValue(Address);
-        //mDatabase.child(citizenUid).child("profile").child("address").setValue(Address);
     }
 
     private void updateDOB() {
-        mDatabase.child(citizenUid).child("date_of_birth").setValue(DOB);
-        //mDatabase.child(citizenUid).child("profile").child("date_of_birth").setValue(DOB);
+        mDatabase.child(citizenUid).child("profile").child("date_of_birth").setValue(DOB);
 
     }
 
     private void updateLicense() {
-        mDatabase.child(citizenUid).child("license_number").setValue(License);
-        //mDatabase.child(citizenUid).child("profile").child("license_number").setValue(License);
+        mDatabase.child(citizenUid).child("profile").child("license_number").setValue(License);
+    }
+
+    private void updateLanguage(){
+        mDatabase.child(citizenUid).child("profile").child("language").setValue(Language);
     }
 
     private void updateGender() {
         if(gen == 0)
-            mDatabase.child(citizenUid).child("gender").setValue(" ");
-            //mDatabase.child(citizenUid).child("profile").child("gender").setValue(" ");
+            mDatabase.child(citizenUid).child("profile").child("gender").setValue(" ");
         else if(gen == 1)
-            mDatabase.child(citizenUid).child("gender").setValue("Female");
-            //mDatabase.child(citizenUid).child("profile").child("gender").setValue("Female");
+            mDatabase.child(citizenUid).child("profile").child("gender").setValue("Female");
         else
-            mDatabase.child(citizenUid).child("gender").setValue("Male");
-            //mDatabase.child(citizenUid).child("profile").child("gender").setValue("Male");
+            mDatabase.child(citizenUid).child("profile").child("gender").setValue("Male");
 
     }
 
     private void updateEthnicity() {
         if (eth == 1 )
-            mDatabase.child(citizenUid).child("ethnicity").setValue("American indian");
-            //mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("American indian");
+            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("American indian");
         else if (eth == 2 )
-            mDatabase.child(citizenUid).child("ethnicity").setValue("Asian");
-            //mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("Asian");
+            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("Asian");
         else if (eth == 3)
-            mDatabase.child(citizenUid).child("ethnicity").setValue("African American");
-            //mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("African American");
+            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("African American");
         else if (eth == 4)
-            mDatabase.child(citizenUid).child("ethnicty").setValue("Hispanic");
-            //mDatabase.child(citizenUid).child("profile").child("ethnicty").setValue("Hispanic");
+            mDatabase.child(citizenUid).child("profile").child("ethnicty").setValue("Hispanic");
         else if (eth == 5)
-            mDatabase.child(citizenUid).child("ethnicity").setValue("pacific islander");
-            //mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("pacific islander");
+            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("pacific islander");
         else if (eth == 6)
-            mDatabase.child(citizenUid).child("ethnicity").setValue("white");
-            //mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("white");
+            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("white");
         else
-            mDatabase.child(citizenUid).child("ethnicity").setValue(" ");
-            //mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue(" ");
+            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue(" ");
     }
 
     private void toHomepage() {

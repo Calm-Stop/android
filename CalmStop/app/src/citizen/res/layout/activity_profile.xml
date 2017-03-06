@@ -229,6 +229,34 @@
                 android:textColor="@android:color/background_dark" />
 
             <TextView
+                android:text="Preferred Language: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LicenseNumber"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="20dp"
+                android:id="@+id/preferredLang"
+                android:layout_alignRight="@+id/backButton"
+                android:layout_alignEnd="@+id/backButton"
+                android:textSize="16sp"
+                android:fontFamily="monospace"
+                android:typeface="monospace"
+                android:textColor="@android:color/background_dark" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:text="Preffered Language"
+                android:ems="10"
+                android:id="@+id/editprefferedLang"
+                android:textSize="16sp"
+                android:fontFamily="monospace"
+                android:typeface="monospace"
+                android:textColor="@android:color/background_dark" />
+
+            <TextView
                 android:text="Gender:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -258,7 +286,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp"
-
                 android:id="@+id/ethnicity"
                 android:layout_alignRight="@+id/gender"
                 android:layout_alignEnd="@+id/gender"
@@ -277,6 +304,8 @@
                 android:text="View My Documents"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/ethnicity"
+                android:layout_marginTop="20dp"
                 android:layout_gravity="center"
                 android:id="@+id/viewDocs"
                 android:shape="oval"
