@@ -70,16 +70,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private String Ethnicity;
     private String Language;
 
-    private String valueEmail;
-    private String valuePassword;
-
     private Uri Photo;
-    private String uid;
+    private String officerUid;
 
     private FirebaseUser user;
     private DatabaseReference mDatabase;
 
     private static final String TAG = "Profile Edit";
+
+    private String valueEmail;
+    private String valuePassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +98,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         mphoto = (ImageView)findViewById(R.id.profilePicture);
         mphoto.setOnClickListener(this);
+
         findViewById(R.id.backbutton).setOnClickListener(this);
         findViewById(R.id.savebutton).setOnClickListener(this);
 
@@ -112,11 +113,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mDatabase = FirebaseDatabase.getInstance().getReference("officer");
 
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            uid = "";
+            officerUid = "";
         }
         else{
-            uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            officerUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         }
+
+        Photo = user.getPhotoUrl();
 
         if(Photo == null) {
 
@@ -124,7 +127,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             mphoto.setImageURI(Photo);
         }
 
-        mDatabase.child("14566").child(uid).child("profile")
+        mDatabase.child("14566").child(officerUid).child("profile")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -150,9 +153,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
 
         });
-
-
-
     }
 
     @Override
@@ -364,7 +364,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private void updateEmail() {
 
-        mDatabase.child("14566").child(uid).child("profile").child("email").setValue(Email);
+        mDatabase.child("14566").child(officerUid).child("profile").child("email").setValue(Email);
 
         user.updateEmail(Email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -401,11 +401,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateFName() {
-        mDatabase.child("14566").child(uid).child("profile").child("first_name").setValue(FName);
+        mDatabase.child("14566").child(officerUid).child("profile").child("first_name").setValue(FName);
     }
 
     private void updateLName() {
-        mDatabase.child("14566").child(uid).child("profile").child("last_name").setValue(LName);
+        mDatabase.child("14566").child(officerUid).child("profile").child("last_name").setValue(LName);
     }
 
     private void updatePhoto() {
@@ -428,46 +428,46 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updatePhoneNumber() {
-        mDatabase.child("14566").child(uid).child("profile").child("phone_number").setValue(PhoneNumber);
+        mDatabase.child("14566").child(officerUid).child("profile").child("phone_number").setValue(PhoneNumber);
     }
 
     private void updateAddress() {
-        mDatabase.child("14566").child(uid).child("profile").child("address").setValue(Address);
+        mDatabase.child("14566").child(officerUid).child("profile").child("address").setValue(Address);
     }
 
     private void updateDOB() {
-        mDatabase.child("14566").child(uid).child("profile").child("date_of_birth").setValue(DOB);
+        mDatabase.child("14566").child(officerUid).child("profile").child("date_of_birth").setValue(DOB);
     }
 
     private void updateLicense() {
-        mDatabase.child("14566").child(uid).child("profile").child("license_number").setValue(License);
+        mDatabase.child("14566").child(officerUid).child("profile").child("license_number").setValue(License);
     }
 
     private void updateGender() {
         if(gen == 0)
-            mDatabase.child("14566").child(uid).child("profile").child("gender").setValue(" ");
+            mDatabase.child("14566").child(officerUid).child("profile").child("gender").setValue(" ");
         else if(gen == 1)
-            mDatabase.child("14566").child(uid).child("profile").child("gender").setValue("Female");
+            mDatabase.child("14566").child(officerUid).child("profile").child("gender").setValue("Female");
         else
-            mDatabase.child("14566").child(uid).child("profile").child("gender").setValue("Male");
+            mDatabase.child("14566").child(officerUid).child("profile").child("gender").setValue("Male");
 
     }
 
     private void updateEthnicity() {
         if (eth == 1 )
-            mDatabase.child("14566").child(uid).child("profile").child("ethnicity").setValue("American indian");
+            mDatabase.child("14566").child(officerUid).child("profile").child("ethnicity").setValue("American indian");
         else if (eth == 2 )
-            mDatabase.child("14566").child(uid).child("profile").child("ethnicity").setValue("Asian");
+            mDatabase.child("14566").child(officerUid).child("profile").child("ethnicity").setValue("Asian");
         else if (eth == 3)
-            mDatabase.child("14566").child(uid).child("profile").child("ethnicity").setValue("African American");
+            mDatabase.child("14566").child(officerUid).child("profile").child("ethnicity").setValue("African American");
         else if (eth == 4)
-            mDatabase.child("14566").child(uid).child("profile").child("ethnicty").setValue("Hispanic");
+            mDatabase.child("14566").child(officerUid).child("profile").child("ethnicty").setValue("Hispanic");
         else if (eth == 5)
-            mDatabase.child("14566").child(uid).child("profile").child("ethnicity").setValue("pacific islander");
+            mDatabase.child("14566").child(officerUid).child("profile").child("ethnicity").setValue("pacific islander");
         else if (eth == 6)
-            mDatabase.child("14566").child(uid).child("profile").child("ethnicity").setValue("white");
+            mDatabase.child("14566").child(officerUid).child("profile").child("ethnicity").setValue("white");
         else
-            mDatabase.child("14566").child(uid).child("profile").child("ethnicity").setValue(" ");
+            mDatabase.child("14566").child(officerUid).child("profile").child("ethnicity").setValue(" ");
     }
 
     private void toAccount() {

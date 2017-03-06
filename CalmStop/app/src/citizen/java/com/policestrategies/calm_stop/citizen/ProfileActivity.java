@@ -27,6 +27,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
 
 
@@ -37,9 +42,13 @@ import com.policestrategies.calm_stop.R;
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
     private Spinner genderSetter;
     private Spinner ethnicitySetter;
-    private EditText mname;
+    private EditText mFname;
+    private EditText mLname;
     private EditText memail;
     private EditText mphoneNum;
+    private EditText mDOB;
+    private EditText maddress;
+    private EditText mLicense;
     private ImageView mphoto;
 
     private static final int chosenImage = 1;
@@ -47,15 +56,26 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private int gen = 0;
     private int eth = 0;
 
-    private String Name;
+    private String FName;
+    private String LName;
     private String Email;
     private String PhoneNumber;
-    private String valueEmail;
-    private String valuePassword;
+
+    private String License;
+    private String Address;
+    private String DOB;
+    private String Gender;
+    private String Ethnicity;
+    private String Language;
 
     private Uri Photo;
+    private String citizenUid;
 
     private FirebaseUser user;
+    private DatabaseReference mDatabase;
+
+    private String valueEmail;
+    private String valuePassword;
 
     private static final String TAG = "Profile Edit";
 
@@ -64,15 +84,21 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        mname = (EditText)findViewById(R.id.editName);
+        mFname = (EditText)findViewById(R.id.editFirstName);
+        mLname = (EditText)findViewById(R.id.editLastName);
         memail = (EditText)findViewById(R.id.editEmail);
+        mDOB = (EditText)findViewById(R.id.editDateOfBirth);
         mphoneNum = (EditText)findViewById(R.id.editPhonenum);
+        mLicense= (EditText)findViewById(R.id.editLicenseNumber);
+        maddress = (EditText)findViewById(R.id.editAddress);
+
         mphoto = (ImageView)findViewById(R.id.profilePicture);
+        mphoto.setOnClickListener(this);
 
         findViewById(R.id.backbutton).setOnClickListener(this);
         findViewById(R.id.viewDocs).setOnClickListener(this);
         findViewById(R.id.savebutton).setOnClickListener(this);
-        mphoto.setOnClickListener(this);
+
 
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
@@ -80,17 +106,18 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         setUpGenderSetter();
         setUpEthnicitySetter();
 
+        mDatabase = FirebaseDatabase.getInstance().getReference("citizen");
+
         user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            // Name, email address, and profile photo Url
-            Name = user.getDisplayName();
-            Email = user.getEmail();
-            Photo = user.getPhotoUrl();
-            String photStr = Photo.toString();
+
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+           citizenUid = "";
+        }
+        else{
+            citizenUid= FirebaseAuth.getInstance().getCurrentUser().getUid();
         }
 
-        mname.setText(Name);
-        memail.setText(Email);
+        Photo = user.getPhotoUrl();
 
         if(Photo == null) {
             //mphoto.setImageURI();
@@ -98,6 +125,33 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             mphoto.setImageURI(Photo);
         }
 
+
+        mDatabase.child(citizenUid) //.child("profile") <-not part of database
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        //NEED TO ADD BADGE NUMBER
+                        Address = snapshot.child("address").getValue().toString();
+                        DOB = snapshot.child("date_of_birth").getValue().toString();
+                        Email = snapshot.child("email").getValue().toString();
+                        FName = snapshot.child("first_name").getValue().toString();
+                        LName = snapshot.child("last_name").getValue().toString();
+                        Gender = snapshot.child("gender").getValue().toString();
+                        Language = snapshot.child("language").getValue().toString();
+                        License = snapshot.child("license_number").getValue().toString();
+                        PhoneNumber = snapshot.child("phone_number").getValue().toString();
+                        Ethnicity = "";
+
+                        setEverything();
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        Log.e(TAG, "Failed to read app title value.", error.toException());
+                    }
+
+                });
     }
 
     @Override
@@ -117,15 +171,24 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 //FIXME
                 //TODO
 
-                Name = mname.getText().toString();
+                FName = mFname.getText().toString();
+                LName = mLname.getText().toString();
                 Email = memail.getText().toString();
                 PhoneNumber = mphoneNum.getText().toString();
+                DOB = mDOB.getText().toString();
+                License = mLicense.getText().toString();
+                Address = maddress.getText().toString();
 
                 //WRITE TO FIREBASE
-                updateName();
+                updateFName();
+                updateLName();
                 updatePhoto();
-                //updatePhoneNumber();
+                updatePhoneNumber();
                 updateEmail();
+                updateAddress();
+                updateDOB();
+                updateLicense();
+                updateGender();
 
                 recreate();
                 break;
@@ -231,6 +294,45 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
+    private void setEverything(){
+
+        mFname.setText(FName);
+        mLname.setText(LName);
+        memail.setText(Email);
+        mphoneNum.setText(PhoneNumber);
+        maddress.setText(Address);
+        mDOB.setText(DOB);
+        mLicense.setText(License);
+        genderSetter.setSelection(setGen());
+        ethnicitySetter.setSelection(setEth());
+
+    }
+
+    private int setGen(){
+        if(Gender.equalsIgnoreCase("male"))
+            return 2;
+        else if (Gender.equalsIgnoreCase("female"))
+            return 1;
+        return 0;
+    }
+
+
+    private int setEth(){
+        if (Ethnicity.equalsIgnoreCase("American indian"))
+            return 1;
+        else if (Ethnicity.equalsIgnoreCase("Asian"))
+            return 2;
+        else if (Ethnicity.equalsIgnoreCase("African american"))
+            return 3;
+        else if (Ethnicity.equalsIgnoreCase("Hispanic"))
+            return 4;
+        else if (Ethnicity.equalsIgnoreCase("pacific islander"))
+            return 5;
+        else if (Ethnicity.equalsIgnoreCase("white"))
+            return 6;
+        return 0;
+    }
+
     private void authentication() {
         AlertDialog.Builder authen = new AlertDialog.Builder(this);
         authen.setTitle("Reauthentication");
@@ -278,7 +380,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 authentication();
 
                                 AuthCredential credential = EmailAuthProvider
-                                        .getCredential(valueEmail,valuePassword );
+                                        .getCredential(valueEmail, valuePassword );
                                 user.reauthenticate(credential)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
@@ -295,24 +397,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 });
     }
 
-    private void updateName() {
-        UserProfileChangeRequest updateName = new UserProfileChangeRequest.Builder()
-                .setDisplayName(Name)
-                .build();
+    private void updateFName() {
+        mDatabase.child(citizenUid).child("first_name").setValue(FName);
+        //mDatabase.child(citizenUid).child("profile").child("first_name").setValue(FName);
+    }
 
-        user.updateProfile(updateName)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User profile updated.");
-                        }
-                        else {
-                            Toast.makeText(ProfileActivity.this, "Error Updating Name", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
+    private void updateLName() {
+        mDatabase.child(citizenUid).child("last_name").setValue(LName);
+        //mDatabase.child(citizenUid).child("profile").child("last_name").setValue(LName);
     }
 
     private void updatePhoto() {
@@ -328,14 +420,68 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             Log.d(TAG, "User profile updated.");
                         }
                         else
-                            Toast.makeText(ProfileActivity.this, "Error Uploading Image", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ProfileActivity.this, "Error Uploading Image",
+                                    Toast.LENGTH_LONG).show();
                     }
                 });
-
     }
 
     private void updatePhoneNumber() {
+        mDatabase.child(citizenUid).child("phone_number").setValue(PhoneNumber);
+        //mDatabase.child(citizenUid).child("profile").child("phone_number").setValue(PhoneNumber);
+    }
 
+    private void updateAddress() {
+        mDatabase.child(citizenUid).child("address").setValue(Address);
+        //mDatabase.child(citizenUid).child("profile").child("address").setValue(Address);
+    }
+
+    private void updateDOB() {
+        mDatabase.child(citizenUid).child("date_of_birth").setValue(DOB);
+        //mDatabase.child(citizenUid).child("profile").child("date_of_birth").setValue(DOB);
+
+    }
+
+    private void updateLicense() {
+        mDatabase.child(citizenUid).child("license_number").setValue(License);
+        //mDatabase.child(citizenUid).child("profile").child("license_number").setValue(License);
+    }
+
+    private void updateGender() {
+        if(gen == 0)
+            mDatabase.child(citizenUid).child("gender").setValue(" ");
+            //mDatabase.child(citizenUid).child("profile").child("gender").setValue(" ");
+        else if(gen == 1)
+            mDatabase.child(citizenUid).child("gender").setValue("Female");
+            //mDatabase.child(citizenUid).child("profile").child("gender").setValue("Female");
+        else
+            mDatabase.child(citizenUid).child("gender").setValue("Male");
+            //mDatabase.child(citizenUid).child("profile").child("gender").setValue("Male");
+
+    }
+
+    private void updateEthnicity() {
+        if (eth == 1 )
+            mDatabase.child(citizenUid).child("ethnicity").setValue("American indian");
+            //mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("American indian");
+        else if (eth == 2 )
+            mDatabase.child(citizenUid).child("ethnicity").setValue("Asian");
+            //mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("Asian");
+        else if (eth == 3)
+            mDatabase.child(citizenUid).child("ethnicity").setValue("African American");
+            //mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("African American");
+        else if (eth == 4)
+            mDatabase.child(citizenUid).child("ethnicty").setValue("Hispanic");
+            //mDatabase.child(citizenUid).child("profile").child("ethnicty").setValue("Hispanic");
+        else if (eth == 5)
+            mDatabase.child(citizenUid).child("ethnicity").setValue("pacific islander");
+            //mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("pacific islander");
+        else if (eth == 6)
+            mDatabase.child(citizenUid).child("ethnicity").setValue("white");
+            //mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("white");
+        else
+            mDatabase.child(citizenUid).child("ethnicity").setValue(" ");
+            //mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue(" ");
     }
 
     private void toHomepage() {

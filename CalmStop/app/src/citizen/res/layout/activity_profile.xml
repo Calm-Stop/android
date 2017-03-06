@@ -33,14 +33,14 @@
                 android:background="@mipmap/ic_launcher" />
 
             <TextView
-                android:text="Name: "
+                android:text="First Name: "
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/backButton"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="0dp"
-                android:id="@+id/Name"
+                android:id="@+id/FirstName"
                 android:layout_alignRight="@+id/backButton"
                 android:layout_alignEnd="@+id/backButton"
                 android:textSize="16sp"
@@ -52,9 +52,65 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:text="Name"
+                android:text="First Name"
                 android:ems="10"
-                android:id="@+id/editName"
+                android:id="@+id/editFirstName"
+                android:textSize="16sp"
+                android:fontFamily="monospace"
+                android:typeface="monospace"
+                android:textColor="@android:color/background_dark" />
+
+            <TextView
+                android:text="Last Name: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/FirstName"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="20dp"
+                android:id="@+id/LastName"
+                android:layout_alignRight="@+id/backButton"
+                android:layout_alignEnd="@+id/backButton"
+                android:textSize="16sp"
+                android:fontFamily="monospace"
+                android:typeface="monospace"
+                android:textColor="@android:color/background_dark" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:text="Last Name"
+                android:ems="10"
+                android:id="@+id/editLastName"
+                android:textSize="16sp"
+                android:fontFamily="monospace"
+                android:typeface="monospace"
+                android:textColor="@android:color/background_dark" />
+
+            <TextView
+                android:text="Date of Birth: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LastName"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="20dp"
+                android:id="@+id/dateOfBirth"
+                android:layout_alignRight="@+id/backButton"
+                android:layout_alignEnd="@+id/backButton"
+                android:textSize="16sp"
+                android:fontFamily="monospace"
+                android:typeface="monospace"
+                android:textColor="@android:color/background_dark" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text="mm/dd/yyyy"
+                android:ems="10"
+                android:id="@+id/editDateOfBirth"
                 android:textSize="16sp"
                 android:fontFamily="monospace"
                 android:typeface="monospace"
@@ -64,7 +120,7 @@
                 android:text="Email:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/Name"
+                android:layout_below="@+id/dateOfBirth"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp"
@@ -117,10 +173,66 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-                android:text="Gender:"
+                android:text="Address: "
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/phonenumber"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="20dp"
+                android:id="@+id/Address"
+                android:layout_alignRight="@+id/backButton"
+                android:layout_alignEnd="@+id/backButton"
+                android:textSize="16sp"
+                android:fontFamily="monospace"
+                android:typeface="monospace"
+                android:textColor="@android:color/background_dark" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPostalAddress"
+                android:text="Address"
+                android:ems="10"
+                android:id="@+id/editAddress"
+                android:textSize="16sp"
+                android:fontFamily="monospace"
+                android:typeface="monospace"
+                android:textColor="@android:color/background_dark" />
+
+            <TextView
+                android:text="License Number: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/Address"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="20dp"
+                android:id="@+id/LicenseNumber"
+                android:layout_alignRight="@+id/backButton"
+                android:layout_alignEnd="@+id/backButton"
+                android:textSize="16sp"
+                android:fontFamily="monospace"
+                android:typeface="monospace"
+                android:textColor="@android:color/background_dark" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:text="License Number"
+                android:ems="10"
+                android:id="@+id/editLicenseNumber"
+                android:textSize="16sp"
+                android:fontFamily="monospace"
+                android:typeface="monospace"
+                android:textColor="@android:color/background_dark" />
+
+            <TextView
+                android:text="Gender:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LicenseNumber"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp"
