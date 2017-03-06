@@ -256,7 +256,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
-        if(!licensenum.matches("\\w([0-9]{8})")) {
+        if(!licensenum.matches("^\\w([0-9]{8})")) {
             mLicenseNum.setError("Enter a letter followed by eight numbers\nExample: A12345678");
             mLicenseNum.requestFocus();
             return false;
@@ -265,7 +265,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //PHONE REGEX
-        if(!phone.matches("\\d")) {
+        if(!phone.matches("^1?(\\d{10}|" +
+                "\\(?\\d{3}\\)?(-|\\s)?\\d{3}(-|\\s)?\\d{4})\\s?")) {
             mPhone.setError("Invalid Phone Number.");
             mPhone.requestFocus();
             return false;
@@ -282,13 +283,9 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mAddress.setError(null);
         }
 
-        //DATE OF BIRTH REGEX
+        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
         if (dateofbirth.isEmpty()) {
             mDateOfBirth.setError("This field was left empty");
-            mDateOfBirth.requestFocus();
-            return false;
-        } else if (!dateofbirth.matches("")) {
-            mDateOfBirth.setError("Invalid date of birth.");
             mDateOfBirth.requestFocus();
             return false;
         } else {
