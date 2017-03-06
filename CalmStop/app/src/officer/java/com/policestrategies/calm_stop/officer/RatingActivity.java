@@ -90,36 +90,29 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
                     }
             );
 
-            // get officer comments
-            mDatabase.child("officer").child("14566").child(userId).child("comments").child("c1").addListenerForSingleValueEvent(
-                    new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String firstComment = dataSnapshot.getValue(String.class);
-                            comments_array.add(firstComment);
-                            comments_array.add(firstComment);
-                            comments_array.add(firstComment);
-                            comments_array.add(firstComment);
-                            comments_array.add(firstComment);
-                            Log.d(TAG, "comment array = "+comments_array);
-                            ArrayAdapter adapter = new ArrayAdapter<String>(getBaseContext(),
-                                    R.layout.activity_drivercommentslistview, comments_array);
-                            ListView listView = (ListView) findViewById(R.id.driver_comments);
-                            listView.setAdapter(adapter);
 
-                        }
+            // Get officer comments
+            mDatabase.child("officer").child("14566").child(userId).child("comments").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    List<String> comments_array = new ArrayList<String>();
+                    for (DataSnapshot commentSnapshot: dataSnapshot.getChildren()) {
+                        String comment = commentSnapshot.getValue(String.class);
+                        comments_array.add(comment);
+                        Log.d(TAG, "comment array= "+comments_array);
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
                     }
-            );
+                    ArrayAdapter adapter = new ArrayAdapter<String>(getBaseContext(),
+                            R.layout.activity_drivercommentslistview, comments_array);
+                    ListView listView = (ListView) findViewById(R.id.driver_comments);
+                    listView.setAdapter(adapter);
+                }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-
-
-
+                }
+            });
     }
     }
 
