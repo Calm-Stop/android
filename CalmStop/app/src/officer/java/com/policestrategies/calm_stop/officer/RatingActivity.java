@@ -13,12 +13,16 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.api.model.StringList;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.R.attr.data;
 import static android.R.attr.rating;
@@ -35,7 +39,9 @@ import static com.policestrategies.calm_stop.R.id.Name;
 public class RatingActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    String[] comments_array = {"\"Officer was very friendly.\"","\"I felt unfairly treated by the officer.\"","\"Officer gave me unnecessarily long lecture on why tail lights are important.\"","\"The traffic stop was professionally conducted.\"","\"I don't think I should have been pulled over for going 7 over the speed limit.\""};
+    // String[] comments_array = {"\"Officer was very friendly.\"","\"I felt unfairly treated by the officer.\"","\"Officer gave me unnecessarily long lecture on why tail lights are important.\"","\"The traffic stop was professionally conducted.\"","\"I don't think I should have been pulled over for going 7 over the speed limit.\""};
+
+    List<String> comments_array = new ArrayList<String>();
 
     RatingBar officerStarRating;
 
@@ -63,6 +69,8 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String userId = user.getUid();
+
+            // Get officer rating
             mDatabase.child("officer").child("14566").child(userId).child("ratings").child("avg_rating").addListenerForSingleValueEvent(
                     new ValueEventListener() {
                         @Override
@@ -81,44 +89,38 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
                         }
                     }
             );
-            // Read from the database
-            /* FirebaseDatabase database = FirebaseDatabase.getInstance();
-            String findOfficerRating = "officer/14566/"+userId+"/ratings/avg_rating";
-            Log.d(TAG, "path: "+findOfficerRating);
-            DatabaseReference myRef = database.getReference("officer/14566/KeqDG6SFGFNlKpoYJuZb4xRqo682/ratings/avg_rating");
 
-            myRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // This method is called once with the initial value and again
-                    // whenever data at this location is updated.
-                    officerStarRatingValue = dataSnapshot.getValue(Float.class);
-                    Log.d(TAG, "Rating is: " + officerStarRatingValue);
-                    officerStarRating=(RatingBar)findViewById(R.id.officerStarRatingBar);
-                    officerStarRating.setRating(officerStarRatingValue);
-                    String ratingDigitsString = String.valueOf(officerStarRatingValue);
-                    ratingDigits.setText(ratingDigitsString);
+            // get officer comments
+            mDatabase.child("officer").child("14566").child(userId).child("comments").child("c1").addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String firstComment = dataSnapshot.getValue(String.class);
+                            comments_array.add(firstComment);
+                            comments_array.add(firstComment);
+                            comments_array.add(firstComment);
+                            comments_array.add(firstComment);
+                            comments_array.add(firstComment);
+                            Log.d(TAG, "comment array = "+comments_array);
+                            ArrayAdapter adapter = new ArrayAdapter<String>(getBaseContext(),
+                                    R.layout.activity_drivercommentslistview, comments_array);
+                            ListView listView = (ListView) findViewById(R.id.driver_comments);
+                            listView.setAdapter(adapter);
 
-                }
+                        }
 
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    // Failed to read value
-                    Log.w(TAG, "Failed to read value.", error.toException());
-                }
-            }); */
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-
-        }
+                        }
+                    }
+            );
 
 
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,
-                R.layout.activity_drivercommentslistview, comments_array);
 
-        ListView listView = (ListView) findViewById(R.id.driver_comments);
-        listView.setAdapter(adapter);
 
+    }
     }
 
     @Override
