@@ -6,14 +6,18 @@ package com.policestrategies.calm_stop.officer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toolbar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +32,7 @@ import com.policestrategies.calm_stop.officer.beacon_registration.BeaconRegistra
 public class HomepageActivity extends AppCompatActivity implements View.OnClickListener {
     //welcome Officer
 
+    private BottomNavigationView bottomNavigationView;
     private ListView mDrawerList;
     private ArrayAdapter<String> mAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -40,8 +45,20 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+/*
+        mBottomBar = BottomBar.bind(this, R.layout.activity_homepage,
+                savedInstanceState);
 
+        mBottomBar.setItems(
+                new BottomBarTab(R.drawable.ic_recents, "Recents"),
+                new BottomBarTab(R.drawable.ic_favorites, "Favorites"),
+                new BottomBarTab(R.drawable.ic_nearby, "Nearby"),
+                new BottomBarTab(R.drawable.ic_friends, "Friends")
+        );
+*/
         //findViewById(R.id.button_logout).setOnClickListener(this);
+
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mDrawerList = (ListView)findViewById(R.id.navList);
@@ -59,6 +76,31 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.button_manage_beacon).setOnClickListener(this);
         findViewById(R.id.button_ratings).setOnClickListener(this);
 
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_home:
+                                home();
+                                break;
+
+                            case R.id.action_ratings:
+                                ratings();
+                                break;
+
+                            case R.id.action_history:
+                                history();
+                                break;
+
+                            case R.id.action_account:
+                                account();
+                                break;
+
+                        }
+                        return true;
+                    }
+                });
 
         Toast.makeText(HomepageActivity.this, "Welcome!", Toast.LENGTH_LONG).show();
     }
