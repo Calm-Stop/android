@@ -42,8 +42,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private EditText mDateOfBirth;
     private EditText mPhone;
     private EditText mAddress;
-    private EditText mGender;
-    private EditText mlanguage;
 
     private int gen = 0;
     private int lang = 0;
@@ -63,6 +61,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private FirebaseDatabase database;
     // [END declare databaseRef & database]
 
+    private RegexChecks regexChecks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,9 +81,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         mLastNameField = (EditText) findViewById(R.id.input_lastname);
         mPhone = (EditText) findViewById(R.id.input_phone);
         mAddress = (EditText) findViewById(R.id.input_address);
-        mGender = (EditText) findViewById(R.id.input_gender);
         mDateOfBirth = (EditText) findViewById(R.id.input_DateOfBirth);
-        mlanguage = (EditText) findViewById(R.id.input_language);
 
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
@@ -159,8 +157,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         final String lastname = mLastNameField.getText().toString();
         final String phone = mPhone.getText().toString();
         final String address = mAddress.getText().toString();
-        //final String gender = mGender.getText().toString();
-        //final String language = mlanguage.getText().toString();
         final String dateofbirth = mDateOfBirth.getText().toString();
         final String gender = genderSetter.getSelectedItem().toString();
         final String language = langSetter.getSelectedItem().toString();
@@ -170,9 +166,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         if (!validateInput(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth)) {
             return;
         }
-//        final Citizen mUser = new Citizen(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth);
-        // Now we need to attempt to signup - we'll add code for this later (once Firebase is integrated)
-        // [START create_user_with_email]
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -183,7 +176,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
+                        if (!task.isSuccessful())  {
                             Toast.makeText(SignupFormActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                             finish();
@@ -222,35 +215,26 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private boolean validateInput(String email, String password, String licensenum, String firstname,
                                   String lastname, String phone, String address, String gender, String language, String dateofbirth) {
 
-        //FIRST NAME REGEX
-        if(firstname.matches(".*\\d.*") || firstname.matches(".*\\s.*")) {
+//(8 fns)validEmail, validPassword, validLicense, validAddress, validPhone, validFirstname, validLastname, validDateOfBirth
+        //FIRST NAME CHECK
+        if (!regexChecks.validFirstName(firstname)) {
             mFirstNameField.setError("Please enter a valid first name.");
-            mFirstNameField.requestFocus();
-            return false;
-        } else if (firstname.isEmpty()) {
-            mFirstNameField.setError("This field was left empty.");
             mFirstNameField.requestFocus();
             return false;
         } else {
             mFirstNameField.setError(null);
         }
-
-        //LAST NAME REGEX
-        if(lastname.matches(".*\\d.*") || lastname.matches(".*\\s.*")) {
-            mLastNameField.setError("Please enter a valid last name.");
-            mLastNameField.requestFocus();
-            return false;
-        } else if (lastname.isEmpty()) {
-            mLastNameField.setError("This field was left empty.");
+        //LAST NAME CHECK
+        if (!regexChecks.validLastName(lastname)) {
+            mLastNameField.setError("Please enter a valid first name.");
             mLastNameField.requestFocus();
             return false;
         } else {
             mLastNameField.setError(null);
         }
 
-
-        //EMAIL REGEX
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        //EMAIL CHECK
+        if (!regexChecks.validEmail(email)) {
             mEmailField.setError("Enter a valid email address.");
             mEmailField.requestFocus();
             return false;
@@ -259,17 +243,16 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //PASSWORD REGEX
-        if (password.isEmpty() || password.length() < 6) {
-            mPasswordField.setError("Please enter a valid password" +
-                    " containing at least 6 characters.");
+        if (!regexChecks.validPassword(password)) {
+            mPasswordField.setError("Password must be at least 6 characters and contain at least a letter and a number.");
             mPasswordField.requestFocus();
             return false;
         } else {
             mPasswordField.setError(null);
         }
-/*
+
         //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
-        if(!licensenum.matches("^\\w([0-9]{8})")) {
+        if(!regexChecks.validLicense(licensenum)) {
             mLicenseNum.setError("Enter a letter followed by eight numbers\nExample: A12345678");
             mLicenseNum.requestFocus();
             return false;
@@ -278,17 +261,26 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //PHONE REGEX
-        if(!phone.matches("^1?(\\d{10}|" +
-                "\\(?\\d{3}\\)?(-|\\s)?\\d{3}(-|\\s)?\\d{4})\\s?")) {
+        if(!regexChecks.validPhone(phone)) {
             mPhone.setError("Invalid Phone Number.");
             mPhone.requestFocus();
             return false;
         } else {
             mPhone.setError(null);
         }
-        //address gender language DOB
+
+        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
+        if (!regexChecks.validDateOfBirth(dateofbirth)){
+            mDateOfBirth.setError("DD-MM-YYYY");
+            mDateOfBirth.requestFocus();
+            return false;
+        } else {
+            mDateOfBirth.setError(null);
+        }
+
+        //address gender language DOB; Use google map API for address
         //ADDRESS REGEX
-        if (address.isEmpty()){
+        if (!regexChecks.validAddress(address)){
             mAddress.setError("This field was left empty.");
             mAddress.requestFocus();
             return false;
@@ -296,19 +288,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mAddress.setError(null);
         }
 
-        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
-        if (dateofbirth.isEmpty()) {
-            mDateOfBirth.setError("This field was left empty");
-            mDateOfBirth.requestFocus();
-            return false;
-        } else if (!dateofbirth.matches("^\\d{1,2}(-?|(,\\s)?|/?)\\d{1,2}(-?|(,\\s)?|/?)\\d{4}")){
-            mDateOfBirth.setError("DD-MM-YYYY");
-            mDateOfBirth.requestFocus();
-            return false;
-        } else {
-            mDateOfBirth.setError(null);
-        }
-*/
         return true;
 
 

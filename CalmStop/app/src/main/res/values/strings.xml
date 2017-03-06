@@ -5,19 +5,19 @@
     <string name="auth_failed">Authentication failed</string>
 
     <string-array name = "Gender">
-        <item></item>
         <item>Female</item>
         <item>Male</item>
+        <item>Not saying</item>
     </string-array>
 
     <string-array name = "Ethnicity">
-        <item></item>
         <item>American Indian</item>
         <item>Asian</item>
         <item>African American</item>
         <item>Hispanic</item>
         <item>Pacific Islander</item>
         <item>White</item>
+        <item>Not saying</item>
     </string-array>
 
     <string-array name = "Language">
