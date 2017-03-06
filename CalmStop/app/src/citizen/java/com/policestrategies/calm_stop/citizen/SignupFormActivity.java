@@ -209,6 +209,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private boolean validateInput(String email, String password, String licensenum, String firstname,
                                   String lastname, String phone, String address, String gender, String language, String dateofbirth) {
 
+        //FIRST NAME REGEX
         if(firstname.matches(".*\\d.*") || firstname.matches(".*\\s.*")) {
             mFirstNameField.setError("Please enter a valid first name.");
             mFirstNameField.requestFocus();
@@ -221,6 +222,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mFirstNameField.setError(null);
         }
 
+        //LAST NAME REGEX
         if(lastname.matches(".*\\d.*") || lastname.matches(".*\\s.*")) {
             mLastNameField.setError("Please enter a valid last name.");
             mLastNameField.requestFocus();
@@ -234,7 +236,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
 
-
+        //EMAIL REGEX
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             mEmailField.setError("Enter a valid email address.");
             mEmailField.requestFocus();
@@ -243,6 +245,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mEmailField.setError(null);
         }
 
+        //PASSWORD REGEX
         if (password.isEmpty() || password.length() < 6) {
             mPasswordField.setError("Please enter a valid password" +
                     " containing at least 6 characters.");
@@ -252,9 +255,51 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mPasswordField.setError(null);
         }
 
+        //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
+        if(!licensenum.matches("\\w([0-9]{8})")) {
+            mLicenseNum.setError("Enter a letter followed by eight numbers\nExample: A12345678");
+            mLicenseNum.requestFocus();
+            return false;
+        } else {
+            mLicenseNum.setError(null);
+        }
+
+        //PHONE REGEX
+        if(!phone.matches("\\d")) {
+            mPhone.setError("Invalid Phone Number.");
+            mPhone.requestFocus();
+            return false;
+        } else {
+            mPhone.setError(null);
+        }
+        //address gender language DOB
+        //ADDRESS REGEX
+        if (address.isEmpty()){
+            mAddress.setError("This field was left empty.");
+            mAddress.requestFocus();
+            return false;
+        } else {
+            mAddress.setError(null);
+        }
+
+        //DATE OF BIRTH REGEX
+        if (dateofbirth.isEmpty()) {
+            mDateOfBirth.setError("This field was left empty");
+            mDateOfBirth.requestFocus();
+            return false;
+        } else if (!dateofbirth.matches("")) {
+            mDateOfBirth.setError("Invalid date of birth.");
+            mDateOfBirth.requestFocus();
+            return false;
+        } else {
+            mDateOfBirth.setError(null);
+        }
+
         return true;
 
+
     }
+
 
     public static String getEmail(){
         String emailInput = mEmailField.getText().toString();
