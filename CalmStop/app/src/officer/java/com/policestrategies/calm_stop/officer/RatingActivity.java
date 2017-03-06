@@ -55,9 +55,6 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
 
     private BottomNavigationView bottomNavigationView;
 
-
-
-
     private FirebaseUser user;
 
     private static final String TAG = "RatingActivity";
