@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
 
+import static android.R.attr.data;
 import static android.R.attr.rating;
 import static android.R.attr.value;
 import static com.policestrategies.calm_stop.R.id.Name;
@@ -54,14 +55,37 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_rating);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         ratingDigits = (TextView)findViewById(R.id.star_rating_digits);
 
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
+            String userId = user.getUid();
+            mDatabase.child("officer").child("14566").child(userId).child("ratings").child("avg_rating").addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Float officerStarRatingValue = dataSnapshot.getValue(Float.class);
+                            Log.d(TAG, "rating = "+officerStarRatingValue);
+                            officerStarRating=(RatingBar)findViewById(R.id.officerStarRatingBar);
+                            officerStarRating.setRating(officerStarRatingValue);
+                            String ratingDigitsString = String.valueOf(officerStarRatingValue);
+                            ratingDigits.setText(ratingDigitsString);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    }
+            );
             // Read from the database
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("officer/14566/AIxgvUpkVnW1t0irg1taKZg5ZZl2/profile/rating");
+            /* FirebaseDatabase database = FirebaseDatabase.getInstance();
+            String findOfficerRating = "officer/14566/"+userId+"/ratings/avg_rating";
+            Log.d(TAG, "path: "+findOfficerRating);
+            DatabaseReference myRef = database.getReference("officer/14566/KeqDG6SFGFNlKpoYJuZb4xRqo682/ratings/avg_rating");
 
             myRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -82,7 +106,7 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
                     // Failed to read value
                     Log.w(TAG, "Failed to read value.", error.toException());
                 }
-            });
+            }); */
 
 
         }
