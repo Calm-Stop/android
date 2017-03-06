@@ -1,11 +1,12 @@
-package com.policestrategies.calm_stop.citizen;
+package com.policestrategies.calm_stop.citizen.beacon_detection;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,17 +20,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
 
 import org.altbeacon.beacon.Beacon;
-import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
-import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor;
 
 import java.io.InputStream;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Landing page after a beacon is detected. Find the UUID of the beacon and connect to the officer.
@@ -42,18 +42,17 @@ public class BeaconDetectionActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
 
+    private RecyclerView mRecyclerView;
+
     private String mDepartmentNumber;
     private String mOfficerUid;
     private String mOfficerName;
-
-    private Bitmap mOfficerPhoto;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beacon_detection);
-        ((TextView) findViewById(R.id.text_namespace_id)).setText("Scanning....");
-        findViewById(R.id.officer_information_card_view).setVisibility(View.INVISIBLE);
+        ((TextView) findViewById(R.id.text_scanning)).setText("Scanning....");
 
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -107,15 +106,27 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                                             @Override
                                             public void run() {
 
-                                                new DownloadImageTask((ImageView) findViewById(R.id.officer_photo))
-                                                        .execute(officerPhotoUrl);
+//                                                new DownloadImageTask((ImageView) findViewById(R.id.officer_photo))
+//                                                        .execute(officerPhotoUrl);
 
                                                 String deptNum = "Department # " + mDepartmentNumber;
-                                                ((TextView) findViewById(R.id.officer_department_number))
-                                                        .setText(deptNum);
-                                                ((TextView) findViewById(R.id.officer_name)).setText(mOfficerName);
-                                                findViewById(R.id.text_namespace_id).setVisibility(View.GONE);
-                                                findViewById(R.id.officer_information_card_view).setVisibility(View.VISIBLE);
+                                                List<BeaconObject> scanned = new ArrayList<>();
+                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
+                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
+                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
+                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
+                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
+                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
+                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
+                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
+                                                mRecyclerView.setAdapter(new BeaconDetectionAdapter(scanned,
+                                                        new BeaconDetectionAdapter.OnItemClickListener() {
+                                                            @Override
+                                                            public void onItemClick(BeaconObject item) {
+                                                                System.out.println("Clicked on officer " + item.getOfficerName());
+                                                            }
+                                                        }));
+                                                findViewById(R.id.text_scanning).setVisibility(View.GONE);
                                             }
                                         });
 
@@ -149,6 +160,10 @@ public class BeaconDetectionActivity extends AppCompatActivity {
             Toast.makeText(BeaconDetectionActivity.this, "Failed to range beacons",
                     Toast.LENGTH_SHORT).show();
         }
+
+        mRecyclerView = (RecyclerView)findViewById(R.id.beacon_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(null);
 
         System.out.println("Down here-------------------------------");
 
