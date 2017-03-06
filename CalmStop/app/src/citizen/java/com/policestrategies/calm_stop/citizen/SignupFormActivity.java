@@ -71,8 +71,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         langSetter = (Spinner) findViewById(R.id.ethnicitySetter);
 
-//        setUpGenderSetter();
-//        setUpLangSetter();
+        setUpGenderSetter();
+        setUpLangSetter();
 
         mEmailField = (EditText) findViewById(R.id.input_email);
         mPasswordField = (EditText) findViewById(R.id.input_password);
@@ -152,25 +152,25 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
      * an account.
      */
     private void signup() {
-        String email = mEmailField.getText().toString();
-        String password = mPasswordField.getText().toString();
-        String licensenum = mLicenseNum.getText().toString();
-        String firstname = mFirstNameField.getText().toString();
-        String lastname = mLastNameField.getText().toString();
-        String phone = mPhone.getText().toString();
-        String address = mAddress.getText().toString();
-        String gender = mGender.getText().toString();
-        String language = mlanguage.getText().toString();
-        String dateofbirth = mDateOfBirth.getText().toString();
-//        gender = genderSetter.getSelectedItem().toString();
-//        language = langSetter.getSelectedItem().toString();
+        final String email = mEmailField.getText().toString();
+        final String password = mPasswordField.getText().toString();
+        final String licensenum = mLicenseNum.getText().toString();
+        final String firstname = mFirstNameField.getText().toString();
+        final String lastname = mLastNameField.getText().toString();
+        final String phone = mPhone.getText().toString();
+        final String address = mAddress.getText().toString();
+        //final String gender = mGender.getText().toString();
+        //final String language = mlanguage.getText().toString();
+        final String dateofbirth = mDateOfBirth.getText().toString();
+        final String gender = genderSetter.getSelectedItem().toString();
+        final String language = langSetter.getSelectedItem().toString();
 
         Log.d(TAG, "createAccount:" + email);
 
         if (!validateInput(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth)) {
             return;
         }
-        final Citizen mUser = new Citizen(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth);
+//        final Citizen mUser = new Citizen(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth);
         // Now we need to attempt to signup - we'll add code for this later (once Firebase is integrated)
         // [START create_user_with_email]
 
@@ -192,7 +192,20 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             Toast.makeText(SignupFormActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             String uuid = user.getUid();
-                            databaseRef.child("citizen").child(uuid).child("profile").setValue(mUser);
+                            DatabaseReference citizenDatabaseRef = databaseRef.child("citizen")
+                                    .child(uuid).child("profile").getRef();
+                            //email, password, licensenum, firstname, lastname, phone, address, dateofbirth, gender, language
+                            citizenDatabaseRef.child("email").setValue(email);
+                            citizenDatabaseRef.child("first_name").setValue(firstname);
+                            citizenDatabaseRef.child("last_name").setValue(lastname);
+                            citizenDatabaseRef.child("license_number").setValue(licensenum);
+                            citizenDatabaseRef.child("phone_number").setValue(phone);
+                            citizenDatabaseRef.child("address").setValue(address);
+                            citizenDatabaseRef.child("gender").setValue(gender);
+                            citizenDatabaseRef.child("language").setValue(language);
+                            citizenDatabaseRef.child("date_of_birth").setValue(dateofbirth);
+
+//                            databaseRef.child("citizen").child(uuid).child("profile").setValue(mUser);
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
                             finish();
@@ -313,7 +326,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         emailInput = token[0];
         return emailInput;
     }
-/*
+
     private void setUpGenderSetter() {
 
         final ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this,
@@ -393,7 +406,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             }
         });
     }
-*/
+
     /*
      *  local private class
      *  Citizen is used to store data that is dumped into firebase on account creation here
