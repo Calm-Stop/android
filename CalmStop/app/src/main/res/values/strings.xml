@@ -30,6 +30,21 @@
         <item>German</item>
     </string-array>
 
+    <string-array name= "Month">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+
     <string user="Hello Citizen, ">Calm Stop Citizen Greeting</string>
 
     <string name="drawer_open">Open navigation drawer</string>
