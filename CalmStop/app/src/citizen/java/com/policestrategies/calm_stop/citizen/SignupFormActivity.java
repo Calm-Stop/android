@@ -42,8 +42,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private EditText mDateOfBirth;
     private EditText mPhone;
     private EditText mAddress;
-    private EditText mGender;
-    private EditText mlanguage;
 
     private int gen = 0;
     private int lang = 0;
@@ -63,6 +61,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private FirebaseDatabase database;
     // [END declare databaseRef & database]
 
+    private RegexChecks regexChecks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +71,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         langSetter = (Spinner) findViewById(R.id.ethnicitySetter);
 
-//        setUpGenderSetter();
-//        setUpLangSetter();
+        setUpGenderSetter();
+        setUpLangSetter();
 
         mEmailField = (EditText) findViewById(R.id.input_email);
         mPasswordField = (EditText) findViewById(R.id.input_password);
@@ -81,9 +81,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         mLastNameField = (EditText) findViewById(R.id.input_lastname);
         mPhone = (EditText) findViewById(R.id.input_phone);
         mAddress = (EditText) findViewById(R.id.input_address);
-        mGender = (EditText) findViewById(R.id.input_gender);
         mDateOfBirth = (EditText) findViewById(R.id.input_DateOfBirth);
-        mlanguage = (EditText) findViewById(R.id.input_language);
 
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
@@ -152,27 +150,22 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
      * an account.
      */
     private void signup() {
-        String email = mEmailField.getText().toString();
-        String password = mPasswordField.getText().toString();
-        String licensenum = mLicenseNum.getText().toString();
-        String firstname = mFirstNameField.getText().toString();
-        String lastname = mLastNameField.getText().toString();
-        String phone = mPhone.getText().toString();
-        String address = mAddress.getText().toString();
-        String gender = mGender.getText().toString();
-        String language = mlanguage.getText().toString();
-        String dateofbirth = mDateOfBirth.getText().toString();
-//        gender = genderSetter.getSelectedItem().toString();
-//        language = langSetter.getSelectedItem().toString();
+        final String email = mEmailField.getText().toString();
+        final String password = mPasswordField.getText().toString();
+        final String licensenum = mLicenseNum.getText().toString();
+        final String firstname = mFirstNameField.getText().toString();
+        final String lastname = mLastNameField.getText().toString();
+        final String phone = mPhone.getText().toString();
+        final String address = mAddress.getText().toString();
+        final String dateofbirth = mDateOfBirth.getText().toString();
+        final String gender = genderSetter.getSelectedItem().toString();
+        final String language = langSetter.getSelectedItem().toString();
 
         Log.d(TAG, "createAccount:" + email);
 
         if (!validateInput(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth)) {
             return;
         }
-        final Citizen mUser = new Citizen(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth);
-        // Now we need to attempt to signup - we'll add code for this later (once Firebase is integrated)
-        // [START create_user_with_email]
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -183,7 +176,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
+                        if (!task.isSuccessful())  {
                             Toast.makeText(SignupFormActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                             finish();
@@ -192,7 +185,20 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             Toast.makeText(SignupFormActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             String uuid = user.getUid();
-                            databaseRef.child("citizen").child(uuid).child("profile").setValue(mUser);
+                            DatabaseReference citizenDatabaseRef = databaseRef.child("citizen")
+                                    .child(uuid).child("profile").getRef();
+                            //email, password, licensenum, firstname, lastname, phone, address, dateofbirth, gender, language
+                            citizenDatabaseRef.child("email").setValue(email);
+                            citizenDatabaseRef.child("first_name").setValue(firstname);
+                            citizenDatabaseRef.child("last_name").setValue(lastname);
+                            citizenDatabaseRef.child("license_number").setValue(licensenum);
+                            citizenDatabaseRef.child("phone_number").setValue(phone);
+                            citizenDatabaseRef.child("address").setValue(address);
+                            citizenDatabaseRef.child("gender").setValue(gender);
+                            citizenDatabaseRef.child("language").setValue(language);
+                            citizenDatabaseRef.child("date_of_birth").setValue(dateofbirth);
+
+//                            databaseRef.child("citizen").child(uuid).child("profile").setValue(mUser);
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
                             finish();
@@ -209,33 +215,26 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private boolean validateInput(String email, String password, String licensenum, String firstname,
                                   String lastname, String phone, String address, String gender, String language, String dateofbirth) {
 
-        if(firstname.matches(".*\\d.*") || firstname.matches(".*\\s.*")) {
+//(8 fns)validEmail, validPassword, validLicense, validAddress, validPhone, validFirstname, validLastname, validDateOfBirth
+        //FIRST NAME CHECK
+        if (!regexChecks.validFirstName(firstname)) {
             mFirstNameField.setError("Please enter a valid first name.");
-            mFirstNameField.requestFocus();
-            return false;
-        } else if (firstname.isEmpty()) {
-            mFirstNameField.setError("This field was left empty.");
             mFirstNameField.requestFocus();
             return false;
         } else {
             mFirstNameField.setError(null);
         }
-
-        if(lastname.matches(".*\\d.*") || lastname.matches(".*\\s.*")) {
-            mLastNameField.setError("Please enter a valid last name.");
-            mLastNameField.requestFocus();
-            return false;
-        } else if (lastname.isEmpty()) {
-            mLastNameField.setError("This field was left empty.");
+        //LAST NAME CHECK
+        if (!regexChecks.validLastName(lastname)) {
+            mLastNameField.setError("Please enter a valid first name.");
             mLastNameField.requestFocus();
             return false;
         } else {
             mLastNameField.setError(null);
         }
 
-
-
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        //EMAIL CHECK
+        if (!regexChecks.validEmail(email)) {
             mEmailField.setError("Enter a valid email address.");
             mEmailField.requestFocus();
             return false;
@@ -243,18 +242,57 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mEmailField.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 6) {
-            mPasswordField.setError("Please enter a valid password" +
-                    " containing at least 6 characters.");
+        //PASSWORD REGEX
+        if (!regexChecks.validPassword(password)) {
+            mPasswordField.setError("Password must be at least 6 characters and contain at least a letter and a number.");
             mPasswordField.requestFocus();
             return false;
         } else {
             mPasswordField.setError(null);
         }
 
+        //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
+        if(!regexChecks.validLicense(licensenum)) {
+            mLicenseNum.setError("Enter a letter followed by eight numbers\nExample: A12345678");
+            mLicenseNum.requestFocus();
+            return false;
+        } else {
+            mLicenseNum.setError(null);
+        }
+
+        //PHONE REGEX
+        if(!regexChecks.validPhone(phone)) {
+            mPhone.setError("Invalid Phone Number.");
+            mPhone.requestFocus();
+            return false;
+        } else {
+            mPhone.setError(null);
+        }
+
+        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
+        if (!regexChecks.validDateOfBirth(dateofbirth)){
+            mDateOfBirth.setError("DD-MM-YYYY");
+            mDateOfBirth.requestFocus();
+            return false;
+        } else {
+            mDateOfBirth.setError(null);
+        }
+
+        //address gender language DOB; Use google map API for address
+        //ADDRESS REGEX
+        if (!regexChecks.validAddress(address)){
+            mAddress.setError("This field was left empty.");
+            mAddress.requestFocus();
+            return false;
+        } else {
+            mAddress.setError(null);
+        }
+
         return true;
 
+
     }
+
 
     public static String getEmail(){
         String emailInput = mEmailField.getText().toString();
@@ -267,7 +305,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         emailInput = token[0];
         return emailInput;
     }
-/*
+
     private void setUpGenderSetter() {
 
         final ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this,
@@ -347,7 +385,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             }
         });
     }
-*/
+
     /*
      *  local private class
      *  Citizen is used to store data that is dumped into firebase on account creation here
