@@ -2,7 +2,10 @@ package com.policestrategies.calm_stop.officer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,10 +19,16 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
     //private UserLocalStore localStore;
 
+    private BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.bringToFront();
 
         findViewById(R.id.aboutus_button).setOnClickListener(this);
         findViewById(R.id.profile_button).setOnClickListener(this);
@@ -29,6 +38,32 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         findViewById(R.id.backbutton).setOnClickListener(this);
         //localStore = new UserLocalStore(this);
 
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_home:
+                                home();
+                                break;
+
+                            case R.id.action_ratings:
+                                ratings();
+                                break;
+
+                            case R.id.action_history:
+                                history();
+                                break;
+
+                            case R.id.action_account:
+                                account();
+                                break;
+
+                        }
+                        return true;
+                    }
+                });
+
     }
 
     @Override
@@ -36,7 +71,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
         switch(v.getId()) {
 
-            case R.id.logout_button: // The login button was pressed - let's run the login function
+            case R.id.logout_button:
                 logout();
                 break;
             case R.id.aboutus_button:
@@ -86,11 +121,31 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void logout() {
-        //You want to logout -> login page
-        //UserLocalStore localStore = new UserLocalStore(this);
-        //localStore.clearUserData();
         FirebaseAuth.getInstance().signOut();
         Intent i = new Intent(getBaseContext(), LoginActivity.class);
+        startActivity(i);
+
+    }
+
+    private void home() {
+        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        startActivity(i);
+        finish();
+
+    }
+
+    private void ratings() {
+        Intent i = new Intent(getBaseContext(), RatingActivity.class);
+        startActivity(i);
+
+    }
+    private void account() {
+        Intent i = new Intent(getBaseContext(), AccountActivity.class);
+        startActivity(i);
+
+    }
+    private void history() {
+        Intent i = new Intent(getBaseContext(), HistoryActivity.class);
         startActivity(i);
 
     }

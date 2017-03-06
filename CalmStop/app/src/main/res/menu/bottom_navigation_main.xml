@@ -4,34 +4,29 @@
     <item
         android:id="@+id/action_home"
         android:enabled="true"
+        android:icon="@drawable/ic_home_black_24dp"
         android:title="Home"
         app:showAsAction="ifRoom" />
-        <!--
-        android:icon="@drawable/common_google_signin_btn_text_dark_normal"
-        -->
+
     <item
         android:id="@+id/action_ratings"
         android:enabled="true"
-        android:title="Ratingss"
-        app:showAsAction="ifRoom" />
-    <!--
-    android:icon="@drawable/ic_access_time_white_24dp"
-    -->
+        android:icon="@drawable/ic_grade_black_24dp"
+        android:title="Ratings"
+        app:showAsAction="ifRoom"/>
+
     <item
         android:id="@+id/action_history"
         android:enabled="true"
+        android:icon="@drawable/ic_history_black_24dp"
         android:title="History"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_account"
         android:enabled="true"
+        android:icon="@drawable/ic_perm_identity_black_24dp"
         android:title="Account"
-        app:showAsAction="ifRoom" />
-
-    <!--
-            android:icon="@drawable/ic_audiotrack_white_24dp"
-    android:icon="@drawable/ic_audiotrack_white_24dp"
-    -->
+        app:showAsAction="ifRoom"/>
 
 </menu>

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -33,48 +32,18 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     //welcome Officer
 
     private BottomNavigationView bottomNavigationView;
-    private ListView mDrawerList;
-    private ArrayAdapter<String> mAdapter;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawerLayout;
-    private String mActivityTitle;
-
-    private String[] mMenuList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-/*
-        mBottomBar = BottomBar.bind(this, R.layout.activity_homepage,
-                savedInstanceState);
 
-        mBottomBar.setItems(
-                new BottomBarTab(R.drawable.ic_recents, "Recents"),
-                new BottomBarTab(R.drawable.ic_favorites, "Favorites"),
-                new BottomBarTab(R.drawable.ic_nearby, "Nearby"),
-                new BottomBarTab(R.drawable.ic_friends, "Friends")
-        );
-*/
-        //findViewById(R.id.button_logout).setOnClickListener(this);
+        //bottomNavigationView.SetOnItemSelectedListener(this);
 
+        //bottomNavigationView.bringToFront();
 
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView)findViewById(R.id.navList);
-        mActivityTitle = getTitle().toString();
-
-        mMenuList = new String[]{"Home", "Ratings", "History", "Account"};
-
-        addDrawerItems();
-        setupDrawer();
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
-        findViewById(R.id.button_logout).setOnClickListener(this);
         findViewById(R.id.button_manage_beacon).setOnClickListener(this);
-        findViewById(R.id.button_ratings).setOnClickListener(this);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -110,12 +79,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
         switch(v.getId()) {
 
-            case R.id.button_ratings: // Ratings button was pressed
-                System.out.println("Rating button pressed");
-                Intent h = new Intent(getBaseContext(), RatingActivity.class);
-                startActivity(h);
-                break;
-
             case R.id.button_manage_beacon:
                 System.out.println("Beacon button pressed");
                 Intent i = new Intent(getBaseContext(), BeaconRegistrationActivity.class);
@@ -123,59 +86,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
         }
-    }
-
-    private void addDrawerItems() {
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mMenuList);
-        mDrawerList.setAdapter(mAdapter);
-
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch(position){
-                    case 0:
-                        home();
-                        break;
-                    case 1:
-                        ratings();
-                        break;
-                    case 2:
-                        history();
-                        break;
-                    case 3:
-                        account();
-                        break;
-
-                }
-
-                //Toast.makeText(HomepageActivity.this, "position= " + position, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-    private void setupDrawer() {
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.string.drawer_open, R.string.drawer_close) {
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Menu");
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mActivityTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
-
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
     }
 
     private void home() {
@@ -201,16 +111,5 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-
-    private void logout() {
-        //You want to logout -> login page
-        FirebaseAuth.getInstance().signOut();
-        Intent i = new Intent(getBaseContext(), LoginActivity.class);
-        startActivity(i);
-
-        // Now we need to attempt to log in - we'll add code for this later (once Firebase is integrated)
-
-        //Toast.makeText(LoginActivity.this, "Logging Out", Toast.LENGTH_SHORT).show();
-    }
 }
 

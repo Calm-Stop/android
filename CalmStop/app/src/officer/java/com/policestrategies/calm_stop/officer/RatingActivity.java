@@ -1,9 +1,13 @@
 package com.policestrategies.calm_stop.officer;
 
+import android.content.Intent;
 import android.media.Rating;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -42,6 +46,10 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
 
     private DatabaseReference mDatabase;
 
+    private BottomNavigationView bottomNavigationView;
+
+
+
 
     private FirebaseUser user;
 
@@ -56,6 +64,9 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_rating);
         ratingDigits = (TextView)findViewById(R.id.star_rating_digits);
 
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.bringToFront();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -83,10 +94,33 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
                     Log.w(TAG, "Failed to read value.", error.toException());
                 }
             });
-
-
         }
 
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_home:
+                                home();
+                                break;
+
+                            case R.id.action_ratings:
+                                ratings();
+                                break;
+
+                            case R.id.action_history:
+                                history();
+                                break;
+
+                            case R.id.action_account:
+                                account();
+                                break;
+
+                        }
+                        return true;
+                    }
+                });
 
 
         ArrayAdapter adapter = new ArrayAdapter<String>(this,
@@ -101,13 +135,31 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
 
         switch(v.getId()) {
-/*
-            case R.id.button_logout: // The login button was pressed - let's run the login function
-                logout();
-                break;
-*/
+
         }
     }
 
+    private void home() {
+        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        startActivity(i);
+        finish();
+
+    }
+
+    private void ratings() {
+        Intent i = new Intent(getBaseContext(), RatingActivity.class);
+        startActivity(i);
+
+    }
+    private void account() {
+        Intent i = new Intent(getBaseContext(), AccountActivity.class);
+        startActivity(i);
+
+    }
+    private void history() {
+        Intent i = new Intent(getBaseContext(), HistoryActivity.class);
+        startActivity(i);
+
+    }
 
 }

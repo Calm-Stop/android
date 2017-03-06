@@ -360,6 +360,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateEmail() {
+        mDatabase.child(citizenUid).child("profile").child("email").setValue(Email);
         user.updateEmail(Email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
