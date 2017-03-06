@@ -289,7 +289,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mDateOfBirth.requestFocus();
             return false;
         } else if (!dateofbirth.matches("^\\d{1,2}(-?|(,\\s)?|/?)\\d{1,2}(-?|(,\\s)?|/?)\\d{4}")){
-            mDateOfBirth.setError("Invalid date of birth");
+            mDateOfBirth.setError("DD-MM-YYYY");
             mDateOfBirth.requestFocus();
             return false;
         } else {
