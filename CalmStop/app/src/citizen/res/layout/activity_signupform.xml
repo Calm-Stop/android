@@ -77,13 +77,6 @@
             android:inputType="text"
             android:hint="Address" />
 
-        <!--  Gender Label -->
-        <EditText
-            android:id="@+id/input_gender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Gender" />
 <!-- SPINNER -->
         <TextView
             android:text="Gender:"
@@ -130,12 +123,6 @@
             android:id="@+id/ethnicitySetter"
             android:background="@android:color/background_light" />
 <!-- END SPINNER -->
-        <EditText
-            android:id="@+id/input_language"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Preferred Language" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

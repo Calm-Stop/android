@@ -42,8 +42,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private EditText mDateOfBirth;
     private EditText mPhone;
     private EditText mAddress;
-    private EditText mGender;
-    private EditText mlanguage;
 
     private int gen = 0;
     private int lang = 0;
@@ -81,9 +79,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         mLastNameField = (EditText) findViewById(R.id.input_lastname);
         mPhone = (EditText) findViewById(R.id.input_phone);
         mAddress = (EditText) findViewById(R.id.input_address);
-        mGender = (EditText) findViewById(R.id.input_gender);
         mDateOfBirth = (EditText) findViewById(R.id.input_DateOfBirth);
-        mlanguage = (EditText) findViewById(R.id.input_language);
 
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
@@ -159,8 +155,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         final String lastname = mLastNameField.getText().toString();
         final String phone = mPhone.getText().toString();
         final String address = mAddress.getText().toString();
-        //final String gender = mGender.getText().toString();
-        //final String language = mlanguage.getText().toString();
         final String dateofbirth = mDateOfBirth.getText().toString();
         final String gender = genderSetter.getSelectedItem().toString();
         final String language = langSetter.getSelectedItem().toString();
@@ -170,9 +164,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         if (!validateInput(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth)) {
             return;
         }
-//        final Citizen mUser = new Citizen(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth);
-        // Now we need to attempt to signup - we'll add code for this later (once Firebase is integrated)
-        // [START create_user_with_email]
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -259,15 +250,14 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //PASSWORD REGEX
-        if (password.isEmpty() || password.length() < 6) {
-            mPasswordField.setError("Please enter a valid password" +
-                    " containing at least 6 characters.");
+        if (password.isEmpty() || password.length() < 6 || !password.matches("((.*\\d.*)(.*\\w.*))|((.*\\w.*)(.*\\d.*))")) {
+            mPasswordField.setError("Password must be at least 6 characters and contain at least a letter and a number.");
             mPasswordField.requestFocus();
             return false;
         } else {
             mPasswordField.setError(null);
         }
-/*
+
         //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
         if(!licensenum.matches("^\\w([0-9]{8})")) {
             mLicenseNum.setError("Enter a letter followed by eight numbers\nExample: A12345678");
@@ -286,6 +276,20 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         } else {
             mPhone.setError(null);
         }
+
+        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
+        if (dateofbirth.isEmpty()) {
+            mDateOfBirth.setError("This field was left empty");
+            mDateOfBirth.requestFocus();
+            return false;
+        } else if (!dateofbirth.matches("^\\d{1,2}(-|(,\\s)|/)\\d{1,2}(-|(,\\s)|/)\\d{4}")){
+            mDateOfBirth.setError("DD-MM-YYYY");
+            mDateOfBirth.requestFocus();
+            return false;
+        } else {
+            mDateOfBirth.setError(null);
+        }
+
         //address gender language DOB
         //ADDRESS REGEX
         if (address.isEmpty()){
@@ -296,19 +300,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mAddress.setError(null);
         }
 
-        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
-        if (dateofbirth.isEmpty()) {
-            mDateOfBirth.setError("This field was left empty");
-            mDateOfBirth.requestFocus();
-            return false;
-        } else if (!dateofbirth.matches("^\\d{1,2}(-?|(,\\s)?|/?)\\d{1,2}(-?|(,\\s)?|/?)\\d{4}")){
-            mDateOfBirth.setError("DD-MM-YYYY");
-            mDateOfBirth.requestFocus();
-            return false;
-        } else {
-            mDateOfBirth.setError(null);
-        }
-*/
         return true;
 
 

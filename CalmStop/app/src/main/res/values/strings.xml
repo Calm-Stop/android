@@ -5,7 +5,7 @@
     <string name="auth_failed">Authentication failed</string>
 
     <string-array name = "Gender">
-        <item></item>
+        <item>-</item>
         <item>Female</item>
         <item>Male</item>
     </string-array>
