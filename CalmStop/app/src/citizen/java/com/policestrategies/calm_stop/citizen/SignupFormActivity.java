@@ -254,7 +254,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         } else {
             mPasswordField.setError(null);
         }
-
+/*
         //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
         if(!licensenum.matches("^\\w([0-9]{8})")) {
             mLicenseNum.setError("Enter a letter followed by eight numbers\nExample: A12345678");
@@ -295,7 +295,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         } else {
             mDateOfBirth.setError(null);
         }
-
+*/
         return true;
 
 
