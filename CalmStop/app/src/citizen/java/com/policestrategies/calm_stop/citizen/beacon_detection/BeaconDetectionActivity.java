@@ -1,15 +1,11 @@
 package com.policestrategies.calm_stop.citizen.beacon_detection;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -22,11 +18,9 @@ import com.policestrategies.calm_stop.R;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,116 +33,56 @@ import java.util.List;
 public class BeaconDetectionActivity extends AppCompatActivity {
 
     private BeaconManager mBeaconManager;
-
     private DatabaseReference mDatabase;
-
     private RecyclerView mRecyclerView;
 
-    private String mDepartmentNumber;
-    private String mOfficerUid;
-    private String mOfficerName;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beacon_detection);
-        ((TextView) findViewById(R.id.text_scanning)).setText("Scanning....");
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.beacon_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(null);
+
+        mProgressDialog = ProgressDialog.show(this, "", "Scanning");
 
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        enableBeaconRanging();
+    }
+
+    @Override
+    protected void onDestroy() {
+        closeProgressDialog();
+        super.onDestroy();
+    }
+
+    private void enableBeaconRanging() {
         mBeaconManager.getBeaconParsers().add(new BeaconParser().
                 setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
 
-        // TODO: This is really dirty. Definitely need to clean this up - demo purposes only.
         mBeaconManager.addRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
-                if (collection.size() > 0) {
-                    Beacon beacon = collection.iterator().next();
+
+                final List<String> scannedInstanceIds = new ArrayList<>();
+
+                for (Beacon beacon : collection) {
                     if (beacon.getServiceUuid() == 0xfeaa && beacon.getBeaconTypeCode() == 0x00) {
-
-                        Identifier namespaceId = beacon.getId1();
-                        Identifier instanceId = beacon.getId2();
-
-
-                        String scannedID = "Found a beacon with namespaceID: " + namespaceId + " and" +
-                                " instanceID: " + instanceId;
-
-                        DatabaseReference beaconReference = mDatabase.child("beacons")
-                                .child(instanceId.toString()).child("officer").getRef();
-
-                        beaconReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                mDepartmentNumber = dataSnapshot.child("department").getValue()
-                                        .toString();
-                                mOfficerUid = dataSnapshot.child("uid").getValue().toString();
-
-                                DatabaseReference officerReference = mDatabase.child("officer")
-                                        .child(mDepartmentNumber).child(mOfficerUid).getRef();
-
-                                officerReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                        mOfficerName = "Officer " + dataSnapshot.child("profile")
-                                                .child("last_name").getValue().toString();
-
-                                        final String officerPhotoUrl = dataSnapshot.child("photo")
-                                                .getValue().toString();
-
-                                        System.out.println("Up here 1111");
-
-                                        System.out.println("Set image");
-
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-
-//                                                new DownloadImageTask((ImageView) findViewById(R.id.officer_photo))
-//                                                        .execute(officerPhotoUrl);
-
-                                                String deptNum = "Department # " + mDepartmentNumber;
-                                                List<BeaconObject> scanned = new ArrayList<>();
-                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
-                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
-                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
-                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
-                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
-                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
-                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
-                                                scanned.add(new BeaconObject(mOfficerName, deptNum));
-                                                mRecyclerView.setAdapter(new BeaconDetectionAdapter(scanned,
-                                                        new BeaconDetectionAdapter.OnItemClickListener() {
-                                                            @Override
-                                                            public void onItemClick(BeaconObject item) {
-                                                                System.out.println("Clicked on officer " + item.getOfficerName());
-                                                            }
-                                                        }));
-                                                findViewById(R.id.text_scanning).setVisibility(View.GONE);
-                                            }
-                                        });
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
+                        scannedInstanceIds.add(beacon.getId2().toString());
+                        scannedInstanceIds.add("0xffff"); // DEBUG
                     }
-
                 }
+                try {
+                    mBeaconManager.stopRangingBeaconsInRegion(region);
+                } catch (RemoteException e) {
+                    System.out.println("Failed to stop ranging beacons in BeaconDetectionActivity");
+                }
+                downloadOfficerInformation(scannedInstanceIds);
             }
         });
 
@@ -157,44 +91,101 @@ public class BeaconDetectionActivity extends AppCompatActivity {
         try {
             mBeaconManager.startRangingBeaconsInRegion(region);
         } catch (Exception e) {
+            closeProgressDialog();
             Toast.makeText(BeaconDetectionActivity.this, "Failed to range beacons",
                     Toast.LENGTH_SHORT).show();
         }
 
-        mRecyclerView = (RecyclerView)findViewById(R.id.beacon_recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(null);
+    } // end enableBeaconRanging
 
-        System.out.println("Down here-------------------------------");
 
-    }
+    /**
+     * Obtains the officer information associated with each beacon instance id from firebase.
+     * @param instanceIds detected by the didRangeBeaconsInRegion function
+     */
+    private void downloadOfficerInformation(final List<String> instanceIds) {
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
+        final List<BeaconObject> scannedBeacons = new ArrayList<>();
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
+        DatabaseReference databaseReference = mDatabase.getRef();
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (String instance : instanceIds) {
+                    String officerUid;
+                    String officerLastName;
+                    String officerDepartmentNumber;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
+                    // Look up the beacon and obtain officerUid and department number
+                    officerUid = dataSnapshot.child("beacons").child(instance)
+                            .child("officer").child("uid").getValue().toString();
+                    officerDepartmentNumber = dataSnapshot.child("beacons").child(instance)
+                            .child("officer").child("department").getValue().toString();
 
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                e.printStackTrace();
+                    // Look up officer name
+                    officerLastName = dataSnapshot.child("officer")
+                            .child(officerDepartmentNumber).child(officerUid)
+                            .child("profile").child("last_name").getValue().toString();
+
+                    scannedBeacons.add(new BeaconObject(officerLastName, officerDepartmentNumber));
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    //new DownloadImageTask((ImageView) findViewById(R.id.officer_photo))
+                    //.execute(officerPhotoUrl);
+
+                        mRecyclerView.setAdapter(new BeaconDetectionAdapter(scannedBeacons,
+                                new BeaconDetectionAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(BeaconObject item) {
+                                        System.out.println("Officer " + item.getOfficerName());
+                                    }
+                                }));
+                        closeProgressDialog();
+                    }
+                });
+
             }
-            return mIcon11;
-        }
 
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                closeProgressDialog();
+                System.out.println("Database error while retrieving officer information");
+            }
+        });
+
+    } // end downloadOfficerInformation
+
+//    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+//        ImageView bmImage;
+//
+//        public DownloadImageTask(ImageView bmImage) {
+//            this.bmImage = bmImage;
+//        }
+//
+//        protected Bitmap doInBackground(String... urls) {
+//            String urldisplay = urls[0];
+//            Bitmap mIcon11 = null;
+//            try {
+//                InputStream in = new java.net.URL(urldisplay).openStream();
+//                mIcon11 = BitmapFactory.decodeStream(in);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return mIcon11;
+//        }
+//
+//        protected void onPostExecute(Bitmap result) {
+//            bmImage.setImageBitmap(result);
+//        }
+//    }
+
+    private void closeProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
         }
     }
 
