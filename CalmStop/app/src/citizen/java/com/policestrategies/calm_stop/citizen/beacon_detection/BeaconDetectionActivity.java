@@ -66,7 +66,6 @@ public class BeaconDetectionActivity extends AppCompatActivity {
             startActivity(i);
         }
 
-
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -168,7 +167,7 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                 });
 
             }
-
+    
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 closeProgressDialog();
