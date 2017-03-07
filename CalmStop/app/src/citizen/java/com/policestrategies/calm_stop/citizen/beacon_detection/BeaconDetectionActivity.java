@@ -1,19 +1,24 @@
 package com.policestrategies.calm_stop.citizen.beacon_detection;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.citizen.LoginActivity;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconManager;
@@ -37,6 +42,7 @@ public class BeaconDetectionActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
 
     private ProgressDialog mProgressDialog;
+    private String mUid;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -48,6 +54,18 @@ public class BeaconDetectionActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(null);
 
         mProgressDialog = ProgressDialog.show(this, "", "Scanning");
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        if (firebaseAuth.getCurrentUser() != null) {
+            mUid = firebaseAuth.getCurrentUser().getUid();
+        } else {
+            firebaseAuth.signOut();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        }
+
 
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -127,7 +145,8 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                             .child(officerDepartmentNumber).child(officerUid)
                             .child("profile").child("last_name").getValue().toString();
 
-                    scannedBeacons.add(new BeaconObject(officerLastName, officerDepartmentNumber));
+                    scannedBeacons.add(new BeaconObject(officerLastName, officerDepartmentNumber,
+                            officerUid, instance));
                 }
 
                 runOnUiThread(new Runnable() {
@@ -141,7 +160,7 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                                 new BeaconDetectionAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(BeaconObject item) {
-                                        System.out.println("Officer " + item.getOfficerName());
+                                        syncWithOfficer(item);
                                     }
                                 }));
                         closeProgressDialog();
@@ -158,6 +177,32 @@ public class BeaconDetectionActivity extends AppCompatActivity {
         });
 
     } // end downloadOfficerInformation
+
+    /**
+     * Allows the citizen to choose to speak with a certain officer.
+     * @param officer that was clicked on
+     */
+    private void syncWithOfficer(final BeaconObject officer) {
+
+       new AlertDialog.Builder(this)
+               .setTitle("Communicate with Officer")
+               .setMessage("Would you like to speak with Officer " + officer.getOfficerName() + "?")
+               .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialogInterface, int i) {
+                        mDatabase.child("beacons").child(officer.getBeaconInstanceId())
+                                .child("citizens").setValue(mUid);
+                   }
+               })
+               .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialogInterface, int i) {
+                       // Do nothing
+                   }
+               })
+               .setCancelable(true)
+               .show();
+    }
 
 //    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 //        ImageView bmImage;
