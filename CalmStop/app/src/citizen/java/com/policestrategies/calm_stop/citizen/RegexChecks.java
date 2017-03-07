@@ -40,6 +40,7 @@ public class RegexChecks {
         return true;
     }
 
+    //PHONE REGEX
     public boolean validPhone(String phone) {
         if(!phone.matches("^1?(\\d{10}|" +
                 "\\(?\\d{3}\\)?(-|\\s)?\\d{3}(-|\\s)?\\d{4})\\s?")) {
@@ -48,6 +49,7 @@ public class RegexChecks {
         return true;
     }
 
+    //FIRST NAME REGEX
     public boolean validFirstName(String firstname) {
         if (firstname.isEmpty()){
             return false;
@@ -55,6 +57,7 @@ public class RegexChecks {
         return true;
     }
 
+    //LAST NAME REGEX
     public boolean validLastName(String lastname) {
         if (lastname.isEmpty()){
             return false;
@@ -62,6 +65,7 @@ public class RegexChecks {
         return true;
     }
 
+    //DATE OF BIRTH REGEX
     public boolean validDateOfBirth(String dateofbirth) {
         if (!dateofbirth.matches("^\\d{1,2}(-?|(,\\s)?|/?)\\d{1,2}(-?|(,\\s)?|/?)\\d{4}")) {
             return false;

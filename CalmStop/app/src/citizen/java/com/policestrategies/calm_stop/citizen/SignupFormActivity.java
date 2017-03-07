@@ -29,16 +29,15 @@ import java.util.regex.Pattern;
 /**
  * Allows the user to sign up or return to the log in page.
  */
-
 public class SignupFormActivity extends AppCompatActivity implements View.OnClickListener {
     private Spinner genderSetter;
     private Spinner langSetter;
 
     private EditText mFirstNameField;
     private EditText mLastNameField;
-    private static EditText  mEmailField;
+    private static EditText mEmailField;
     private EditText mPasswordField;
-    private EditText mLicenseNum;
+    private EditText mLicense;
     private EditText mDateOfBirth;
     private EditText mPhone;
     private EditText mAddress;
@@ -69,14 +68,14 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_signupform);
 
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
-        langSetter = (Spinner) findViewById(R.id.ethnicitySetter);
+        langSetter = (Spinner) findViewById(R.id.langSetter);
 
         setUpGenderSetter();
         setUpLangSetter();
 
         mEmailField = (EditText) findViewById(R.id.input_email);
         mPasswordField = (EditText) findViewById(R.id.input_password);
-        mLicenseNum = (EditText) findViewById(R.id.input_licenseNum);
+        mLicense = (EditText) findViewById(R.id.input_licenseNum);
         mFirstNameField = (EditText) findViewById(R.id.input_firstname);
         mLastNameField = (EditText) findViewById(R.id.input_lastname);
         mPhone = (EditText) findViewById(R.id.input_phone);
@@ -152,7 +151,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private void signup() {
         final String email = mEmailField.getText().toString();
         final String password = mPasswordField.getText().toString();
-        final String licensenum = mLicenseNum.getText().toString();
+        final String licensenum = mLicense.getText().toString();
         final String firstname = mFirstNameField.getText().toString();
         final String lastname = mLastNameField.getText().toString();
         final String phone = mPhone.getText().toString();
@@ -253,11 +252,11 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
         //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
         if(!regexChecks.validLicense(licensenum)) {
-            mLicenseNum.setError("Enter a letter followed by eight numbers\nExample: A12345678");
-            mLicenseNum.requestFocus();
+            mLicense.setError("Enter a letter followed by eight numbers\nExample: A12345678");
+            mLicense.requestFocus();
             return false;
         } else {
-            mLicenseNum.setError(null);
+            mLicense.setError(null);
         }
 
         //PHONE REGEX
@@ -319,15 +318,15 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position) {
                     case 0:
-                        //blank
+                        //female
                         gen = 0;
                         break;
                     case 1:
-                        //female
+                        //male
                         gen = 1;
                         break;
                     case 2:
-                        //male
+                        //blank
                         gen = 2;
                         break;
                 }

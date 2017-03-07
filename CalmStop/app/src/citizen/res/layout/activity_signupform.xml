@@ -109,7 +109,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginTop="20dp"
 
-            android:id="@+id/ethnicity"
+            android:id="@+id/language"
             android:layout_alignRight="@+id/gender"
             android:layout_alignEnd="@+id/gender"
             android:fontFamily="monospace"
@@ -120,7 +120,7 @@
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/ethnicitySetter"
+            android:id="@+id/langSetter"
             android:background="@android:color/background_light" />
 <!-- END SPINNER -->
 
