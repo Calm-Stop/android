@@ -70,8 +70,10 @@ class BeaconDetectionAdapter extends RecyclerView.Adapter<BeaconDetectionAdapter
         }
 
         void setBeaconView(final BeaconObject beacon, final OnItemClickListener listener) {
-            mOfficerName.setText(beacon.getOfficerName());
-            mDepartmentNumber.setText(beacon.getDepartmentNumber());
+            String officerName = "Officer " + beacon.getOfficerName();
+            String departmentNumber = "Department #" + beacon.getDepartmentNumber();
+            mOfficerName.setText(officerName);
+            mDepartmentNumber.setText(departmentNumber);
             mOfficerPhoto.setImageResource(R.mipmap.ic_launcher);
             mCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
