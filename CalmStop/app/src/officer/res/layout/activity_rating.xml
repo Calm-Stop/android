@@ -3,19 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:backgroundTint="@color/colorPrimaryDark"
-            app:menu="@menu/bottom_navigation_main" />
 
         <TextView
             android:layout_width="match_parent"
@@ -63,7 +59,7 @@
         android:fontFamily="sans-serif"
         android:textSize="24sp"
         android:layout_marginBottom="10dp"
-        android:textColor="@color/colorPrimary"/>
+        android:textColor="@color/colorPrimary" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -75,11 +71,18 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/driver_comments"
         android:divider="@drawable/comments_line"
         android:footerDividersEnabled="false"
-        android:headerDividersEnabled="false" />
+        android:headerDividersEnabled="false"
+        android:layout_height="250dp" />
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryDark"
+        app:menu="@menu/bottom_navigation_main" />
 
     <TextView
         android:layout_width="wrap_content"
