@@ -120,11 +120,6 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
                                     R.layout.activity_drivercommentslistview, comments_array);
                             ListView listView = (ListView) findViewById(R.id.driver_comments);
                             listView.setAdapter(adapter);
-
-
-
-
-                            // }
                         }
 
                         @Override

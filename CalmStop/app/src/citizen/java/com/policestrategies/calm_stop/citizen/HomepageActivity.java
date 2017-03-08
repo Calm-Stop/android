@@ -120,14 +120,9 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
 
         switch(v.getId()) {
-/*
-            case R.id.button_logout: // The login button was pressed - let's run the login function
-                logout();
-                break;
-*/
+
         }
     }
-
 
     private void profile() {
         Intent i = new Intent(getBaseContext(), ProfileActivity.class);
@@ -141,21 +136,24 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         startActivity(i);
 
     }
+
     private void help() {
         Intent i = new Intent(getBaseContext(), HelpActivity.class);
         startActivity(i);
 
     }
+
     private void aboutUs() {
         Intent i = new Intent(getBaseContext(), AboutUsActivity.class);
         startActivity(i);
 
     }
+
     private void settings() {
         Intent i = new Intent(getBaseContext(), SettingsActivity.class);
         startActivity(i);
-
     }
+
     private void logout() {
         //You want to logout -> login page
         FirebaseAuth.getInstance().signOut();

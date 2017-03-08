@@ -7,7 +7,7 @@
     <string-array name = "Gender">
         <item>Female</item>
         <item>Male</item>
-        <item>Not saying</item>
+        <item>Prefer Not to Answer</item>
     </string-array>
 
     <string-array name = "Ethnicity">
@@ -17,7 +17,7 @@
         <item>Hispanic</item>
         <item>Pacific Islander</item>
         <item>White</item>
-        <item>Not saying</item>
+        <item>Prefer Not to Answer</item>
     </string-array>
 
     <string-array name = "Language">

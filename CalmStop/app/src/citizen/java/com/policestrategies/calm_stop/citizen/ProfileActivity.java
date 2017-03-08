@@ -116,7 +116,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
            citizenUid = "";
         }
         else{
-            citizenUid= FirebaseAuth.getInstance().getCurrentUser().getUid();
+            citizenUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         }
 
         Photo = user.getPhotoUrl();
@@ -126,7 +126,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }else {
             mphoto.setImageURI(Photo);
         }
-
 
         mDatabase.child(citizenUid).child("profile") //.child("profile") <-not part of database
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -403,6 +402,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updatePhoto() {
+        //mDatabase.child(citizenUid).child("profile").child("photo").setValue(Photo);
         UserProfileChangeRequest updatePhoto = new UserProfileChangeRequest.Builder()
                 .setPhotoUri(Photo)
                 .build();
@@ -426,7 +426,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateAddress() {
-        mDatabase.child(citizenUid).child("address").setValue(Address);
+        mDatabase.child(citizenUid).child("profile").child("address").setValue(Address);
     }
 
     private void updateDOB() {
