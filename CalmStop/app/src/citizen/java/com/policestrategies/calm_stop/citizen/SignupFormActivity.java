@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.SignupVerification;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,14 +63,11 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private FirebaseDatabase database;
     // [END declare databaseRef & database]
 
-    private RegexChecks regexChecks;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signupform);
 
-        regexChecks = new RegexChecks();
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         langSetter = (Spinner) findViewById(R.id.langSetter);
 
@@ -217,9 +215,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private boolean validateInput(String email, String password, String licensenum, String firstname,
                                   String lastname, String phone, String address, String gender, String language, String dateofbirth) {
 
-//(8 fns)validEmail, validPassword, validLicense, validAddress, validPhone, validFirstname, validLastname, validDateOfBirth
         //FIRST NAME CHECK
-        if (!regexChecks.validFirstName(firstname)) {
+        if (!SignupVerification.validFirstName(firstname)) {
             mFirstNameField.setError("Please enter a valid first name.");
             mFirstNameField.requestFocus();
             return false;
@@ -227,8 +224,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mFirstNameField.setError(null);
         }
         //LAST NAME CHECK
-        if (!regexChecks.validLastName(lastname)) {
-            mLastNameField.setError("Please enter a valid first name.");
+        if (!SignupVerification.validLastName(lastname)) {
+            mLastNameField.setError("Please enter a valid last name.");
             mLastNameField.requestFocus();
             return false;
         } else {
@@ -236,7 +233,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //EMAIL CHECK
-        if (!regexChecks.validEmail(email)) {
+        if (!SignupVerification.validEmail(email)) {
             mEmailField.setError("Enter a valid email address.");
             mEmailField.requestFocus();
             return false;
@@ -245,7 +242,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //PASSWORD REGEX
-        if (!regexChecks.validPassword(password)) {
+        if (!SignupVerification.validPassword(password)) {
             mPasswordField.setError("Password must be at least 6 characters and contain at least a letter and a number.");
             mPasswordField.requestFocus();
             return false;
@@ -254,7 +251,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
-        if(!regexChecks.validLicense(licensenum)) {
+
+        if(!SignupVerification.validLicense(licensenum)) {
             mLicense.setError("Enter a letter followed by eight numbers\nExample: A12345678");
             mLicense.requestFocus();
             return false;
@@ -263,7 +261,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //PHONE REGEX
-        if(!regexChecks.validPhone(phone)) {
+        if(!SignupVerification.validPhone(phone)) {
             mPhone.setError("Invalid Phone Number.");
             mPhone.requestFocus();
             return false;
@@ -272,7 +270,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
-        if (!regexChecks.validDateOfBirth(dateofbirth)){
+        if (!SignupVerification.validDateOfBirth(dateofbirth)){
             mDateOfBirth.setError("DD-MM-YYYY");
             mDateOfBirth.requestFocus();
             return false;
@@ -282,7 +280,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
         //address gender language DOB; Use google map API for address
         //ADDRESS REGEX
-        if (!regexChecks.validAddress(address)){
+        if (!SignupVerification.validAddress(address)){
             mAddress.setError("This field was left empty.");
             mAddress.requestFocus();
             return false;
@@ -291,8 +289,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         return true;
-
-
     }
 
     public static String getEmail(){
