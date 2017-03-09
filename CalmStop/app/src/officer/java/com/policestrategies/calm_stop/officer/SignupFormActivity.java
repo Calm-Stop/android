@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.SignupVerification;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
