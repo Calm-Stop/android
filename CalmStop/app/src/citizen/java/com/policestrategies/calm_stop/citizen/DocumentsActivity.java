@@ -1,6 +1,8 @@
 package com.policestrategies.calm_stop.citizen;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,6 +19,10 @@ import com.policestrategies.calm_stop.R;
 
 public class DocumentsActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int chosenImage = 1;
+    private static final String DOCS = "Documents";
+    private static final String LICEN = "license";
+    private static final String REGI = "registration";
+    private static final String INSUR = "insurance";
 
     private int PhotoUpdating;  //0 -> License; 1 -> registration; 2 -> insurance
 
@@ -41,8 +47,29 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
         mregistration.setOnClickListener(this);
         minsurance.setOnClickListener(this);
 
-        Toast.makeText(DocumentsActivity.this, "Click on Image To Upload", Toast.LENGTH_SHORT).show();
+        SharedPreferences docs = getSharedPreferences(DOCS, 0);
 
+        //READ FROM
+        String licen = docs.getString(LICEN, null);
+        String regi = docs.getString(REGI, null);
+        String insur = docs.getString(INSUR, null);
+
+        if(licen != null) {
+            licensePic = Uri.parse(licen);
+            mlicense.setImageURI(licensePic);
+        }
+
+        if(regi != null) {
+            registrationPic = Uri.parse(regi);
+            mregistration.setImageURI(registrationPic);
+        }
+
+        if(insur != null) {
+            insurancePic = Uri.parse(insur);
+            minsurance.setImageURI(insurancePic);
+        }
+
+        Toast.makeText(DocumentsActivity.this, "Click on Image To Upload", Toast.LENGTH_SHORT).show();
     }
 
     public void onClick(View v) {
@@ -82,6 +109,11 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                 if (requestCode == chosenImage && resultCode == RESULT_OK && data != null) {
                     licensePic = data.getData();
                     mlicense.setImageURI(licensePic);
+                    String license = licensePic.toString();
+                    SharedPreferences docs = getSharedPreferences(DOCS, 0);
+                    SharedPreferences.Editor editor = docs.edit();
+                    editor.putString(LICEN, license);
+                    editor.commit();
                 } else
                     Toast.makeText(DocumentsActivity.this, "Error with License", Toast.LENGTH_LONG).show();
                 break;
@@ -89,6 +121,11 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                 if (requestCode == chosenImage && resultCode == RESULT_OK && data != null) {
                     registrationPic = data.getData();
                     mregistration.setImageURI(registrationPic);
+                    String regi = registrationPic.toString();
+                    SharedPreferences docs = getSharedPreferences(DOCS, 0);
+                    SharedPreferences.Editor editor = docs.edit();
+                    editor.putString(REGI, regi);
+                    editor.commit();
                 } else
                     Toast.makeText(DocumentsActivity.this, "Error with Registration", Toast.LENGTH_LONG).show();
                 break;
@@ -96,6 +133,11 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                 if (requestCode == chosenImage && resultCode == RESULT_OK && data != null) {
                     insurancePic = data.getData();
                     minsurance.setImageURI(insurancePic);
+                    String insur = insurancePic.toString();
+                    SharedPreferences docs = getSharedPreferences(DOCS, 0);
+                    SharedPreferences.Editor editor = docs.edit();
+                    editor.putString(INSUR, insur);
+                    editor.commit();
                 } else
                     Toast.makeText(DocumentsActivity.this, "Error with Insurance", Toast.LENGTH_LONG).show();
                 break;

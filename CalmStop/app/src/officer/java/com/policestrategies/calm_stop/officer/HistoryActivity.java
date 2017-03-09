@@ -46,7 +46,6 @@ public class HistoryActivity extends AppCompatActivity implements View.OnClickLi
                             case R.id.action_account:
                                 account();
                                 break;
-
                         }
                         return true;
                     }

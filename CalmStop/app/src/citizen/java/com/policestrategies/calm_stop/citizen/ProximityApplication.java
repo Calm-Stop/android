@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
 
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;

@@ -50,7 +50,7 @@
             android:name=".citizen.SignupFormActivity" />
 
         <activity
-            android:name=".citizen.BeaconDetectionActivity" />
+            android:name=".citizen.beacon_detection.BeaconDetectionActivity" />
 
     </application>
     

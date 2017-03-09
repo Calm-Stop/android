@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.R.attr.data;
@@ -43,12 +44,8 @@ import static com.policestrategies.calm_stop.R.id.Name;
 public class RatingActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    // String[] comments_array = {"\"Officer was very friendly.\"","\"I felt unfairly treated by the officer.\"","\"Officer gave me unnecessarily long lecture on why tail lights are important.\"","\"The traffic stop was professionally conducted.\"","\"I don't think I should have been pulled over for going 7 over the speed limit.\""};
-
     List<String> comments_array = new ArrayList<String>();
-
     RatingBar officerStarRating;
-
     float officerStarRatingValue;
 
     private DatabaseReference mDatabase;
@@ -71,11 +68,12 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
         ratingDigits = (TextView) findViewById(R.id.star_rating_digits);
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        Log.d(TAG, "comments array:" + comments_array);
 
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            String userId = user.getUid();
+            final String userId = user.getUid();
 
             // Get officer rating
             mDatabase.child("officer").child("14566").child(userId).child("ratings").child("avg_rating").addListenerForSingleValueEvent(
@@ -84,6 +82,9 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Float officerStarRatingValue = dataSnapshot.getValue(Float.class);
                             Log.d(TAG, "rating = " + officerStarRatingValue);
+                            if (officerStarRatingValue == null) {
+                                officerStarRatingValue = (float) 0;
+                            }
                             officerStarRating = (RatingBar) findViewById(R.id.officerStarRatingBar);
                             officerStarRating.setRating(officerStarRatingValue);
                             String ratingDigitsString = String.valueOf(officerStarRatingValue);
@@ -99,27 +100,34 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
 
 
             // Get officer comments
-            mDatabase.child("officer").child("14566").child(userId).child("comments").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    List<String> comments_array = new ArrayList<String>();
-                    for (DataSnapshot commentSnapshot : dataSnapshot.getChildren()) {
-                        String comment = commentSnapshot.getValue(String.class);
-                        comments_array.add(comment);
-                        Log.d(TAG, "comment array= " + comments_array);
+            mDatabase.child("officer").child("14566").child(userId).child("comments").addValueEventListener(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // empty comments_array
+                            List<String> comments_array = new ArrayList<String>();
+                            // add comments from Firebase to comments_array
+                            for (DataSnapshot commentSnapshot : dataSnapshot.getChildren()) {
+                                String comment = commentSnapshot.getValue(String.class);
+                                comments_array.add(comment);
+                            }
+                            // if there are no comments, let officer know
+                            if (comments_array.isEmpty()) {
+                                comments_array.add("You have not received any comments yet.");
+                            }
+                            // comments_array used in listView
+                            ArrayAdapter adapter = new ArrayAdapter<String>(getBaseContext(),
+                                    R.layout.activity_drivercommentslistview, comments_array);
+                            ListView listView = (ListView) findViewById(R.id.driver_comments);
+                            listView.setAdapter(adapter);
+                        }
 
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
                     }
-                    ArrayAdapter adapter = new ArrayAdapter<String>(getBaseContext(),
-                            R.layout.activity_drivercommentslistview, comments_array);
-                    ListView listView = (ListView) findViewById(R.id.driver_comments);
-                    listView.setAdapter(adapter);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+            );
         }
 
         bottomNavigationView.setOnNavigationItemSelectedListener(

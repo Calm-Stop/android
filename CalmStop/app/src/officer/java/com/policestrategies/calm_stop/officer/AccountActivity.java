@@ -124,14 +124,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         FirebaseAuth.getInstance().signOut();
         Intent i = new Intent(getBaseContext(), LoginActivity.class);
         startActivity(i);
-
     }
 
     private void home() {
         Intent i = new Intent(getBaseContext(), HomepageActivity.class);
         startActivity(i);
         finish();
-
     }
 
     private void ratings() {

@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
+
 /**
  * Created by mariavizcaino on 2/9/17.
  */
@@ -44,7 +46,8 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         mDrawerList = (ListView)findViewById(R.id.navList);
         mActivityTitle = getTitle().toString();
 
-        mMenuList = new String[]{"Profile", "Previous Stops", "Help", "About Us", "Settings", "Logout"};
+        mMenuList = new String[]{"Profile", "Previous Stops", "Help", "About Us", "Settings", "Logout"
+        , "Debug - Beacon Detection"};
 
         addDrawerItems();
         setupDrawer();
@@ -83,6 +86,10 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                     case 5:
                         logout();
                         break;
+                    case 6: // Beacon debug
+                        Intent i = new Intent(getBaseContext(), BeaconDetectionActivity.class);
+                        startActivity(i);
+                        break;
 
                 }
 
@@ -120,14 +127,9 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
 
         switch(v.getId()) {
-/*
-            case R.id.button_logout: // The login button was pressed - let's run the login function
-                logout();
-                break;
-*/
+
         }
     }
-
 
     private void profile() {
         Intent i = new Intent(getBaseContext(), ProfileActivity.class);
@@ -141,21 +143,24 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         startActivity(i);
 
     }
+
     private void help() {
         Intent i = new Intent(getBaseContext(), HelpActivity.class);
         startActivity(i);
 
     }
+
     private void aboutUs() {
         Intent i = new Intent(getBaseContext(), AboutUsActivity.class);
         startActivity(i);
 
     }
+
     private void settings() {
         Intent i = new Intent(getBaseContext(), SettingsActivity.class);
         startActivity(i);
-
     }
+
     private void logout() {
         //You want to logout -> login page
         FirebaseAuth.getInstance().signOut();
