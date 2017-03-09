@@ -87,6 +87,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        regexChecks = new RegexChecks();
+
         //mFname, mLname, memail, mDOB, mphoneNum, mLicense, maddress, mLanguage, mphoto
         mFirstNameField = (EditText)findViewById(R.id.editFirstName);
         mLastNameField = (EditText)findViewById(R.id.editLastName);
@@ -466,7 +468,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
         //LAST NAME CHECK
         if (!regexChecks.validLastName(lastname)) {
-            mLastNameField.setError("Please enter a valid first name.");
+            mLastNameField.setError("Please enter a valid last name.");
             mLastNameField.requestFocus();
             return false;
         } else {

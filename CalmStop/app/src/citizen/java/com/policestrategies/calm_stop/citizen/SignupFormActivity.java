@@ -1,6 +1,8 @@
 package com.policestrategies.calm_stop.citizen;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -67,6 +69,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signupform);
 
+        regexChecks = new RegexChecks();
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         langSetter = (Spinner) findViewById(R.id.langSetter);
 
@@ -291,7 +294,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
 
     }
-
 
     public static String getEmail(){
         String emailInput = mEmailField.getText().toString();
