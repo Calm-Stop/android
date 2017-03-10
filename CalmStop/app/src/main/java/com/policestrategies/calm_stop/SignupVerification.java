@@ -13,8 +13,6 @@ public class SignupVerification {
     }
 
     public static boolean validPassword(String password) {
-        System.out.println("Password length: " + password.length());
-        System.out.println("Match: " + password.matches("((.*\\d.*)(.*\\w.*))|((.*\\w.*)(.*\\d.*))"));
         return (!(password.length() < 6) && password.matches("((.*\\d.*)(.*[A-Za-z].*))|((.*[A-Za-z].*)(.*\\d.*))"));
     }
 
