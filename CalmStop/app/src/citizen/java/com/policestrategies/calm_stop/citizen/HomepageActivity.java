@@ -128,30 +128,30 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         Intent i = new Intent(getBaseContext(), ProfileActivity.class);
         startActivity(i);
         finish();
-
     }
 
     private void previousStops() {
         Intent i = new Intent(getBaseContext(), PreviousStopsActivity.class);
         startActivity(i);
-
+        finish();
     }
 
     private void help() {
         Intent i = new Intent(getBaseContext(), HelpActivity.class);
         startActivity(i);
-
+        finish();
     }
 
     private void aboutUs() {
         Intent i = new Intent(getBaseContext(), AboutUsActivity.class);
         startActivity(i);
-
+        finish();
     }
 
     private void settings() {
         Intent i = new Intent(getBaseContext(), SettingsActivity.class);
         startActivity(i);
+        finish();
     }
 
     private void logout() {
@@ -159,6 +159,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         FirebaseAuth.getInstance().signOut();
         Intent i = new Intent(getBaseContext(), LoginActivity.class);
         startActivity(i);
-
+        finish();
     }
 }

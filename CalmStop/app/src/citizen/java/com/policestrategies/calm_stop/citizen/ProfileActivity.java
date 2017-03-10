@@ -42,6 +42,7 @@ import com.policestrategies.calm_stop.R;
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
     private Spinner genderSetter;
     private Spinner ethnicitySetter;
+    private Spinner languageSetter;
     private EditText mFname;
     private EditText mLname;
     private EditText memail;
@@ -49,13 +50,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private EditText mDOB;
     private EditText maddress;
     private EditText mLicense;
-    private EditText mLanguage;
     private ImageView mphoto;
 
     private static final int chosenImage = 1;
 
     private int gen = 0;
     private int eth = 0;
+    private int lan = 2;
+    private int ethTrue = 1;
 
     private String FName;
     private String LName;
@@ -92,7 +94,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mphoneNum = (EditText)findViewById(R.id.editPhonenum);
         mLicense= (EditText)findViewById(R.id.editLicenseNumber);
         maddress = (EditText)findViewById(R.id.editAddress);
-        mLanguage = (EditText)findViewById(R.id.editprefferedLang);
 
         mphoto = (ImageView)findViewById(R.id.profilePicture);
         mphoto.setOnClickListener(this);
@@ -104,9 +105,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
+        languageSetter = (Spinner) findViewById(R.id.languageSetter);
 
         setUpGenderSetter();
         setUpEthnicitySetter();
+        setUpLanguageSetter();
 
         mDatabase = FirebaseDatabase.getInstance().getReference("citizen");
 
@@ -142,7 +145,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         License = snapshot.child("license_number").getValue().toString();
                         PhoneNumber = snapshot.child("phone_number").getValue().toString();
                         Language = snapshot.child("language").getValue().toString();
-                        Ethnicity = "";
+
+                        if(snapshot.hasChild("ethnicity"))
+                            Ethnicity = snapshot.child("ethnicity").getValue().toString();
+                        else
+                            ethTrue = 0;
 
                         setEverything();
 
@@ -165,13 +172,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.viewDocs:
-                //FIXME
                 toDocuments();
                 break;
 
             case R.id.savebutton:
-                //FIXME
-                //TODO
 
                 FName = mFname.getText().toString();
                 LName = mLname.getText().toString();
@@ -180,7 +184,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 DOB = mDOB.getText().toString();
                 License = mLicense.getText().toString();
                 Address = maddress.getText().toString();
-                Language = mLanguage.getText().toString();
 
                 //WRITE TO FIREBASE
                 updateFName();
@@ -193,6 +196,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 updateLicense();
                 updateLanguage();
                 updateGender();
+                updateEthnicity();
 
                 recreate();
                 break;
@@ -288,8 +292,77 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
+    private void setUpLanguageSetter() {
+
+        final ArrayAdapter<CharSequence> languageAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Language, android.R.layout.simple_spinner_dropdown_item);
+
+        languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        languageSetter.setAdapter(languageAdapter);
+
+        languageSetter.setSelection(lan); //default to english
+
+        languageSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position) {
+                    case 0: //Arabic
+                        lan = 0;
+                        Language = "Arabic";
+                        break;
+                    case 1: //Chinese (Mandarin)
+                        lan = 1;
+                        Language = "Chinese (Mandarin)";
+                        break;
+                    case 2: //English
+                        lan = 2;
+                        Language = "English";
+                        break;
+                    case 3: //French
+                        lan = 3;
+                        Language = "French";
+                        break;
+                    case 4: //German
+                        lan = 4;
+                        Language = "German";
+                        break;
+                    case 5: // Italian
+                        lan = 5;
+                        Language = "Italian";
+                        break;
+                    case 6: //Portuguese
+                        lan = 6;
+                        Language = "Portuguese";
+                        break;
+                    case 7: //Russian
+                        lan = 7;
+                        Language = "Russian";
+                        break;
+                    case 8: //Spanish
+                        lan = 8;
+                        Language = "Spanish";
+                        break;
+                    case 9: //Swedish
+                        lan = 9;
+                        Language = "Swedish";
+                        break;
+                    case 10: //Vietnamese
+                        lan = 10;
+                        Language = "Vietnamese";
+                        break;
+                }
+
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
+
     private void setEverything(){
 
+        if(ethTrue == 0)
+            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("");
         mFname.setText(FName);
         mLname.setText(LName);
         memail.setText(Email);
@@ -297,9 +370,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         maddress.setText(Address);
         mDOB.setText(DOB);
         mLicense.setText(License);
-        mLanguage.setText(Language);
         genderSetter.setSelection(setGen());
         ethnicitySetter.setSelection(setEth());
+        languageSetter.setSelection(setLan());
 
     }
 
@@ -308,9 +381,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             return 2;
         else if (Gender.equalsIgnoreCase("female"))
             return 1;
-        return 0;
+        return 0; //else blank
     }
-
 
     private int setEth(){
         if (Ethnicity.equalsIgnoreCase("American indian"))
@@ -325,7 +397,31 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             return 5;
         else if (Ethnicity.equalsIgnoreCase("white"))
             return 6;
-        return 0;
+        return 0; //else blank
+    }
+
+    private int setLan(){
+        if (Language.equalsIgnoreCase("Arabic"))
+            return 0;
+        else if (Language.equalsIgnoreCase("Chinese (Mandarin)"))
+            return 1;
+        else if (Language.equalsIgnoreCase("French"))
+            return 3;
+        else if (Language.equalsIgnoreCase("German"))
+            return 4;
+        else if (Language.equalsIgnoreCase("Italian"))
+            return 5;
+        else if (Language.equalsIgnoreCase("Portuguese"))
+            return 6;
+        else if (Language.equalsIgnoreCase("Russian"))
+            return 7;
+        else if (Language.equalsIgnoreCase("Spanish"))
+            return 8;
+        else if (Language.equalsIgnoreCase("Swedish"))
+            return 9;
+        else if (Language.equalsIgnoreCase("Vietnamese"))
+            return 10;
+        return 2; //else English
     }
 
     private void authentication() {
@@ -402,7 +498,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updatePhoto() {
-        //mDatabase.child(citizenUid).child("profile").child("photo").setValue(Photo);
+        mDatabase.child(citizenUid).child("profile").child("photo").setValue(Photo);
         UserProfileChangeRequest updatePhoto = new UserProfileChangeRequest.Builder()
                 .setPhotoUri(Photo)
                 .build();
@@ -431,7 +527,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private void updateDOB() {
         mDatabase.child(citizenUid).child("profile").child("date_of_birth").setValue(DOB);
-
     }
 
     private void updateLicense() {
@@ -444,12 +539,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private void updateGender() {
         if(gen == 0)
-            mDatabase.child(citizenUid).child("profile").child("gender").setValue(" ");
+            mDatabase.child(citizenUid).child("profile").child("gender").setValue("");
         else if(gen == 1)
             mDatabase.child(citizenUid).child("profile").child("gender").setValue("Female");
         else
             mDatabase.child(citizenUid).child("profile").child("gender").setValue("Male");
-
     }
 
     private void updateEthnicity() {
@@ -466,7 +560,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         else if (eth == 6)
             mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("white");
         else
-            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue(" ");
+            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("");
     }
 
     private void toHomepage() {
