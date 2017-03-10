@@ -1,6 +1,8 @@
 package com.policestrategies.calm_stop.citizen;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.SignupVerification;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,22 +32,23 @@ import java.util.regex.Pattern;
 /**
  * Allows the user to sign up or return to the log in page.
  */
-
 public class SignupFormActivity extends AppCompatActivity implements View.OnClickListener {
     private Spinner genderSetter;
     private Spinner langSetter;
+    private Spinner ethnicitySetter;
 
     private EditText mFirstNameField;
     private EditText mLastNameField;
-    private static EditText  mEmailField;
+    private static EditText mEmailField;
     private EditText mPasswordField;
-    private EditText mLicenseNum;
+    private EditText mLicense;
     private EditText mDateOfBirth;
     private EditText mPhone;
     private EditText mAddress;
 
     private int gen = 0;
     private int lang = 0;
+    private int eth = 0;
 
     private static final String TAG = "Signup";
 
@@ -61,22 +65,22 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private FirebaseDatabase database;
     // [END declare databaseRef & database]
 
-    private RegexChecks regexChecks;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signupform);
 
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
-        langSetter = (Spinner) findViewById(R.id.ethnicitySetter);
+        langSetter = (Spinner) findViewById(R.id.langSetter);
+        ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
 
         setUpGenderSetter();
         setUpLangSetter();
+        setUpEthnicitySetter();
 
         mEmailField = (EditText) findViewById(R.id.input_email);
         mPasswordField = (EditText) findViewById(R.id.input_password);
-        mLicenseNum = (EditText) findViewById(R.id.input_licenseNum);
+        mLicense = (EditText) findViewById(R.id.input_licenseNum);
         mFirstNameField = (EditText) findViewById(R.id.input_firstname);
         mLastNameField = (EditText) findViewById(R.id.input_lastname);
         mPhone = (EditText) findViewById(R.id.input_phone);
@@ -152,7 +156,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private void signup() {
         final String email = mEmailField.getText().toString();
         final String password = mPasswordField.getText().toString();
-        final String licensenum = mLicenseNum.getText().toString();
+        final String licensenum = mLicense.getText().toString();
         final String firstname = mFirstNameField.getText().toString();
         final String lastname = mLastNameField.getText().toString();
         final String phone = mPhone.getText().toString();
@@ -160,6 +164,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         final String dateofbirth = mDateOfBirth.getText().toString();
         final String gender = genderSetter.getSelectedItem().toString();
         final String language = langSetter.getSelectedItem().toString();
+        final String ethnicity = ethnicitySetter.getSelectedItem().toString();
 
         Log.d(TAG, "createAccount:" + email);
 
@@ -197,6 +202,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             citizenDatabaseRef.child("gender").setValue(gender);
                             citizenDatabaseRef.child("language").setValue(language);
                             citizenDatabaseRef.child("date_of_birth").setValue(dateofbirth);
+                            citizenDatabaseRef.child("ethnicity").setValue(ethnicity);
 
 //                            databaseRef.child("citizen").child(uuid).child("profile").setValue(mUser);
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
@@ -215,9 +221,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private boolean validateInput(String email, String password, String licensenum, String firstname,
                                   String lastname, String phone, String address, String gender, String language, String dateofbirth) {
 
-//(8 fns)validEmail, validPassword, validLicense, validAddress, validPhone, validFirstname, validLastname, validDateOfBirth
         //FIRST NAME CHECK
-        if (!regexChecks.validFirstName(firstname)) {
+        if (!SignupVerification.validFirstName(firstname)) {
             mFirstNameField.setError("Please enter a valid first name.");
             mFirstNameField.requestFocus();
             return false;
@@ -225,8 +230,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mFirstNameField.setError(null);
         }
         //LAST NAME CHECK
-        if (!regexChecks.validLastName(lastname)) {
-            mLastNameField.setError("Please enter a valid first name.");
+        if (!SignupVerification.validLastName(lastname)) {
+            mLastNameField.setError("Please enter a valid last name.");
             mLastNameField.requestFocus();
             return false;
         } else {
@@ -234,7 +239,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //EMAIL CHECK
-        if (!regexChecks.validEmail(email)) {
+        if (!SignupVerification.validEmail(email)) {
             mEmailField.setError("Enter a valid email address.");
             mEmailField.requestFocus();
             return false;
@@ -243,7 +248,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //PASSWORD REGEX
-        if (!regexChecks.validPassword(password)) {
+        if (!SignupVerification.validPassword(password)) {
             mPasswordField.setError("Password must be at least 6 characters and contain at least a letter and a number.");
             mPasswordField.requestFocus();
             return false;
@@ -252,16 +257,17 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
-        if(!regexChecks.validLicense(licensenum)) {
-            mLicenseNum.setError("Enter a letter followed by eight numbers\nExample: A12345678");
-            mLicenseNum.requestFocus();
+
+        if(!SignupVerification.validLicense(licensenum)) {
+            mLicense.setError("Enter a letter followed by eight numbers\nExample: A12345678");
+            mLicense.requestFocus();
             return false;
         } else {
-            mLicenseNum.setError(null);
+            mLicense.setError(null);
         }
 
         //PHONE REGEX
-        if(!regexChecks.validPhone(phone)) {
+        if(!SignupVerification.validPhone(phone)) {
             mPhone.setError("Invalid Phone Number.");
             mPhone.requestFocus();
             return false;
@@ -270,7 +276,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
-        if (!regexChecks.validDateOfBirth(dateofbirth)){
+        if (!SignupVerification.validDateOfBirth(dateofbirth)){
             mDateOfBirth.setError("DD-MM-YYYY");
             mDateOfBirth.requestFocus();
             return false;
@@ -280,7 +286,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
         //address gender language DOB; Use google map API for address
         //ADDRESS REGEX
-        if (!regexChecks.validAddress(address)){
+        if (!SignupVerification.validAddress(address)){
             mAddress.setError("This field was left empty.");
             mAddress.requestFocus();
             return false;
@@ -289,10 +295,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         return true;
-
-
     }
-
 
     public static String getEmail(){
         String emailInput = mEmailField.getText().toString();
@@ -319,15 +322,15 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position) {
                     case 0:
-                        //blank
+                        //female
                         gen = 0;
                         break;
                     case 1:
-                        //female
+                        //male
                         gen = 1;
                         break;
                     case 2:
-                        //male
+                        //blank
                         gen = 2;
                         break;
                 }
@@ -337,6 +340,49 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             }
         });
     }
+
+
+    private void setUpEthnicitySetter() {
+
+        final ArrayAdapter<CharSequence> ethnicityAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Ethnicity, android.R.layout.simple_spinner_dropdown_item);
+
+        ethnicityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ethnicitySetter.setAdapter(ethnicityAdapter);
+
+        ethnicitySetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position) {
+                    case 0: //Prefer not to Answer
+                        eth = 0;
+                        break;
+                    case 1: //American indian
+                        eth = 1;
+                        break;
+                    case 2: //asian
+                        eth = 2;
+                        break;
+                    case 3: //African american
+                        eth = 3;
+                        break;
+                    case 4: //hispanic
+                        eth = 4;
+                        break;
+                    case 5: //pacific islander
+                        eth = 5;
+                        break;
+                    case 6: //white
+                        eth = 6;
+                        break;
+                }
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
+
 
     private void setUpLangSetter() {
 

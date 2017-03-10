@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.SignupVerification;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -154,6 +155,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
         Log.d(TAG, "createAccount:" + email);
 
+
         if (!validateInput(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth)) {
             return;
         }
@@ -212,33 +214,25 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private boolean validateInput(String email, String password, String licensenum, String firstname,
                                   String lastname, String phone, String address, String gender, String language, String dateofbirth) {
 
-        if(firstname.matches(".*\\d.*") || firstname.matches(".*\\s.*")) {
+        //FIRST NAME CHECK
+        if (!SignupVerification.validFirstName(firstname)) {
             mFirstNameField.setError("Please enter a valid first name.");
-            mFirstNameField.requestFocus();
-            return false;
-        } else if (firstname.isEmpty()) {
-            mFirstNameField.setError("This field was left empty.");
             mFirstNameField.requestFocus();
             return false;
         } else {
             mFirstNameField.setError(null);
         }
-
-        if(lastname.matches(".*\\d.*") || lastname.matches(".*\\s.*")) {
+        //LAST NAME CHECK
+        if (!SignupVerification.validLastName(lastname)) {
             mLastNameField.setError("Please enter a valid last name.");
-            mLastNameField.requestFocus();
-            return false;
-        } else if (lastname.isEmpty()) {
-            mLastNameField.setError("This field was left empty.");
             mLastNameField.requestFocus();
             return false;
         } else {
             mLastNameField.setError(null);
         }
 
-
-
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        //EMAIL CHECK
+        if (!SignupVerification.validEmail(email)) {
             mEmailField.setError("Enter a valid email address.");
             mEmailField.requestFocus();
             return false;
@@ -246,17 +240,54 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mEmailField.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 6) {
-            mPasswordField.setError("Please enter a valid password" +
-                    " containing at least 6 characters.");
+        //PASSWORD REGEX
+        if (!SignupVerification.validPassword(password)) {
+            mPasswordField.setError("Password must be at least 6 characters and contain at least a letter and a number.");
             mPasswordField.requestFocus();
             return false;
         } else {
             mPasswordField.setError(null);
         }
 
-        return true;
+        //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
 
+        if(!SignupVerification.validLicense(licensenum)) {
+            mLicense.setError("Enter a letter followed by eight numbers\nExample: A12345678");
+            mLicense.requestFocus();
+            return false;
+        } else {
+            mLicense.setError(null);
+        }
+
+        //PHONE REGEX
+        if(!SignupVerification.validPhone(phone)) {
+            mPhone.setError("Invalid Phone Number.");
+            mPhone.requestFocus();
+            return false;
+        } else {
+            mPhone.setError(null);
+        }
+
+        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
+        if (!SignupVerification.validDateOfBirth(dateofbirth)){
+            mDateOfBirth.setError("DD-MM-YYYY");
+            mDateOfBirth.requestFocus();
+            return false;
+        } else {
+            mDateOfBirth.setError(null);
+        }
+
+        //address gender language DOB; Use google map API for address
+        //ADDRESS REGEX
+        if (!SignupVerification.validAddress(address)){
+            mAddress.setError("This field was left empty.");
+            mAddress.requestFocus();
+            return false;
+        } else {
+            mAddress.setError(null);
+        }
+
+        return true;
     }
 
     public static String getEmail(){

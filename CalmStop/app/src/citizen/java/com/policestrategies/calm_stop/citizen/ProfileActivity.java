@@ -33,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.SignupVerification;
 
 
 /**
@@ -43,12 +44,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private Spinner genderSetter;
     private Spinner ethnicitySetter;
     private Spinner languageSetter;
-    private EditText mFname;
-    private EditText mLname;
-    private EditText memail;
-    private EditText mphoneNum;
-    private EditText mDOB;
-    private EditText maddress;
+    private EditText mFirstNameField;
+    private EditText mLastNameField;
+    private EditText mEmailField;
+    private EditText mPhone;
+    private EditText mDateOfBirth;
+    private EditText mAddress;
     private EditText mLicense;
     private ImageView mphoto;
 
@@ -76,6 +77,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private FirebaseUser user;
     private DatabaseReference mDatabase;
+    private DatabaseReference profileRef;
 
     private String valueEmail;
     private String valuePassword;
@@ -87,13 +89,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        mFname = (EditText)findViewById(R.id.editFirstName);
-        mLname = (EditText)findViewById(R.id.editLastName);
-        memail = (EditText)findViewById(R.id.editEmail);
-        mDOB = (EditText)findViewById(R.id.editDateOfBirth);
-        mphoneNum = (EditText)findViewById(R.id.editPhonenum);
+        //mFname, mLname, memail, mDOB, mphoneNum, mLicense, maddress, mLanguage, mphoto
+        mFirstNameField = (EditText)findViewById(R.id.editFirstName);
+        mLastNameField = (EditText)findViewById(R.id.editLastName);
+        mEmailField = (EditText)findViewById(R.id.editEmail);
+        mDateOfBirth = (EditText)findViewById(R.id.editDateOfBirth);
+        mPhone = (EditText)findViewById(R.id.editPhonenum);
         mLicense= (EditText)findViewById(R.id.editLicenseNumber);
-        maddress = (EditText)findViewById(R.id.editAddress);
+        mAddress = (EditText)findViewById(R.id.editAddress);
 
         mphoto = (ImageView)findViewById(R.id.profilePicture);
         mphoto.setOnClickListener(this);
@@ -114,12 +117,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+        if (user == null) {
            citizenUid = "";
         }
         else{
-            citizenUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            citizenUid = user.getUid();
         }
+
+        mDatabase = FirebaseDatabase.getInstance().getReference("citizen");
+        profileRef = mDatabase.child(citizenUid).child("profile");
 
         Photo = user.getPhotoUrl();
 
@@ -129,7 +135,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             mphoto.setImageURI(Photo);
         }
 
-        mDatabase.child(citizenUid).child("profile") //.child("profile") <-not part of database
+        profileRef
+
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
@@ -175,14 +182,18 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             case R.id.savebutton:
 
-                FName = mFname.getText().toString();
-                LName = mLname.getText().toString();
-                Email = memail.getText().toString();
-                PhoneNumber = mphoneNum.getText().toString();
-                DOB = mDOB.getText().toString();
+                FName = mFirstNameField.getText().toString();
+                LName = mLastNameField.getText().toString();
+                Email = mEmailField.getText().toString();
+                PhoneNumber = mPhone.getText().toString();
+                DOB = mDateOfBirth.getText().toString();
                 License = mLicense.getText().toString();
-                Address = maddress.getText().toString();
+                Address = mAddress.getText().toString();
+                Gender = genderSetter.getSelectedItem().toString();
+                Ethnicity = ethnicitySetter.getSelectedItem().toString();
+                Language = languageSetter.getSelectedItem().toString();
 
+                if (!validateInput(Email, License, FName, LName, PhoneNumber, Address, Gender, Language, DOB)) return;
                 //WRITE TO FIREBASE
                 updateFName();
                 updateLName();
@@ -305,7 +316,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         languageSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch(position) {
+                switch (position) {
                     case 0: //Arabic
                         lan = 0;
                         Language = "Arabic";
@@ -351,7 +362,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         Language = "Vietnamese";
                         break;
                 }
-
             }
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
@@ -359,21 +369,21 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-    private void setEverything(){
 
-        if(ethTrue == 1)
-            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("");
-        mFname.setText(FName);
-        mLname.setText(LName);
-        memail.setText(Email);
-        mphoneNum.setText(PhoneNumber);
-        maddress.setText(Address);
-        mDOB.setText(DOB);
+    private void setEverything() {
+
+        if (ethTrue == 1)
+            profileRef.child("ethnicity").setValue("");
+        mFirstNameField.setText(FName);
+        mLastNameField.setText(LName);
+        mEmailField.setText(Email);
+        mPhone.setText(PhoneNumber);
+        mAddress.setText(Address);
+        mDateOfBirth.setText(DOB);
         mLicense.setText(License);
         genderSetter.setSelection(setGen());
         ethnicitySetter.setSelection(setEth());
         languageSetter.setSelection(setLan());
-
     }
 
     private int setGen(){
@@ -397,7 +407,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             return 5;
         else if (Ethnicity.equalsIgnoreCase("white"))
             return 6;
-        return 0; //else blank
+        else
+            return 0; //else blank
     }
 
     private int setLan(){
@@ -453,9 +464,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         authen.show();
     }
-
+    //mFname, mLname, memail, mDOB, mphoneNum, mLicense, maddress, mLanguage, mphoto
     private void updateEmail() {
-        mDatabase.child(citizenUid).child("profile").child("email").setValue(Email);
+        profileRef.child("email").setValue(Email);
         user.updateEmail(Email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -489,16 +500,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 });
     }
 
-    private void updateFName() {
-        mDatabase.child(citizenUid).child("profile").child("first_name").setValue(FName);
-    }
-
-    private void updateLName() {
-        mDatabase.child(citizenUid).child("profile").child("last_name").setValue(LName);
-    }
 
     private void updatePhoto() {
-        mDatabase.child(citizenUid).child("profile").child("photo").setValue(Photo);
+        profileRef.child("photo").setValue(Photo);
         UserProfileChangeRequest updatePhoto = new UserProfileChangeRequest.Builder()
                 .setPhotoUri(Photo)
                 .build();
@@ -517,51 +521,66 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 });
     }
 
-    private void updatePhoneNumber() {
-        mDatabase.child(citizenUid).child("profile").child("phone_number").setValue(PhoneNumber);
-    }
 
-    private void updateAddress() {
-        mDatabase.child(citizenUid).child("profile").child("address").setValue(Address);
-    }
+    private void updateFName() { profileRef.child("first_name").setValue(FName); }
+    private void updateLName() { profileRef.child("last_name").setValue(LName); }
+    private void updatePhoneNumber() { profileRef.child("phone_number").setValue(PhoneNumber); }
+    private void updateAddress() {profileRef.child("address").setValue(Address);}
+    private void updateDOB() { profileRef.child("date_of_birth").setValue(DOB); }
+    private void updateLicense() { profileRef.child("license_number").setValue(License); }
 
-    private void updateDOB() {
-        mDatabase.child(citizenUid).child("profile").child("date_of_birth").setValue(DOB);
-    }
-
-    private void updateLicense() {
-        mDatabase.child(citizenUid).child("profile").child("license_number").setValue(License);
-    }
-
-    private void updateLanguage(){
-        mDatabase.child(citizenUid).child("profile").child("language").setValue(Language);
-    }
 
     private void updateGender() {
         if(gen == 2)
-            mDatabase.child(citizenUid).child("profile").child("gender").setValue("");
+            profileRef.child("gender").setValue("");
         else if(gen == 0)
-            mDatabase.child(citizenUid).child("profile").child("gender").setValue("Female");
+            profileRef.child("gender").setValue("Female");
         else
-            mDatabase.child(citizenUid).child("profile").child("gender").setValue("Male");
+            profileRef.child("gender").setValue("Male");
     }
 
     private void updateEthnicity() {
         if (eth == 2)
-            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("American Indian");
+            profileRef.child("ethnicity").setValue("American Indian");
         else if (eth == 3)
-            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("Asian");
+            profileRef.child("ethnicity").setValue("Asian");
         else if (eth == 1)
-            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("African American");
+            profileRef.child("ethnicity").setValue("African American");
         else if (eth == 4)
-            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("Hispanic");
+            profileRef.child("ethnicity").setValue("Hispanic");
         else if (eth == 5)
-            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("pacific islander");
+            profileRef.child("ethnicity").setValue("pacific islander");
         else if (eth == 6)
-            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("white");
+            profileRef.child("ethnicity").setValue("white");
         else
-            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("");
+            profileRef.child("ethnicity").setValue("");
     }
+
+    private void updateLanguage() {
+        if (lan == 0)
+            profileRef.child("language").setValue("Arabic");
+        else if (lan == 1)
+            profileRef.child("language").setValue("Chinese (Mandarin)");
+        else if (lan == 3)
+            profileRef.child("language").setValue("French");
+        else if (lan == 4)
+            profileRef.child("language").setValue("German");
+        else if (lan == 5)
+            profileRef.child("language").setValue("Italian");
+        else if (lan == 6)
+            profileRef.child("language").setValue("Portuguese");
+        else if (lan == 7)
+            profileRef.child("language").setValue("Russian");
+        else if (lan == 8)
+            profileRef.child("language").setValue("Spanish");
+        else if (lan == 9)
+            profileRef.child("language").setValue("Swedish");
+        else if (lan == 10)
+            profileRef.child("language").setValue("Vietnamese");
+        else
+            profileRef.child("language").setValue("English");
+    }
+
 
     private void toHomepage() {
         Intent i = new Intent(getBaseContext(), HomepageActivity.class);
@@ -573,4 +592,75 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         startActivity(i);
     }
 
+    private boolean validateInput(String email, String licensenum, String firstname,
+                                  String lastname, String phone, String address, String gender, String language, String dateofbirth) {
+
+//(8 fns)validEmail, validPassword, validLicense, validAddress, validPhone, validFirstname, validLastname, validDateOfBirth
+        //FIRST NAME CHECK
+        if (!SignupVerification.validFirstName(firstname)) {
+            mFirstNameField.setError("Please enter a valid first name.");
+            mFirstNameField.requestFocus();
+            return false;
+        } else {
+            mFirstNameField.setError(null);
+        }
+        //LAST NAME CHECK
+        if (!SignupVerification.validLastName(lastname)) {
+            mLastNameField.setError("Please enter a valid last name.");
+            mLastNameField.requestFocus();
+            return false;
+        } else {
+            mLastNameField.setError(null);
+        }
+
+        //EMAIL CHECK
+        if (!SignupVerification.validEmail(email)) {
+            mEmailField.setError("Enter a valid email address.");
+            mEmailField.requestFocus();
+            return false;
+        } else {
+            mEmailField.setError(null);
+        }
+
+        //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
+        if(!SignupVerification.validLicense(licensenum)) {
+            mLicense.setError("Enter a letter followed by eight numbers\nExample: A12345678");
+            mLicense.requestFocus();
+            return false;
+        } else {
+            mLicense.setError(null);
+        }
+
+        //PHONE REGEX
+        if(!SignupVerification.validPhone(phone)) {
+            mPhone.setError("Invalid Phone Number.");
+            mPhone.requestFocus();
+            return false;
+        } else {
+            mPhone.setError(null);
+        }
+
+        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
+        if (!SignupVerification.validDateOfBirth(dateofbirth)){
+            mDateOfBirth.setError("DD-MM-YYYY");
+            mDateOfBirth.requestFocus();
+            return false;
+        } else {
+            mDateOfBirth.setError(null);
+        }
+
+        //address gender language DOB; Use google map API for address
+        //ADDRESS REGEX
+        if (!SignupVerification.validAddress(address)){
+            mAddress.setError("This field was left empty.");
+            mAddress.requestFocus();
+            return false;
+        } else {
+            mAddress.setError(null);
+        }
+
+        return true;
+
+
+    }
 }
