@@ -54,10 +54,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private static final int chosenImage = 1;
 
-    private int gen = 0;
+    private int gen = 2;
     private int eth = 0;
     private int lan = 2;
-    private int ethTrue = 1;
+    private int ethTrue = 0;
 
     private String FName;
     private String LName;
@@ -101,7 +101,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         findViewById(R.id.backbutton).setOnClickListener(this);
         findViewById(R.id.viewDocs).setOnClickListener(this);
         findViewById(R.id.savebutton).setOnClickListener(this);
-
 
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
@@ -149,10 +148,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         if(snapshot.hasChild("ethnicity"))
                             Ethnicity = snapshot.child("ethnicity").getValue().toString();
                         else
-                            ethTrue = 0;
+                            ethTrue = 1;
 
                         setEverything();
-
                     }
 
                     @Override
@@ -234,13 +232,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position) {
-                    case 0: //blank
+                    case 0: //Female
                         gen = 0;
                         break;
-                    case 1: //female
+                    case 1: //Male
                         gen = 1;
                         break;
-                    case 2: //male
+                    case 2: //Prefer Not to Answer
                         gen = 2;
                         break;
                 }
@@ -259,20 +257,22 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         ethnicityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ethnicitySetter.setAdapter(ethnicityAdapter);
 
+        ethnicitySetter.setSelection(eth);
+
         ethnicitySetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position) {
-                    case 0: //blank
+                    case 0:  //Prefer Not to Answer
                         eth = 0;
                         break;
-                    case 1: //American indian
+                    case 1: //African american
                         eth = 1;
                         break;
-                    case 2: //asian
+                    case 2: //American indian
                         eth = 2;
                         break;
-                    case 3: //African american
+                    case 3: //asian
                         eth = 3;
                         break;
                     case 4: //hispanic
@@ -361,7 +361,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private void setEverything(){
 
-        if(ethTrue == 0)
+        if(ethTrue == 1)
             mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("");
         mFname.setText(FName);
         mLname.setText(LName);
@@ -378,19 +378,19 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private int setGen(){
         if(Gender.equalsIgnoreCase("male"))
-            return 2;
-        else if (Gender.equalsIgnoreCase("female"))
             return 1;
-        return 0; //else blank
+        else if (Gender.equalsIgnoreCase("female"))
+            return 0;
+        return 2; //else blank
     }
 
     private int setEth(){
         if (Ethnicity.equalsIgnoreCase("American indian"))
-            return 1;
-        else if (Ethnicity.equalsIgnoreCase("Asian"))
             return 2;
-        else if (Ethnicity.equalsIgnoreCase("African american"))
+        else if (Ethnicity.equalsIgnoreCase("Asian"))
             return 3;
+        else if (Ethnicity.equalsIgnoreCase("African american"))
+            return 1;
         else if (Ethnicity.equalsIgnoreCase("Hispanic"))
             return 4;
         else if (Ethnicity.equalsIgnoreCase("pacific islander"))
@@ -538,23 +538,23 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateGender() {
-        if(gen == 0)
+        if(gen == 2)
             mDatabase.child(citizenUid).child("profile").child("gender").setValue("");
-        else if(gen == 1)
+        else if(gen == 0)
             mDatabase.child(citizenUid).child("profile").child("gender").setValue("Female");
         else
             mDatabase.child(citizenUid).child("profile").child("gender").setValue("Male");
     }
 
     private void updateEthnicity() {
-        if (eth == 1 )
-            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("American indian");
-        else if (eth == 2 )
-            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("Asian");
+        if (eth == 2)
+            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("American Indian");
         else if (eth == 3)
+            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("Asian");
+        else if (eth == 1)
             mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("African American");
         else if (eth == 4)
-            mDatabase.child(citizenUid).child("profile").child("ethnicty").setValue("Hispanic");
+            mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("Hispanic");
         else if (eth == 5)
             mDatabase.child(citizenUid).child("profile").child("ethnicity").setValue("pacific islander");
         else if (eth == 6)

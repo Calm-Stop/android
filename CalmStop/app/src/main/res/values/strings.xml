@@ -11,13 +11,13 @@
     </string-array>
 
     <string-array name = "Ethnicity">
+        <item>Prefer Not to Answer</item>
+        <item>African American</item>
         <item>American Indian</item>
         <item>Asian</item>
-        <item>African American</item>
         <item>Hispanic</item>
         <item>Pacific Islander</item>
         <item>White</item>
-        <item>Prefer Not to Answer</item>
     </string-array>
 
     <string-array name = "Language">
