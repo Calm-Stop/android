@@ -43,6 +43,7 @@ import com.policestrategies.calm_stop.SignupVerification;
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
     private Spinner genderSetter;
     private Spinner ethnicitySetter;
+    private Spinner langSetter;
     private EditText mFirstNameField;
     private EditText mLastNameField;
     private EditText mEmailField;
@@ -57,6 +58,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private int gen = 0;
     private int eth = 0;
+    private int lan = 0;
 
     private String FName;
     private String LName;
@@ -95,7 +97,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mPhone = (EditText)findViewById(R.id.editPhonenum);
         mLicense= (EditText)findViewById(R.id.editLicenseNumber);
         mAddress = (EditText)findViewById(R.id.editAddress);
-        mLanguage = (EditText)findViewById(R.id.editprefferedLang);
 
         mphoto = (ImageView)findViewById(R.id.profilePicture);
         mphoto.setOnClickListener(this);
@@ -107,10 +108,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
+        langSetter = (Spinner) findViewById(R.id.langSetter);
 
         setUpGenderSetter();
         setUpEthnicitySetter();
-
+        setUpLangSetter();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -150,7 +152,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         License = snapshot.child("license_number").getValue().toString();
                         PhoneNumber = snapshot.child("phone_number").getValue().toString();
                         Language = snapshot.child("language").getValue().toString();
-                        Ethnicity = "";
+                        Ethnicity = snapshot.child("ethnicity").getValue().toString();
 
                         setEverything();
 
@@ -188,9 +190,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 DOB = mDateOfBirth.getText().toString();
                 License = mLicense.getText().toString();
                 Address = mAddress.getText().toString();
-                Language = mLanguage.getText().toString();
                 Gender = genderSetter.getSelectedItem().toString();
                 Ethnicity = ethnicitySetter.getSelectedItem().toString();
+                Language = langSetter.getSelectedItem().toString();
 
                 if (!validateInput(email, License, FName, LName, PhoneNumber, Address, Gender, Language, DOB)) return;
                 //WRITE TO FIREBASE
@@ -242,7 +244,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position) {
-                    case 0: //blank
+                    case 0: //Prefer not to Answer
                         gen = 0;
                         break;
                     case 1: //female
@@ -271,7 +273,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position) {
-                    case 0: //blank
+                    case 0: //Prefer not to Answer
                         eth = 0;
                         break;
                     case 1: //American indian
@@ -300,6 +302,48 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
+    private void setUpLangSetter() {
+
+        final ArrayAdapter<CharSequence> langAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Language, android.R.layout.simple_spinner_dropdown_item);
+
+        langAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        langSetter.setAdapter(langAdapter);
+
+        langSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position) {
+                    case 0: //English
+                        eth = 0;
+                        break;
+                    case 1: //Spanish
+                        eth = 1;
+                        break;
+                    case 2: //Mandarin Chinese
+                        eth = 2;
+                        break;
+                    case 3: //Russian
+                        eth = 3;
+                        break;
+                    case 4: //French
+                        eth = 4;
+                        break;
+                    case 5: //Arabic
+                        eth = 5;
+                        break;
+                    case 6: //German
+                        eth = 6;
+                        break;
+                }
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
+
+
     private void setEverything(){
 
         mFirstNameField.setText(FName);
@@ -309,36 +353,54 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mAddress.setText(Address);
         mDateOfBirth.setText(DOB);
         mLicense.setText(License);
-        mLanguage.setText(Language);
         genderSetter.setSelection(setGen());
         ethnicitySetter.setSelection(setEth());
-
+        langSetter.setSelection(setLang());
     }
 
     private int setGen(){
         if(Gender.equalsIgnoreCase("male"))
-            return 1;
+            return 2;
         else if (Gender.equalsIgnoreCase("female"))
-            return 0;
-        return 2;
+            return 1;
+        return 0;
     }
 
+
+    private int setLang(){
+        if (Language.equalsIgnoreCase("English"))
+            return 0;
+        else if (Language.equalsIgnoreCase("Spanish"))
+            return 1;
+        else if (Language.equalsIgnoreCase("Mandarin Chinese"))
+            return 2;
+        else if (Language.equalsIgnoreCase("Russian"))
+            return 3;
+        else if (Language.equalsIgnoreCase("French"))
+            return 4;
+        else if (Language.equalsIgnoreCase("Arabic"))
+            return 5;
+        else if (Language.equalsIgnoreCase("German"))
+            return 6;
+        return 0;
+    }
 
     private int setEth(){
         if (Ethnicity.equalsIgnoreCase("American indian"))
-            return 0;
-        else if (Ethnicity.equalsIgnoreCase("Asian"))
             return 1;
-        else if (Ethnicity.equalsIgnoreCase("African american"))
+        else if (Ethnicity.equalsIgnoreCase("Asian"))
             return 2;
-        else if (Ethnicity.equalsIgnoreCase("Hispanic"))
+        else if (Ethnicity.equalsIgnoreCase("African american"))
             return 3;
-        else if (Ethnicity.equalsIgnoreCase("pacific islander"))
+        else if (Ethnicity.equalsIgnoreCase("Hispanic"))
             return 4;
-        else if (Ethnicity.equalsIgnoreCase("white"))
+        else if (Ethnicity.equalsIgnoreCase("pacific islander"))
             return 5;
-        return 6;
+        else if (Ethnicity.equalsIgnoreCase("white"))
+            return 6;
+        return 7;
     }
+
 
     private void authentication() {
         AlertDialog.Builder authen = new AlertDialog.Builder(this);

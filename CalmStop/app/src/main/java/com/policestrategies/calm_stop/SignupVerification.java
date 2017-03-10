@@ -15,11 +15,11 @@ public class SignupVerification {
     public static boolean validPassword(String password) {
         System.out.println("Password length: " + password.length());
         System.out.println("Match: " + password.matches("((.*\\d.*)(.*\\w.*))|((.*\\w.*)(.*\\d.*))"));
-        return (!(password.length() < 6) && password.matches("((.*\\d.*)(.*\\w.*))|((.*\\w.*)(.*\\d.*))"));
+        return (!(password.length() < 6) && password.matches("((.*\\d.*)(.*[A-Za-z].*))|((.*[A-Za-z].*)(.*\\d.*))"));
     }
 
     public static boolean validLicense(String license) {
-        return (license.matches("^\\w([0-9]{8})"));
+        return (license.matches("^[A-Z]([0-9]{8})"));
     }
 
     public static boolean validAddress(String address) {
@@ -27,7 +27,7 @@ public class SignupVerification {
     }
 
     public static boolean validPhone(String phone) {
-        return (phone.matches("^1?(\\d{10}|" + "\\(?\\d{3}\\)?(-|\\s)?\\d{3}(-|\\s)?\\d{4})\\s?"));
+        return (phone.matches("^(1|(1(-|\\s)))?(\\d{10}|" + "\\(?\\d{3}\\)?(-|\\s)?\\d{3}(-|\\s)?\\d{4})\\s?"));
     }
 
     public static boolean validFirstName(String firstname) {
@@ -39,7 +39,7 @@ public class SignupVerification {
     }
 
     public static boolean validDateOfBirth(String dateofbirth) {
-        return (dateofbirth.matches("^\\d{1,2}(-?|(,\\s)?|/?)\\d{1,2}(-?|(,\\s)?|/?)\\d{4}"));
+        return (dateofbirth.matches("^\\d{1,2}(-|(,\\s)|/)\\d{1,2}(-|(,\\s)|/)\\d{4}"));
     }
 
 } // end class SignupVerification

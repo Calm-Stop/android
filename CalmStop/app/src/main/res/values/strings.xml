@@ -5,26 +5,26 @@
     <string name="auth_failed">Authentication failed</string>
 
     <string-array name = "Gender">
+        <item>Prefer Not to Answer</item>
         <item>Female</item>
         <item>Male</item>
-        <item>Prefer Not to Answer</item>
     </string-array>
 
     <string-array name = "Ethnicity">
+        <item>Prefer Not to Answer</item>
         <item>American Indian</item>
         <item>Asian</item>
         <item>African American</item>
         <item>Hispanic</item>
         <item>Pacific Islander</item>
         <item>White</item>
-        <item>Prefer Not to Answer</item>
     </string-array>
 
     <string-array name = "Language">
         <item>English</item>
         <item>Spanish</item>
         <item>Mandarin Chinese</item>
-        <item>Vietnamese</item>
+        <item>Russian</item>
         <item>French</item>
         <item>Arabic</item>
         <item>German</item>

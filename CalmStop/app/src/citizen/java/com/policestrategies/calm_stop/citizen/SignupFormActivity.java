@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 public class SignupFormActivity extends AppCompatActivity implements View.OnClickListener {
     private Spinner genderSetter;
     private Spinner langSetter;
+    private Spinner ethnicitySetter;
 
     private EditText mFirstNameField;
     private EditText mLastNameField;
@@ -47,6 +48,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
     private int gen = 0;
     private int lang = 0;
+    private int eth = 0;
 
     private static final String TAG = "Signup";
 
@@ -70,9 +72,11 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         langSetter = (Spinner) findViewById(R.id.langSetter);
+        ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
 
         setUpGenderSetter();
         setUpLangSetter();
+        setUpEthnicitySetter();
 
         mEmailField = (EditText) findViewById(R.id.input_email);
         mPasswordField = (EditText) findViewById(R.id.input_password);
@@ -160,6 +164,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         final String dateofbirth = mDateOfBirth.getText().toString();
         final String gender = genderSetter.getSelectedItem().toString();
         final String language = langSetter.getSelectedItem().toString();
+        final String ethnicity = ethnicitySetter.getSelectedItem().toString();
 
         Log.d(TAG, "createAccount:" + email);
 
@@ -197,6 +202,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             citizenDatabaseRef.child("gender").setValue(gender);
                             citizenDatabaseRef.child("language").setValue(language);
                             citizenDatabaseRef.child("date_of_birth").setValue(dateofbirth);
+                            citizenDatabaseRef.child("ethnicity").setValue(ethnicity);
 
 //                            databaseRef.child("citizen").child(uuid).child("profile").setValue(mUser);
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
@@ -334,6 +340,49 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             }
         });
     }
+
+
+    private void setUpEthnicitySetter() {
+
+        final ArrayAdapter<CharSequence> ethnicityAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Ethnicity, android.R.layout.simple_spinner_dropdown_item);
+
+        ethnicityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ethnicitySetter.setAdapter(ethnicityAdapter);
+
+        ethnicitySetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position) {
+                    case 0: //Prefer not to Answer
+                        eth = 0;
+                        break;
+                    case 1: //American indian
+                        eth = 1;
+                        break;
+                    case 2: //asian
+                        eth = 2;
+                        break;
+                    case 3: //African american
+                        eth = 3;
+                        break;
+                    case 4: //hispanic
+                        eth = 4;
+                        break;
+                    case 5: //pacific islander
+                        eth = 5;
+                        break;
+                    case 6: //white
+                        eth = 6;
+                        break;
+                }
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
+
 
     private void setUpLangSetter() {
 

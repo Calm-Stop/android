@@ -244,17 +244,11 @@
                 android:typeface="monospace"
                 android:textColor="@android:color/background_dark" />
 
-            <EditText
+            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="Preffered Language"
-                android:ems="10"
-                android:id="@+id/editprefferedLang"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
+                android:id="@+id/langSetter"
+                android:background="@android:color/background_light" />
 
             <TextView
                 android:text="Gender:"
