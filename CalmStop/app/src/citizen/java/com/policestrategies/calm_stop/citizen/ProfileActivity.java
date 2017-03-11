@@ -1,5 +1,7 @@
 package com.policestrategies.calm_stop.citizen;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,11 +14,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.common.server.converter.StringToIntConverter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -35,6 +39,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SignupVerification;
 
+import java.util.Calendar;
+
 
 /**
  * Created by mariavizcaino on 2/19/17.
@@ -44,6 +50,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private Spinner genderSetter;
     private Spinner ethnicitySetter;
     private Spinner languageSetter;
+    private DatePicker dateofbirth;
     private EditText mFirstNameField;
     private EditText mLastNameField;
     private EditText mEmailField;
@@ -54,11 +61,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView mphoto;
 
     private static final int chosenImage = 1;
+    static final int DATE_DIALOG_ID = 999;
 
     private int gen = 2;
     private int eth = 0;
     private int lan = 2;
     private int ethTrue = 0;
+
+    int month;
+    int day;
+    int year;
 
     private String FName;
     private String LName;
@@ -108,10 +120,21 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
         languageSetter = (Spinner) findViewById(R.id.languageSetter);
+        dateofbirth = (DatePicker) findViewById(R.id.dateofbirthPicker);
 
         setUpGenderSetter();
         setUpEthnicitySetter();
         setUpLanguageSetter();
+
+        // set current date into textview
+        mDateOfBirth.setText(new StringBuilder()
+                // Month is 0 based, just add 1
+                .append(month + 1).append("-").append(day).append("-")
+                .append(year).append(" "));
+
+        // set current date into datepicker
+        dateofbirth.init(year, month, day, null);
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference("citizen");
 
@@ -135,9 +158,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             mphoto.setImageURI(Photo);
         }
 
-        profileRef
-
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         //NEED TO ADD BADGE NUMBER
@@ -193,6 +214,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 Ethnicity = ethnicitySetter.getSelectedItem().toString();
                 Language = languageSetter.getSelectedItem().toString();
 
+                int month = dateofbirth.getMonth();
+                int day = dateofbirth.getDayOfMonth();
+                int year = dateofbirth.getYear();
+                String mon = Integer.toString(month);
+                String dy = Integer.toString(day);
+                String yr = Integer.toString(year);
+
+                DOB = mon + "/" + dy + "/" +yr;
+
                 if (!validateInput(Email, License, FName, LName, PhoneNumber, Address, Gender, Language, DOB)) return;
                 //WRITE TO FIREBASE
                 updateFName();
@@ -217,6 +247,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -369,7 +400,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-
     private void setEverything() {
 
         if (ethTrue == 1)
@@ -380,6 +410,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mPhone.setText(PhoneNumber);
         mAddress.setText(Address);
         mDateOfBirth.setText(DOB);
+        String seperator = "/";
+        String[] dateArray = DOB.split(seperator);
+        month = Integer.parseInt(dateArray[0]);
+        day = Integer.parseInt(dateArray[1]);
+        year = Integer.parseInt(dateArray[2]);
+        dateofbirth.init(year, month, day, null);
         mLicense.setText(License);
         genderSetter.setSelection(setGen());
         ethnicitySetter.setSelection(setEth());

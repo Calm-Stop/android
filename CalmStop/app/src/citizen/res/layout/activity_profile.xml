@@ -114,7 +114,15 @@
                 android:textSize="16sp"
                 android:fontFamily="monospace"
                 android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
+                android:textColor="@android:color/background_dark"
+                android:focusable="false"/>
+
+            <DatePicker
+                android:id="@+id/dateofbirthPicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:datePickerMode="spinner"
+                android:calendarViewShown="false"/>
 
             <TextView
                 android:text="Email:"
