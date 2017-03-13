@@ -145,26 +145,50 @@ public class SignupVerificationTest {
     }
 
     @Test
+    public void zeroDateOfBirth() {
+        String testDateOfBirth = "04-02-1995";
+        Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
+    }
+
+    @Test
+    public void testNotLeapYearDateOfBirth() {
+        String testDateOfBirth = "29-02-1995";
+        Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
+    }
+
+    @Test
+    public void testLeapYearDateOfBirth() {
+        String testDateOfBirth = "29-02-1996";
+        Assert.assertTrue(SignupVerification.validDateOfBirth(testDateOfBirth));
+    }
+
+    @Test
     public void testMinimalDateOfBirth() {
-        String testDateOfBirth = "1/2/1999";
+        String testDateOfBirth = "1-2-1999";
         Assert.assertTrue(SignupVerification.validDateOfBirth(testDateOfBirth));
     }
 
     @Test
     public void testLongDateOfBirth() {
-        String testDateOfBirth = "100/200/19999";
+        String testDateOfBirth = "100-200-19999";
         Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
     }
 
     @Test
     public void testShortDateOfBirth() {
-        String testDateOfBirth = "1/2/999";
+        String testDateOfBirth = "1-2-199";
         Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
     }
 
     @Test
     public void testZeroDateOfBirth() {
-        String testDateOfBirth = "00/00/0000";
+        String testDateOfBirth = "00-00-0000";
+        Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
+    }
+
+    @Test
+    public void testJanDateOfBirth() {
+        String testDateOfBirth = "31/1/1999";
         Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
     }
 
