@@ -138,6 +138,7 @@ public class SignupVerificationTest {
     }
 
 //DOB Test
+    //MONTHS
     @Test
     public void testEmptyDateOfBirth() {
         String testDateOfBirth = "";
@@ -145,57 +146,82 @@ public class SignupVerificationTest {
     }
 
     @Test
-    public void zeroDateOfBirth() {
-        String testDateOfBirth = "04-02-1995";
+    public void testOneMonthDateOfBirth() {
+        String testDateOfBirth = "1-20-1999";
+        Assert.assertTrue(SignupVerification.validDateOfBirth(testDateOfBirth));
+    }
+//RECHECK
+    @Test
+    public void testTwoMonthDateOfBirth() {
+        String testDateOfBirth = "10-20-1999";
+        Assert.assertTrue(SignupVerification.validDateOfBirth(testDateOfBirth));
+    }
+
+    @Test
+    public void testThreeMonthDateOfBirth() {
+        String testDateOfBirth = "100-20-1999";
         Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
+    }
+
+    //DAYS
+    @Test
+    public void testOneDayDateOfBirth() {
+        String testDateOfBirth = "1-1-1999";
+        Assert.assertTrue(SignupVerification.validDateOfBirth(testDateOfBirth));
+    }
+
+    @Test
+    public void testTwoDayDateOfBirth() {
+        String testDateOfBirth = "1-20-1999";
+        Assert.assertTrue(SignupVerification.validDateOfBirth(testDateOfBirth));
+    }
+
+    @Test
+    public void testThreeDayDateOfBirth() {
+        String testDateOfBirth = "1-200-1999";
+        Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
+    }
+
+    //YEARS
+//RECHECK
+    @Test
+    public void testTwoThousandOneDateOfBirth() {
+        String testDateOfBirth = "1-20-2001";
+        Assert.assertTrue(SignupVerification.validDateOfBirth(testDateOfBirth));
+    }
+
+    @Test
+    public void testMoreThanTwoThousandOneDateOfBirth() {
+        String testDateOfBirth = "1-20-2002";
+        Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
+    }
+
+    @Test
+    public void testLessThanNineteenThirtyDateOfBirth() {
+        String testDateOfBirth = "1-20-1929";
+        Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
+    }
+//RECHECK
+    @Test
+    public void testNineteenThirtyDateOfBirth() {
+        String testDateOfBirth = "10-10-1930";
+        Assert.assertTrue(SignupVerification.validDateOfBirth(testDateOfBirth));
+    }
+
+    //LEAP YEAR
+//RECHECK
+    @Test
+    public void testLeapYearDateOfBirth() {
+        String testDateOfBirth = "2-29-1996";
+        Assert.assertTrue(SignupVerification.validDateOfBirth(testDateOfBirth));
     }
 
     @Test
     public void testNotLeapYearDateOfBirth() {
-        String testDateOfBirth = "29-02-1995";
+        String testDateOfBirth = "2-29-1995";
         Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
     }
 
-    @Test
-    public void testLeapYearDateOfBirth() {
-        String testDateOfBirth = "29-02-1996";
-        Assert.assertTrue(SignupVerification.validDateOfBirth(testDateOfBirth));
-    }
 
-    @Test
-    public void testMinimalDateOfBirth() {
-        String testDateOfBirth = "1-2-1999";
-        Assert.assertTrue(SignupVerification.validDateOfBirth(testDateOfBirth));
-    }
-
-    @Test
-    public void testLongDateOfBirth() {
-        String testDateOfBirth = "100-200-19999";
-        Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
-    }
-
-    @Test
-    public void testShortDateOfBirth() {
-        String testDateOfBirth = "1-2-199";
-        Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
-    }
-
-    @Test
-    public void testZeroDateOfBirth() {
-        String testDateOfBirth = "00-00-0000";
-        Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
-    }
-
-    @Test
-    public void testJanDateOfBirth() {
-        String testDateOfBirth = "31/1/1999";
-        Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
-    }
-
-    @Test
-    public void testNineDateOfBirth() {
-        String testDateOfBirth = "99/99/9999";
-        Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
-    }
 
 } // end SignupVerificationTest

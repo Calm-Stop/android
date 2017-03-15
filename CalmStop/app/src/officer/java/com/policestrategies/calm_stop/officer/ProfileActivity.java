@@ -47,7 +47,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private EditText mLname;
     private EditText memail;
     private EditText mDOB;
-    private EditText maddress;
+    private EditText mZip;
     private EditText mLicense;
     private EditText mphoneNum;
     private EditText mDepartmentNum;
@@ -64,7 +64,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private String Email;
     private String PhoneNumber;
     private String License;
-    private String Address;
+    private String ZIP;
     private String DOB;
     private String Gender;
     private String Ethnicity;
@@ -94,7 +94,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mLicense= (EditText)findViewById(R.id.editLicenseNumber);
         mDepartmentNum = (EditText) findViewById(R.id.editdepartnum);
         mBadgeNum = (EditText)findViewById(R.id.editBadgenum);
-        maddress = (EditText)findViewById(R.id.editAddress);
+        mZip = (EditText)findViewById(R.id.editZip);
 
         mphoto = (ImageView)findViewById(R.id.profilePicture);
         mphoto.setOnClickListener(this);
@@ -132,7 +132,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 //NEED TO ADD BADGE NUMBER
-                Address = snapshot.child("address").getValue().toString();
+                ZIP = snapshot.child("zip_code").getValue().toString();
                 DOB = snapshot.child("date_of_birth").getValue().toString();
                 Email = snapshot.child("email").getValue().toString();
                 FName = snapshot.child("first_name").getValue().toString();
@@ -173,7 +173,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 PhoneNumber = mphoneNum.getText().toString();
                 DOB = mDOB.getText().toString();
                 License = mLicense.getText().toString();
-                Address = maddress.getText().toString();
+                ZIP = mZip.getText().toString();
 
                 //WRITE TO FIREBASE
                 updateFName();
@@ -181,7 +181,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 updatePhoto();
                 updatePhoneNumber();
                 updateEmail();
-                updateAddress();
+                updateZip();
                 updateDOB();
                 updateLicense();
                 updateGender();
@@ -297,7 +297,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mLname.setText(LName);
         memail.setText(Email);
         mphoneNum.setText(PhoneNumber);
-        maddress.setText(Address);
+        mZip.setText(ZIP);
         mDOB.setText(DOB);
         mLicense.setText(License);
         mBadgeNum.setText("");
@@ -431,8 +431,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mDatabase.child("14566").child(officerUid).child("profile").child("phone_number").setValue(PhoneNumber);
     }
 
-    private void updateAddress() {
-        mDatabase.child("14566").child(officerUid).child("profile").child("address").setValue(Address);
+    private void updateZip() {
+        mDatabase.child("14566").child(officerUid).child("profile").child("zip_code").setValue(ZIP);
     }
 
     private void updateDOB() {

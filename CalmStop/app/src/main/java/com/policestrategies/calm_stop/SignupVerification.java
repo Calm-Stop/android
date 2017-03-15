@@ -25,6 +25,8 @@ public class SignupVerification {
         return (!address.isEmpty());
     }
 
+    public static boolean validZip(String zip) { return (zip.matches("^\\d{5}")); }
+
     public static boolean validPhone(String phone) {
         return (phone.matches("^(1|(1(-|\\s)))?(\\d{10}|" + "\\(?\\d{3}\\)?(-|\\s)?\\d{3}(-|\\s)?\\d{4})\\s?"));
     }
@@ -45,7 +47,7 @@ public class SignupVerification {
             int I_day, I_month, I_year;
             String dummy = dateofbirth.substring(0,1);
             for (i = 0, j = 1; !dummy.equalsIgnoreCase("-");) {
-                S_day = dateofbirth.substring(0,j);
+                S_month = dateofbirth.substring(0,j);
                 i++; j++;
                 dummy = dateofbirth.substring(i,j);
             }
@@ -54,23 +56,19 @@ public class SignupVerification {
             i=j+1;
             dummy = dateofbirth.substring(j,i);
             while (!dummy.equalsIgnoreCase("-")) {
-                S_month = dateofbirth.substring(k,i);
+                S_day = dateofbirth.substring(k,i);
                 i++; j++;
                 dummy = dateofbirth.substring(j,i);
             }
-            k=i;
-            j=i+1;
-            while (j != dateofbirth.length() + 1) {
-                S_year = dateofbirth.substring(k,j);
-                j++;
-            }
+            S_year = dateofbirth.substring(i, dateofbirth.length());
+
             I_day = Integer.parseInt(S_day);
             I_month = Integer.parseInt(S_month);
             I_year = Integer.parseInt(S_year);
             if ((I_day > 31) || (I_month > 12) || (I_year < 1930) || (I_year > 2001)) {
                 return false;
             } else {
-//FEBRUARY REGEX
+                //FEBRUARY
                 if (I_month == 2) {
                     //LEAPYEAR FEBRUARY
                     if ((I_year % 4) == 0) {
@@ -87,25 +85,18 @@ public class SignupVerification {
                 }
                 //MONTHS with 31 days
                 if ((I_month == 1 || I_month == 3 || I_month == 5 || I_month == 7 || I_month == 8 || I_month == 10 || I_month == 12)
-                        && (I_day > 31 || I_day < 1)) {
-                    if (I_day < 32 && I_day > 0) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                        && (I_day < 32 || I_day > 0)) {
+                    return true;
                     //MONTHS WITH 30 DAYS
-                } else if ((I_month == 4 || I_month == 6 || I_month == 9 || I_month == 11) && (I_day > 30 || I_day < 1)) {
-                    if (I_day < 31 && I_day > 0) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                } else if ((I_month == 4 || I_month == 6 || I_month == 9 || I_month == 11) && (I_day < 31 || I_day > 0)) {
+                    return true;
+                } else {
+                    return false;
                 }
             }
         } else {
             return false;
         }
-        return false;
     }
 
 } // end class SignupVerification

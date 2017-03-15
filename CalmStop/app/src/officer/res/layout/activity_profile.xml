@@ -229,14 +229,14 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-                android:text="Address: "
+                android:text="ZIP Code: "
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/phonenumber"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp"
-                android:id="@+id/Address"
+                android:id="@+id/Zip"
                 android:layout_alignRight="@+id/backButton"
                 android:layout_alignEnd="@+id/backButton"
                 android:textSize="16sp"
@@ -247,10 +247,9 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPostalAddress"
-                android:text="Address"
+                android:text="ZIP Code"
                 android:ems="10"
-                android:id="@+id/editAddress"
+                android:id="@+id/editZip"
                 android:textSize="16sp"
                 android:fontFamily="monospace"
                 android:typeface="monospace"
@@ -260,7 +259,7 @@
                 android:text="License Number: "
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/Address"
+                android:layout_below="@+id/Zip"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp"

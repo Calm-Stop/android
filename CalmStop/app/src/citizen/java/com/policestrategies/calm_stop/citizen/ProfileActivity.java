@@ -1,6 +1,5 @@
 package com.policestrategies.calm_stop.citizen;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -50,18 +48,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private Spinner genderSetter;
     private Spinner ethnicitySetter;
     private Spinner languageSetter;
-    private DatePicker dateofbirth;
     private EditText mFirstNameField;
     private EditText mLastNameField;
     private EditText mEmailField;
     private EditText mPhone;
     private EditText mDateOfBirth;
-    private EditText mAddress;
+    private EditText mZip;
     private EditText mLicense;
     private ImageView mphoto;
 
     private static final int chosenImage = 1;
-    static final int DATE_DIALOG_ID = 999;
 
     private int gen = 2;
     private int eth = 0;
@@ -78,7 +74,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private String PhoneNumber;
 
     private String License;
-    private String Address;
+    private String ZIP;
     private String DOB;
     private String Gender;
     private String Ethnicity;
@@ -96,19 +92,18 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private static final String TAG = "Profile Edit";
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        //mFname, mLname, memail, mDOB, mphoneNum, mLicense, maddress, mLanguage, mphoto
+        //mFname, mLname, memail, mDOB, mphoneNum, mLicense, mZip, mLanguage, mphoto
         mFirstNameField = (EditText)findViewById(R.id.editFirstName);
         mLastNameField = (EditText)findViewById(R.id.editLastName);
         mEmailField = (EditText)findViewById(R.id.editEmail);
         mDateOfBirth = (EditText)findViewById(R.id.editDateOfBirth);
         mPhone = (EditText)findViewById(R.id.editPhonenum);
         mLicense= (EditText)findViewById(R.id.editLicenseNumber);
-        mAddress = (EditText)findViewById(R.id.editAddress);
+        mZip = (EditText)findViewById(R.id.editZip);
 
         mphoto = (ImageView)findViewById(R.id.profilePicture);
         mphoto.setOnClickListener(this);
@@ -120,7 +115,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
         languageSetter = (Spinner) findViewById(R.id.languageSetter);
-        dateofbirth = (DatePicker) findViewById(R.id.dateofbirthPicker);
 
         setUpGenderSetter();
         setUpEthnicitySetter();
@@ -131,9 +125,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 // Month is 0 based, just add 1
                 .append(month + 1).append("-").append(day).append("-")
                 .append(year).append(" "));
-
-        // set current date into datepicker
-        dateofbirth.init(year, month, day, null);
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference("citizen");
@@ -162,7 +153,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         //NEED TO ADD BADGE NUMBER
-                        Address = snapshot.child("address").getValue().toString();
+                        ZIP = snapshot.child("zip_code").getValue().toString();
                         DOB = snapshot.child("date_of_birth").getValue().toString();
                         Email = snapshot.child("email").getValue().toString();
                         FName = snapshot.child("first_name").getValue().toString();
@@ -209,28 +200,20 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 PhoneNumber = mPhone.getText().toString();
                 DOB = mDateOfBirth.getText().toString();
                 License = mLicense.getText().toString();
-                Address = mAddress.getText().toString();
+                ZIP = mZip.getText().toString();
                 Gender = genderSetter.getSelectedItem().toString();
                 Ethnicity = ethnicitySetter.getSelectedItem().toString();
                 Language = languageSetter.getSelectedItem().toString();
 
-                int month = dateofbirth.getMonth();
-                int day = dateofbirth.getDayOfMonth();
-                int year = dateofbirth.getYear();
-                String mon = Integer.toString(month);
-                String dy = Integer.toString(day);
-                String yr = Integer.toString(year);
 
-                DOB = mon + "/" + dy + "/" +yr;
-
-                if (!validateInput(Email, License, FName, LName, PhoneNumber, Address, Gender, Language, DOB)) return;
+                if (!validateInput(Email, License, FName, LName, PhoneNumber, ZIP, DOB)) return;
                 //WRITE TO FIREBASE
                 updateFName();
                 updateLName();
                 updatePhoto();
                 updatePhoneNumber();
                 updateEmail();
-                updateAddress();
+                updateZip();
                 updateDOB();
                 updateLicense();
                 updateLanguage();
@@ -408,14 +391,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mLastNameField.setText(LName);
         mEmailField.setText(Email);
         mPhone.setText(PhoneNumber);
-        mAddress.setText(Address);
+        mZip.setText(ZIP);
         mDateOfBirth.setText(DOB);
-        String seperator = "/";
-        String[] dateArray = DOB.split(seperator);
-        month = Integer.parseInt(dateArray[0]);
-        day = Integer.parseInt(dateArray[1]);
-        year = Integer.parseInt(dateArray[2]);
-        dateofbirth.init(year, month, day, null);
         mLicense.setText(License);
         genderSetter.setSelection(setGen());
         ethnicitySetter.setSelection(setEth());
@@ -500,7 +477,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         authen.show();
     }
-    //mFname, mLname, memail, mDOB, mphoneNum, mLicense, maddress, mLanguage, mphoto
+    //mFname, mLname, memail, mDOB, mphoneNum, mLicense, mZip, mLanguage, mphoto
     private void updateEmail() {
         profileRef.child("email").setValue(Email);
         user.updateEmail(Email)
@@ -561,7 +538,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private void updateFName() { profileRef.child("first_name").setValue(FName); }
     private void updateLName() { profileRef.child("last_name").setValue(LName); }
     private void updatePhoneNumber() { profileRef.child("phone_number").setValue(PhoneNumber); }
-    private void updateAddress() {profileRef.child("address").setValue(Address);}
+    private void updateZip() {profileRef.child("zip_code").setValue(ZIP);}
     private void updateDOB() { profileRef.child("date_of_birth").setValue(DOB); }
     private void updateLicense() { profileRef.child("license_number").setValue(License); }
 
@@ -629,9 +606,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private boolean validateInput(String email, String licensenum, String firstname,
-                                  String lastname, String phone, String address, String gender, String language, String dateofbirth) {
+                                  String lastname, String phone, String zip, String dateofbirth) {
 
-//(8 fns)validEmail, validPassword, validLicense, validAddress, validPhone, validFirstname, validLastname, validDateOfBirth
+//(8 fns)validEmail, validPassword, validLicense, validZip, validPhone, validFirstname, validLastname, validDateOfBirth
         //FIRST NAME CHECK
         if (!SignupVerification.validFirstName(firstname)) {
             mFirstNameField.setError("Please enter a valid first name.");
@@ -685,14 +662,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             mDateOfBirth.setError(null);
         }
 
-        //address gender language DOB; Use google map API for address
-        //ADDRESS REGEX
-        if (!SignupVerification.validAddress(address)){
-            mAddress.setError("This field was left empty.");
-            mAddress.requestFocus();
+        //zip gender language DOB
+        //ZIP CODE REGEX
+        if (!SignupVerification.validZip(zip)){
+            mZip.setError("This field was left empty.");
+            mZip.requestFocus();
             return false;
         } else {
-            mAddress.setError(null);
+            mZip.setError(null);
         }
 
         return true;

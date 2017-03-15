@@ -37,7 +37,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private EditText mLicenseNum;
     private EditText mDateOfBirth;
     private EditText mPhone;
-    private EditText mAddress;
+    private EditText mZip;
     private EditText mGender;
     private EditText mLanguage;
     private EditText mDepartment;
@@ -68,7 +68,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         mFirstNameField = (EditText) findViewById(R.id.input_firstname);
         mLastNameField = (EditText) findViewById(R.id.input_lastname);
         mPhone = (EditText) findViewById(R.id.input_phone);
-        mAddress = (EditText) findViewById(R.id.input_address);
+        mZip = (EditText) findViewById(R.id.input_zip);
         mGender = (EditText) findViewById(R.id.input_gender);
         mDateOfBirth = (EditText) findViewById(R.id.input_DateOfBirth);
         mLanguage = (EditText) findViewById(R.id.input_language);
@@ -147,7 +147,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         final String firstname = mFirstNameField.getText().toString();
         final String lastname = mLastNameField.getText().toString();
         final String phone = mPhone.getText().toString();
-        final String address = mAddress.getText().toString();
+        final String zip = mZip.getText().toString();
         final String gender = mGender.getText().toString();
         final String language = mLanguage.getText().toString();
         final String dateofbirth = mDateOfBirth.getText().toString();
@@ -156,7 +156,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         Log.d(TAG, "createAccount:" + email);
 
 
-        if (!validateInput(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth)) {
+        if (!validateInput(email, password, licensenum, firstname, lastname, phone, zip, dateofbirth)) {
             return;
         }
 
@@ -193,7 +193,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             officerDatabaseRef.child("last_name").setValue(lastname);
                             officerDatabaseRef.child("license_number").setValue(licensenum);
                             officerDatabaseRef.child("phone_number").setValue(phone);
-                            officerDatabaseRef.child("address").setValue(address);
+                            officerDatabaseRef.child("zip_code").setValue(zip);
                             officerDatabaseRef.child("gender").setValue(gender);
                             officerDatabaseRef.child("language").setValue(language);
                             officerDatabaseRef.child("date_of_birth").setValue(dateofbirth);
@@ -212,7 +212,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     }
 
     private boolean validateInput(String email, String password, String licensenum, String firstname,
-                                  String lastname, String phone, String address, String gender, String language, String dateofbirth) {
+                                  String lastname, String phone, String zip, String dateofbirth) {
 
         //FIRST NAME CHECK
         if (!SignupVerification.validFirstName(firstname)) {
@@ -252,11 +252,11 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
 
         if(!SignupVerification.validLicense(licensenum)) {
-            mLicense.setError("Enter a letter followed by eight numbers\nExample: A12345678");
-            mLicense.requestFocus();
+            mLicenseNum.setError("Enter a letter followed by eight numbers\nExample: A12345678");
+            mLicenseNum.requestFocus();
             return false;
         } else {
-            mLicense.setError(null);
+            mLicenseNum.setError(null);
         }
 
         //PHONE REGEX
@@ -277,14 +277,14 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mDateOfBirth.setError(null);
         }
 
-        //address gender language DOB; Use google map API for address
-        //ADDRESS REGEX
-        if (!SignupVerification.validAddress(address)){
-            mAddress.setError("This field was left empty.");
-            mAddress.requestFocus();
+        //zip gender language DOB
+        //ZIP CODE REGEX
+        if (!SignupVerification.validZip(zip)){
+            mZip.setError("This field was left empty.");
+            mZip.requestFocus();
             return false;
         } else {
-            mAddress.setError(null);
+            mZip.setError(null);
         }
 
         return true;

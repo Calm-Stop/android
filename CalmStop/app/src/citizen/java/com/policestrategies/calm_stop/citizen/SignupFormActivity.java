@@ -1,19 +1,15 @@
 package com.policestrategies.calm_stop.citizen;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,7 +40,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private EditText mLicense;
     private EditText mDateOfBirth;
     private EditText mPhone;
-    private EditText mAddress;
+    private EditText mZip;
 
     private int gen = 0;
     private int lang = 0;
@@ -84,7 +80,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         mFirstNameField = (EditText) findViewById(R.id.input_firstname);
         mLastNameField = (EditText) findViewById(R.id.input_lastname);
         mPhone = (EditText) findViewById(R.id.input_phone);
-        mAddress = (EditText) findViewById(R.id.input_address);
+        mZip = (EditText) findViewById(R.id.input_zip);
         mDateOfBirth = (EditText) findViewById(R.id.input_DateOfBirth);
 
         findViewById(R.id.button_login).setOnClickListener(this);
@@ -160,7 +156,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         final String firstname = mFirstNameField.getText().toString();
         final String lastname = mLastNameField.getText().toString();
         final String phone = mPhone.getText().toString();
-        final String address = mAddress.getText().toString();
+        final String zip = mZip.getText().toString();
         final String dateofbirth = mDateOfBirth.getText().toString();
         final String gender = genderSetter.getSelectedItem().toString();
         final String language = langSetter.getSelectedItem().toString();
@@ -168,7 +164,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
         Log.d(TAG, "createAccount:" + email);
 
-        if (!validateInput(email, password, licensenum, firstname, lastname, phone, address, gender, language, dateofbirth)) {
+        if (!validateInput(email, password, licensenum, firstname, lastname, phone, zip, gender, language, dateofbirth)) {
             return;
         }
 
@@ -192,13 +188,13 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             String uuid = user.getUid();
                             DatabaseReference citizenDatabaseRef = databaseRef.child("citizen")
                                     .child(uuid).child("profile").getRef();
-                            //email, password, licensenum, firstname, lastname, phone, address, dateofbirth, gender, language
+                            //email, password, licensenum, firstname, lastname, phone, zip, dateofbirth, gender, language
                             citizenDatabaseRef.child("email").setValue(email);
                             citizenDatabaseRef.child("first_name").setValue(firstname);
                             citizenDatabaseRef.child("last_name").setValue(lastname);
                             citizenDatabaseRef.child("license_number").setValue(licensenum);
                             citizenDatabaseRef.child("phone_number").setValue(phone);
-                            citizenDatabaseRef.child("address").setValue(address);
+                            citizenDatabaseRef.child("zip_code").setValue(zip);
                             citizenDatabaseRef.child("gender").setValue(gender);
                             citizenDatabaseRef.child("language").setValue(language);
                             citizenDatabaseRef.child("date_of_birth").setValue(dateofbirth);
@@ -219,7 +215,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     }
 
     private boolean validateInput(String email, String password, String licensenum, String firstname,
-                                  String lastname, String phone, String address, String gender, String language, String dateofbirth) {
+                                  String lastname, String phone, String zip, String gender, String language, String dateofbirth) {
 
         //FIRST NAME CHECK
         if (!SignupVerification.validFirstName(firstname)) {
@@ -277,21 +273,21 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
         //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
         if (!SignupVerification.validDateOfBirth(dateofbirth)){
-            mDateOfBirth.setError("DD-MM-YYYY");
+            mDateOfBirth.setError("MM-DD-YYYY");
             mDateOfBirth.requestFocus();
             return false;
         } else {
             mDateOfBirth.setError(null);
         }
 
-        //address gender language DOB; Use google map API for address
-        //ADDRESS REGEX
-        if (!SignupVerification.validAddress(address)){
-            mAddress.setError("This field was left empty.");
-            mAddress.requestFocus();
+        //zip gender language DOB
+        //ZIP CODE REGEX
+        if (!SignupVerification.validZip(zip)){
+            mZip.setError("Example: 95064");
+            mZip.requestFocus();
             return false;
         } else {
-            mAddress.setError(null);
+            mZip.setError(null);
         }
 
         return true;

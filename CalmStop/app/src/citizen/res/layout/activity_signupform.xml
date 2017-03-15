@@ -69,26 +69,26 @@
             android:inputType="text"
             android:hint="Date of Birth" />
 
-        <!--  Address Label -->
+        <!--  Zip Code Label -->
         <EditText
-            android:id="@+id/input_address"
+            android:id="@+id/input_zip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="Address" />
+            android:hint="Zip Code" />
 
 <!-- SPINNER -->
         <TextView
             android:text="Gender:"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/input_address"
+            android:layout_below="@+id/input_zip"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginTop="20dp"
             android:id="@+id/gender"
-            android:layout_alignRight="@+id/input_address"
-            android:layout_alignEnd="@+id/input_address"
+            android:layout_alignRight="@+id/input_zip"
+            android:layout_alignEnd="@+id/input_zip"
             android:fontFamily="monospace"
             android:typeface="monospace"
             android:textSize="16sp"
