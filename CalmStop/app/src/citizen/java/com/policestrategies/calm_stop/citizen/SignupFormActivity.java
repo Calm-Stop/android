@@ -42,10 +42,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private EditText mPhone;
     private EditText mZip;
 
-    private int gen = 0;
-    private int lang = 0;
-    private int eth = 0;
-
     private static final String TAG = "Signup";
 
     // [START declare_auth]

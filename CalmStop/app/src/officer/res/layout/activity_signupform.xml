@@ -46,6 +46,24 @@ spinn
             android:inputType="textPassword"
             android:hint="Password" />
 
+        <!-- Department Label -->
+
+        <EditText
+            android:id="@+id/input_department"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="Department Number"/>
+
+        <!-- Badge Label -->
+
+        <EditText
+            android:id="@+id/input_badge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="Badge Number"/>
+
         <!--  Driver's License Label -->
         <EditText
             android:id="@+id/input_licenseNum"
@@ -78,20 +96,76 @@ spinn
             android:inputType="text"
             android:hint="ZIP Code" />
 
-        <!--  Gender Label -->
-        <EditText
-            android:id="@+id/input_gender"
+        <!-- SPINNER -->
+        <TextView
+            android:text="Gender:"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Gender" />
+            android:layout_below="@+id/input_zip"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="20dp"
+            android:id="@+id/gender"
+            android:layout_alignRight="@+id/input_zip"
+            android:layout_alignEnd="@+id/input_zip"
+            android:fontFamily="monospace"
+            android:typeface="monospace"
+            android:textSize="16sp"
+            android:textColor="@android:color/background_dark" />
 
-        <EditText
-            android:id="@+id/input_language"
+        <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Preferred Language" />
+            android:id="@+id/genderSetter"
+            android:background="@android:color/background_light" />
+
+        <TextView
+            android:text="Preferred Language:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/gender"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="20dp"
+
+            android:id="@+id/language"
+            android:layout_alignRight="@+id/gender"
+            android:layout_alignEnd="@+id/gender"
+            android:fontFamily="monospace"
+            android:typeface="monospace"
+            android:textSize="16sp"
+            android:textColor="@android:color/background_dark" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/langSetter"
+            android:background="@android:color/background_light" />
+
+        <TextView
+            android:text="Ethnicity:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/language"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="20dp"
+
+            android:id="@+id/ethnicity"
+            android:layout_alignRight="@+id/language"
+            android:layout_alignEnd="@+id/language"
+            android:fontFamily="monospace"
+            android:typeface="monospace"
+            android:textSize="16sp"
+            android:textColor="@android:color/background_dark" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ethnicitySetter"
+            android:background="@android:color/background_light" />
+
+        <!-- END SPINNER -->
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

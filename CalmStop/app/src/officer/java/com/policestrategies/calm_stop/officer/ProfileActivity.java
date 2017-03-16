@@ -105,7 +105,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mphoto.setOnClickListener(this);
 
         findViewById(R.id.backbutton).setOnClickListener(this);
-        findViewById(R.id.viewDocs).setOnClickListener(this);
         findViewById(R.id.savebutton).setOnClickListener(this);
 
         genderSetter = (Spinner) findViewById(R.id.genderSetter);

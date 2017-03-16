@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -41,6 +43,11 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private EditText mGender;
     private EditText mLanguage;
     private EditText mDepartment;
+    private EditText mBadge;
+
+    private Spinner genderSetter;
+    private Spinner langSetter;
+    private Spinner ethnicitySetter;
 
     private static final String TAG = "Signup";
 
@@ -57,6 +64,10 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private FirebaseDatabase database;
     // [END declare databaseRef & database]
 
+    private int gen = 0;
+    private int lang = 0;
+    private int eth = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,10 +80,16 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         mLastNameField = (EditText) findViewById(R.id.input_lastname);
         mPhone = (EditText) findViewById(R.id.input_phone);
         mZip = (EditText) findViewById(R.id.input_zip);
-        mGender = (EditText) findViewById(R.id.input_gender);
         mDateOfBirth = (EditText) findViewById(R.id.input_DateOfBirth);
-        mLanguage = (EditText) findViewById(R.id.input_language);
         mDepartment = (EditText) findViewById(R.id.input_department);
+        mBadge = (EditText) findViewById(R.id.input_badge);
+
+        genderSetter = (Spinner) findViewById(R.id.genderSetter);
+        langSetter = (Spinner) findViewById(R.id.langSetter);
+        ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
+        setUpGenderSetter();
+        setUpLangSetter();
+        setUpEthnicitySetter();
 
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
@@ -148,15 +165,17 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         final String lastname = mLastNameField.getText().toString();
         final String phone = mPhone.getText().toString();
         final String zip = mZip.getText().toString();
-        final String gender = mGender.getText().toString();
-        final String language = mLanguage.getText().toString();
         final String dateofbirth = mDateOfBirth.getText().toString();
         final String department = mDepartment.getText().toString();
+        final String badge = mBadge.getText().toString();
+        final String gender = genderSetter.getSelectedItem().toString();
+        final String language = langSetter.getSelectedItem().toString();
+        final String ethnicity = ethnicitySetter.getSelectedItem().toString();
 
         Log.d(TAG, "createAccount:" + email);
 
 
-        if (!validateInput(email, password, licensenum, firstname, lastname, phone, zip, dateofbirth)) {
+        if (!validateInput(email, password, licensenum, firstname, lastname, department, badge, phone, zip, dateofbirth)) {
             return;
         }
 
@@ -178,15 +197,20 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             finish();
                             startActivity(getIntent());
                         } else {
+
                             Toast.makeText(SignupFormActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             String uuid = user.getUid();
 
                             // Set up department
-                            DatabaseReference officerDatabaseRef = databaseRef.child("officer")
-                                    .child(department).child(uuid).child("profile").getRef();
+                            // Store the officer's ID in the inputted department and set to be active
+                            // An active officer in a department means that the officer currently works
+                            // in that department
+                            databaseRef.child("department").child(uuid).setValue("Active");
 
-                            officerDatabaseRef.child("email").setValue(email);
+                            //Set up officer profile
+                            DatabaseReference officerDatabaseRef = databaseRef.child("officer")
+                                    .child(uuid).child("profile").getRef();
 
                             officerDatabaseRef.child("email").setValue(email);
                             officerDatabaseRef.child("first_name").setValue(firstname);
@@ -197,6 +221,9 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             officerDatabaseRef.child("gender").setValue(gender);
                             officerDatabaseRef.child("language").setValue(language);
                             officerDatabaseRef.child("date_of_birth").setValue(dateofbirth);
+                            officerDatabaseRef.child("department").setValue(department);
+                            officerDatabaseRef.child("badge").setValue(badge);
+                            officerDatabaseRef.child("ethnicity").setValue(ethnicity);
 
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
@@ -212,7 +239,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     }
 
     private boolean validateInput(String email, String password, String licensenum, String firstname,
-                                  String lastname, String phone, String zip, String dateofbirth) {
+                                  String lastname, String department, String badge, String phone,
+                                  String zip, String dateofbirth) {
 
         //FIRST NAME CHECK
         if (!SignupVerification.validFirstName(firstname)) {
@@ -229,6 +257,24 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             return false;
         } else {
             mLastNameField.setError(null);
+        }
+
+        //DEPARTMENT CHECK
+        if (department.isEmpty()) {
+            mDepartment.setError("Enter your department number");
+            mDepartment.requestFocus();
+            return false;
+        } else {
+            mDepartment.setError(null);
+        }
+
+        //BADGE CHECK
+        if (badge.isEmpty()) {
+            mBadge.setError("Enter your badge number");
+            mBadge.requestFocus();
+            return false;
+        } else {
+            mBadge.setError(null);
         }
 
         //EMAIL CHECK
@@ -301,6 +347,131 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         emailInput = token[0];
         return emailInput;
     }
+
+
+    private void setUpGenderSetter() {
+
+        final ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Gender, android.R.layout.simple_spinner_dropdown_item);
+
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        genderSetter.setAdapter(genderAdapter);
+
+        genderSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position) {
+                    case 0:
+                        //female
+                        gen = 0;
+                        break;
+                    case 1:
+                        //male
+                        gen = 1;
+                        break;
+                    case 2:
+                        //blank
+                        gen = 2;
+                        break;
+                }
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
+
+
+    private void setUpEthnicitySetter() {
+
+        final ArrayAdapter<CharSequence> ethnicityAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Ethnicity, android.R.layout.simple_spinner_dropdown_item);
+
+        ethnicityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ethnicitySetter.setAdapter(ethnicityAdapter);
+
+        ethnicitySetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position) {
+                    case 0: //Prefer not to Answer
+                        eth = 0;
+                        break;
+                    case 1: //American indian
+                        eth = 1;
+                        break;
+                    case 2: //asian
+                        eth = 2;
+                        break;
+                    case 3: //African american
+                        eth = 3;
+                        break;
+                    case 4: //hispanic
+                        eth = 4;
+                        break;
+                    case 5: //pacific islander
+                        eth = 5;
+                        break;
+                    case 6: //white
+                        eth = 6;
+                        break;
+                }
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
+
+
+    private void setUpLangSetter() {
+
+        final ArrayAdapter<CharSequence> langAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Language, android.R.layout.simple_spinner_dropdown_item);
+
+        langAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        langSetter.setAdapter(langAdapter);
+
+        langSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position) {
+                    case 0:
+                        //English
+                        lang = 0;
+                        break;
+                    case 1:
+                        //Spanish
+                        lang = 1;
+                        break;
+                    case 2:
+                        //Mandarin Chinese
+                        lang = 2;
+                        break;
+                    case 3:
+                        //Vietnamese
+                        lang = 3;
+                        break;
+                    case 4:
+                        //French
+                        lang = 4;
+                        break;
+                    case 5:
+                        //Arabic
+                        lang = 5;
+                        break;
+                    case 6:
+                        //German
+                        lang = 6;
+                        break;
+                }
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
+
 
 } // end class SignupformActivity
 
