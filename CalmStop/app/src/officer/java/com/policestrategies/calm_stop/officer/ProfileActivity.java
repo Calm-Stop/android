@@ -21,114 +21,129 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseUser;
-
-
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.auth.api.model.StringList;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
-
-
-/**
- * Created by mariavizcaino on 2/19/17.
- */
+import com.policestrategies.calm_stop.SignupVerification;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
     private Spinner genderSetter;
     private Spinner ethnicitySetter;
-    private EditText mFname;
-    private EditText mLname;
-    private EditText memail;
-    private EditText mDOB;
+    private Spinner languageSetter;
+    private EditText mFirstNameField;
+    private EditText mLastNameField;
+    private EditText mEmailField;
+    private EditText mPhone;
+    private EditText mDateOfBirth;
+
     private EditText mZip;
     private EditText mLicense;
-    private EditText mphoneNum;
     private EditText mDepartmentNum;
     private EditText mBadgeNum;
     private ImageView mphoto;
 
     private static final int chosenImage = 1;
 
-    private int gen = 0;
+    private int gen = 2;
     private int eth = 0;
+    private int lan = 2;
+    private int ethTrue = 0;
+
+    int month;
+    int day;
+    int year;
 
     private String FName;
     private String LName;
     private String Email;
     private String PhoneNumber;
+
     private String License;
     private String ZIP;
     private String DOB;
     private String Gender;
     private String Ethnicity;
     private String Language;
+    private String Department;
+    private String Badge;
 
     private Uri Photo;
     private String officerUid;
 
     private FirebaseUser user;
     private DatabaseReference mDatabase;
-
-    private static final String TAG = "Profile Edit";
+    private DatabaseReference profileRef;
 
     private String valueEmail;
     private String valuePassword;
 
-    @Override
+    private static final String TAG = "Profile Edit";
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        mFname = (EditText)findViewById(R.id.editFirstName);
-        mLname = (EditText)findViewById(R.id.editLastName);
-        memail = (EditText)findViewById(R.id.editEmail);
-        mDOB = (EditText)findViewById(R.id.editDateOfBirth);
-        mphoneNum = (EditText)findViewById(R.id.editPhonenum);
+        //mFname, mLname, memail, mDOB, mphoneNum, mLicense, mZip, mLanguage, mphoto
+        mFirstNameField = (EditText)findViewById(R.id.editFirstName);
+        mLastNameField = (EditText)findViewById(R.id.editLastName);
+        mEmailField = (EditText)findViewById(R.id.editEmail);
+        mDateOfBirth = (EditText)findViewById(R.id.editDateOfBirth);
+        mPhone = (EditText)findViewById(R.id.editPhonenum);
         mLicense= (EditText)findViewById(R.id.editLicenseNumber);
-        mDepartmentNum = (EditText) findViewById(R.id.editdepartnum);
-        mBadgeNum = (EditText)findViewById(R.id.editBadgenum);
         mZip = (EditText)findViewById(R.id.editZip);
+        mDepartmentNum = (EditText)findViewById(R.id.editdepartnum);
+        mBadgeNum = (EditText)findViewById(R.id.editBadgenum);
 
         mphoto = (ImageView)findViewById(R.id.profilePicture);
         mphoto.setOnClickListener(this);
 
         findViewById(R.id.backbutton).setOnClickListener(this);
+        findViewById(R.id.viewDocs).setOnClickListener(this);
         findViewById(R.id.savebutton).setOnClickListener(this);
 
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
+        languageSetter = (Spinner) findViewById(R.id.languageSetter);
 
         setUpGenderSetter();
         setUpEthnicitySetter();
+        setUpLanguageSetter();
+
+        // set current date into textview
+        mDateOfBirth.setText(new StringBuilder()
+                // Month is 0 based, just add 1
+                .append(month + 1).append("-").append(day).append("-")
+                .append(year).append(" "));
+
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference("officer");
-
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+        if (user == null) {
             officerUid = "";
         }
         else{
-            officerUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            officerUid = user.getUid();
         }
+
+        mDatabase = FirebaseDatabase.getInstance().getReference("officer");
+        profileRef = mDatabase.child(officerUid).child("profile");
 
         Photo = user.getPhotoUrl();
 
         if(Photo == null) {
-
+            //mphoto.setImageURI();
         }else {
             mphoto.setImageURI(Photo);
         }
 
-        mDatabase.child("14566").child(officerUid).child("profile")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 //NEED TO ADD BADGE NUMBER
@@ -141,10 +156,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 Language = snapshot.child("language").getValue().toString();
                 License = snapshot.child("license_number").getValue().toString();
                 PhoneNumber = snapshot.child("phone_number").getValue().toString();
-                Ethnicity = "";
+                Language = snapshot.child("language").getValue().toString();
+                Department = snapshot.child("department").getValue().toString();
+                Badge = snapshot.child("badge").getValue().toString();
+                Ethnicity = snapshot.child("ethnicity").getValue().toString();
 
                 setEverything();
-
             }
 
             @Override
@@ -160,21 +177,26 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         switch(v.getId()) {
 
             case R.id.backbutton:
-                toAccount();
+                toHomepage();
                 break;
 
             case R.id.savebutton:
-                //FIXME
-                //TODO
 
-                FName = mFname.getText().toString();
-                LName = mLname.getText().toString();
-                Email = memail.getText().toString();
-                PhoneNumber = mphoneNum.getText().toString();
-                DOB = mDOB.getText().toString();
+                FName = mFirstNameField.getText().toString();
+                LName = mLastNameField.getText().toString();
+                Email = mEmailField.getText().toString();
+                PhoneNumber = mPhone.getText().toString();
+                DOB = mDateOfBirth.getText().toString();
                 License = mLicense.getText().toString();
                 ZIP = mZip.getText().toString();
+                Department = mDepartmentNum.toString();
+                Badge = mBadgeNum.toString();
+                Gender = genderSetter.getSelectedItem().toString();
+                Ethnicity = ethnicitySetter.getSelectedItem().toString();
+                Language = languageSetter.getSelectedItem().toString();
 
+
+                if (!validateInput(Email, License, FName, LName, PhoneNumber, ZIP, DOB)) return;
                 //WRITE TO FIREBASE
                 updateFName();
                 updateLName();
@@ -184,8 +206,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 updateZip();
                 updateDOB();
                 updateLicense();
+                updateLanguage();
                 updateGender();
-                //updateEthnicity();
+                updateEthnicity();
+                updateDepartment();
+                updateBadge();
 
                 recreate();
                 break;
@@ -197,6 +222,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -223,16 +249,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position) {
-                    case 0:
-                        //blank
+                    case 0: //Female
                         gen = 0;
                         break;
-                    case 1:
-                        //female
+                    case 1: //Male
                         gen = 1;
                         break;
-                    case 2:
-                        //male
+                    case 2: //Prefer Not to Answer
                         gen = 2;
                         break;
                 }
@@ -251,36 +274,31 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         ethnicityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ethnicitySetter.setAdapter(ethnicityAdapter);
 
+        ethnicitySetter.setSelection(eth);
+
         ethnicitySetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position) {
-                    case 0:
-                        //blank
+                    case 0:  //Prefer Not to Answer
                         eth = 0;
                         break;
-                    case 1:
-                        //American indian
+                    case 1: //African american
                         eth = 1;
                         break;
-                    case 2:
-                        //asian
+                    case 2: //American indian
                         eth = 2;
                         break;
-                    case 3:
-                        //African american
+                    case 3: //asian
                         eth = 3;
                         break;
-                    case 4:
-                        //hispanic
+                    case 4: //hispanic
                         eth = 4;
                         break;
-                    case 5:
-                        //pacific islander
+                    case 5: //pacific islander
                         eth = 5;
                         break;
-                    case 6:
-                        //white
+                    case 6: //white
                         eth = 6;
                         break;
                 }
@@ -291,45 +309,135 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-    private void setEverything(){
+    private void setUpLanguageSetter() {
 
-        mFname.setText(FName);
-        mLname.setText(LName);
-        memail.setText(Email);
-        mphoneNum.setText(PhoneNumber);
+        final ArrayAdapter<CharSequence> languageAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Language, android.R.layout.simple_spinner_dropdown_item);
+
+        languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        languageSetter.setAdapter(languageAdapter);
+
+        languageSetter.setSelection(lan); //default to english
+
+        languageSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0: //Arabic
+                        lan = 0;
+                        Language = "Arabic";
+                        break;
+                    case 1: //Chinese (Mandarin)
+                        lan = 1;
+                        Language = "Chinese (Mandarin)";
+                        break;
+                    case 2: //English
+                        lan = 2;
+                        Language = "English";
+                        break;
+                    case 3: //French
+                        lan = 3;
+                        Language = "French";
+                        break;
+                    case 4: //German
+                        lan = 4;
+                        Language = "German";
+                        break;
+                    case 5: // Italian
+                        lan = 5;
+                        Language = "Italian";
+                        break;
+                    case 6: //Portuguese
+                        lan = 6;
+                        Language = "Portuguese";
+                        break;
+                    case 7: //Russian
+                        lan = 7;
+                        Language = "Russian";
+                        break;
+                    case 8: //Spanish
+                        lan = 8;
+                        Language = "Spanish";
+                        break;
+                    case 9: //Swedish
+                        lan = 9;
+                        Language = "Swedish";
+                        break;
+                    case 10: //Vietnamese
+                        lan = 10;
+                        Language = "Vietnamese";
+                        break;
+                }
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
+
+    private void setEverything() {
+
+        mFirstNameField.setText(FName);
+        mLastNameField.setText(LName);
+        mDepartmentNum.setText(Department);
+        mBadgeNum.setText(Badge);
+        mEmailField.setText(Email);
+        mPhone.setText(PhoneNumber);
         mZip.setText(ZIP);
-        mDOB.setText(DOB);
+        mDateOfBirth.setText(DOB);
         mLicense.setText(License);
-        mBadgeNum.setText("");
-        mDepartmentNum.setText("14566");
         genderSetter.setSelection(setGen());
         ethnicitySetter.setSelection(setEth());
-
+        languageSetter.setSelection(setLan());
     }
 
     private int setGen(){
         if(Gender.equalsIgnoreCase("male"))
-            return 2;
-        else if (Gender.equalsIgnoreCase("female"))
             return 1;
-        return 0;
+        else if (Gender.equalsIgnoreCase("female"))
+            return 0;
+        return 2; //else blank
     }
-
 
     private int setEth(){
         if (Ethnicity.equalsIgnoreCase("American indian"))
-            return 1;
-        else if (Ethnicity.equalsIgnoreCase("asian"))
             return 2;
-        else if (Ethnicity.equalsIgnoreCase("African american"))
+        else if (Ethnicity.equalsIgnoreCase("Asian"))
             return 3;
-        else if (Ethnicity.equalsIgnoreCase("hispanic"))
+        else if (Ethnicity.equalsIgnoreCase("African american"))
+            return 1;
+        else if (Ethnicity.equalsIgnoreCase("Hispanic"))
             return 4;
         else if (Ethnicity.equalsIgnoreCase("pacific islander"))
             return 5;
         else if (Ethnicity.equalsIgnoreCase("white"))
             return 6;
-        return 0;
+        else
+            return 0; //else blank
+    }
+
+    private int setLan(){
+        if (Language.equalsIgnoreCase("Arabic"))
+            return 0;
+        else if (Language.equalsIgnoreCase("Chinese (Mandarin)"))
+            return 1;
+        else if (Language.equalsIgnoreCase("French"))
+            return 3;
+        else if (Language.equalsIgnoreCase("German"))
+            return 4;
+        else if (Language.equalsIgnoreCase("Italian"))
+            return 5;
+        else if (Language.equalsIgnoreCase("Portuguese"))
+            return 6;
+        else if (Language.equalsIgnoreCase("Russian"))
+            return 7;
+        else if (Language.equalsIgnoreCase("Spanish"))
+            return 8;
+        else if (Language.equalsIgnoreCase("Swedish"))
+            return 9;
+        else if (Language.equalsIgnoreCase("Vietnamese"))
+            return 10;
+        return 2; //else English
     }
 
     private void authentication() {
@@ -361,11 +469,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         authen.show();
     }
-
+    //mFname, mLname, memail, mDOB, mphoneNum, mLicense, mZip, mLanguage, mphoto
     private void updateEmail() {
-
-        mDatabase.child("14566").child(officerUid).child("profile").child("email").setValue(Email);
-
+        profileRef.child("email").setValue(Email);
         user.updateEmail(Email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -382,7 +488,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 authentication();
 
                                 AuthCredential credential = EmailAuthProvider
-                                        .getCredential(valueEmail,valuePassword );
+                                        .getCredential(valueEmail, valuePassword );
                                 user.reauthenticate(credential)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
@@ -397,18 +503,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         }
                     }
                 });
-
     }
 
-    private void updateFName() {
-        mDatabase.child("14566").child(officerUid).child("profile").child("first_name").setValue(FName);
-    }
-
-    private void updateLName() {
-        mDatabase.child("14566").child(officerUid).child("profile").child("last_name").setValue(LName);
-    }
 
     private void updatePhoto() {
+        profileRef.child("photo").setValue(Photo);
         UserProfileChangeRequest updatePhoto = new UserProfileChangeRequest.Builder()
                 .setPhotoUri(Photo)
                 .build();
@@ -427,52 +526,143 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 });
     }
 
-    private void updatePhoneNumber() {
-        mDatabase.child("14566").child(officerUid).child("profile").child("phone_number").setValue(PhoneNumber);
-    }
 
-    private void updateZip() {
-        mDatabase.child("14566").child(officerUid).child("profile").child("zip_code").setValue(ZIP);
-    }
-
-    private void updateDOB() {
-        mDatabase.child("14566").child(officerUid).child("profile").child("date_of_birth").setValue(DOB);
-    }
-
-    private void updateLicense() {
-        mDatabase.child("14566").child(officerUid).child("profile").child("license_number").setValue(License);
-    }
+    private void updateFName() { profileRef.child("first_name").setValue(FName); }
+    private void updateLName() { profileRef.child("last_name").setValue(LName); }
+    private void updatePhoneNumber() { profileRef.child("phone_number").setValue(PhoneNumber); }
+    private void updateZip() {profileRef.child("zip_code").setValue(ZIP);}
+    private void updateDOB() { profileRef.child("date_of_birth").setValue(DOB); }
+    private void updateLicense() { profileRef.child("license_number").setValue(License); }
+    private void updateDepartment() { profileRef.child("department").setValue(Department); }
+    private void updateBadge() { profileRef.child("badge").setValue(Badge); }
 
     private void updateGender() {
-        if(gen == 0)
-            mDatabase.child("14566").child(officerUid).child("profile").child("gender").setValue(" ");
-        else if(gen == 1)
-            mDatabase.child("14566").child(officerUid).child("profile").child("gender").setValue("Female");
+        if(gen == 2)
+            profileRef.child("gender").setValue("");
+        else if(gen == 0)
+            profileRef.child("gender").setValue("Female");
         else
-            mDatabase.child("14566").child(officerUid).child("profile").child("gender").setValue("Male");
-
+            profileRef.child("gender").setValue("Male");
     }
 
     private void updateEthnicity() {
-        if (eth == 1 )
-            mDatabase.child("14566").child(officerUid).child("profile").child("ethnicity").setValue("American indian");
-        else if (eth == 2 )
-            mDatabase.child("14566").child(officerUid).child("profile").child("ethnicity").setValue("Asian");
+        if (eth == 2)
+            profileRef.child("ethnicity").setValue("American Indian");
         else if (eth == 3)
-            mDatabase.child("14566").child(officerUid).child("profile").child("ethnicity").setValue("African American");
+            profileRef.child("ethnicity").setValue("Asian");
+        else if (eth == 1)
+            profileRef.child("ethnicity").setValue("African American");
         else if (eth == 4)
-            mDatabase.child("14566").child(officerUid).child("profile").child("ethnicty").setValue("Hispanic");
+            profileRef.child("ethnicity").setValue("Hispanic");
         else if (eth == 5)
-            mDatabase.child("14566").child(officerUid).child("profile").child("ethnicity").setValue("pacific islander");
+            profileRef.child("ethnicity").setValue("pacific islander");
         else if (eth == 6)
-            mDatabase.child("14566").child(officerUid).child("profile").child("ethnicity").setValue("white");
+            profileRef.child("ethnicity").setValue("white");
         else
-            mDatabase.child("14566").child(officerUid).child("profile").child("ethnicity").setValue(" ");
+            profileRef.child("ethnicity").setValue("");
     }
 
-    private void toAccount() {
-        Intent i = new Intent(getBaseContext(), AccountActivity.class);
+    private void updateLanguage() {
+        if (lan == 0)
+            profileRef.child("language").setValue("Arabic");
+        else if (lan == 1)
+            profileRef.child("language").setValue("Chinese (Mandarin)");
+        else if (lan == 3)
+            profileRef.child("language").setValue("French");
+        else if (lan == 4)
+            profileRef.child("language").setValue("German");
+        else if (lan == 5)
+            profileRef.child("language").setValue("Italian");
+        else if (lan == 6)
+            profileRef.child("language").setValue("Portuguese");
+        else if (lan == 7)
+            profileRef.child("language").setValue("Russian");
+        else if (lan == 8)
+            profileRef.child("language").setValue("Spanish");
+        else if (lan == 9)
+            profileRef.child("language").setValue("Swedish");
+        else if (lan == 10)
+            profileRef.child("language").setValue("Vietnamese");
+        else
+            profileRef.child("language").setValue("English");
+    }
+
+
+    private void toHomepage() {
+        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
         startActivity(i);
     }
 
+
+    private boolean validateInput(String email, String licensenum, String firstname,
+                                  String lastname, String phone, String zip, String dateofbirth) {
+
+//(8 fns)validEmail, validPassword, validLicense, validZip, validPhone, validFirstname, validLastname, validDateOfBirth
+        //FIRST NAME CHECK
+        if (!SignupVerification.validFirstName(firstname)) {
+            mFirstNameField.setError("Please enter a valid first name.");
+            mFirstNameField.requestFocus();
+            return false;
+        } else {
+            mFirstNameField.setError(null);
+        }
+        //LAST NAME CHECK
+        if (!SignupVerification.validLastName(lastname)) {
+            mLastNameField.setError("Please enter a valid last name.");
+            mLastNameField.requestFocus();
+            return false;
+        } else {
+            mLastNameField.setError(null);
+        }
+
+        //EMAIL CHECK
+        if (!SignupVerification.validEmail(email)) {
+            mEmailField.setError("Enter a valid email address.");
+            mEmailField.requestFocus();
+            return false;
+        } else {
+            mEmailField.setError(null);
+        }
+
+        //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
+        if(!SignupVerification.validLicense(licensenum)) {
+            mLicense.setError("Enter a letter followed by eight numbers\nExample: A12345678");
+            mLicense.requestFocus();
+            return false;
+        } else {
+            mLicense.setError(null);
+        }
+
+        //PHONE REGEX
+        if(!SignupVerification.validPhone(phone)) {
+            mPhone.setError("Invalid Phone Number.");
+            mPhone.requestFocus();
+            return false;
+        } else {
+            mPhone.setError(null);
+        }
+
+        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
+        if (!SignupVerification.validDateOfBirth(dateofbirth)){
+            mDateOfBirth.setError("DD-MM-YYYY");
+            mDateOfBirth.requestFocus();
+            return false;
+        } else {
+            mDateOfBirth.setError(null);
+        }
+
+        //zip gender language DOB
+        //ZIP CODE REGEX
+        if (!SignupVerification.validZip(zip)){
+            mZip.setError("This field was left empty.");
+            mZip.requestFocus();
+            return false;
+        } else {
+            mZip.setError(null);
+        }
+
+        return true;
+
+
+    }
 }

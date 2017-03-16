@@ -329,6 +329,30 @@
                 android:id="@+id/ethnicitySetter"
                 android:background="@android:color/background_light" />
 
+            <!--Language spinner-->
+            <TextView
+                android:text="Preferred Language:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ethnicity"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="20dp"
+
+                android:id="@+id/language"
+                android:layout_alignRight="@+id/ethnicity"
+                android:layout_alignEnd="@+id/ethnicity"
+                android:fontFamily="monospace"
+                android:typeface="monospace"
+                android:textSize="16sp"
+                android:textColor="@android:color/background_dark" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/langSetter"
+                android:background="@android:color/background_light" />
+
         </LinearLayout>
     </ScrollView>
 

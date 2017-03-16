@@ -13,13 +13,7 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
-        <EditText
-            android:id="@+id/input_department"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Department Number" />
-
+spinn
         <!--  fName Label -->
         <EditText
             android:id="@+id/input_firstname"
