@@ -206,7 +206,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             // Store the officer's ID in the inputted department and set to be active
                             // An active officer in a department means that the officer currently works
                             // in that department
-                            databaseRef.child("department").child(uuid).setValue("Active");
+                            databaseRef.child("department").child(department).child(uuid).setValue("Active");
 
                             //Set up officer profile
                             DatabaseReference officerDatabaseRef = databaseRef.child("officer")
