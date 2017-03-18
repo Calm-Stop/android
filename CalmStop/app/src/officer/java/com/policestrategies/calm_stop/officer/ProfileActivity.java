@@ -68,6 +68,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private String License;
     private String ZIP;
     private String DOB;
+    private String Day;
+    private String Month;
+    private String Year;
     private String Gender;
     private String Ethnicity;
     private String Language;
