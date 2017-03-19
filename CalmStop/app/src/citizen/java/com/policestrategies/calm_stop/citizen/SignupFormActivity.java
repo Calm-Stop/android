@@ -27,6 +27,7 @@ import com.policestrategies.calm_stop.SignupVerification;
  * Allows the user to sign up or return to the log in page.
  */
 public class SignupFormActivity extends AppCompatActivity implements View.OnClickListener {
+
     private Spinner genderSetter;
     private Spinner langSetter;
     private Spinner ethnicitySetter;

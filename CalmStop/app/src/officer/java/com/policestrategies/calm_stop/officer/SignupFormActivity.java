@@ -36,28 +36,24 @@ import java.util.regex.Pattern;
 
 public class SignupFormActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView mDateView;
-    private EditText mFirstNameField;
-    private EditText mLastNameField;
-    private static EditText  mEmailField;
-    private EditText mPasswordField;
-    private EditText mLicenseNum;
-    private EditText mPhone;
-    private EditText mZip;
-    private EditText mGender;
-    private EditText mLanguage;
-    private EditText mDepartment;
-    private EditText mBadge;
-
     private Spinner genderSetter;
     private Spinner langSetter;
     private Spinner ethnicitySetter;
     private Spinner monthSetter;
     private Spinner daySetter;
     private Spinner yearSetter;
-    private int i_month;
-    private int i_day;
-    private int i_year;
+    private int i_month, i_day, i_year, i_ethnicity, i_language, i_gender;
+
+    private EditText mFirstNameField;
+    private EditText mLastNameField;
+    private static EditText  mEmailField;
+    private EditText mPasswordField;
+    private EditText mLicense;
+    private TextView mDateOfBirth;
+    private EditText mPhone;
+    private EditText mZip;
+    private EditText mDepartment;
+    private EditText mBadge;
 
     private static final String TAG = "Signup";
 
@@ -74,19 +70,15 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private FirebaseDatabase database;
     // [END declare databaseRef & database]
 
-    private int gen = 0;
-    private int lang = 0;
-    private int eth = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signupform);
 
-        mDateView = (TextView) findViewById(R.id.dateOfBirth);
+        mDateOfBirth = (TextView) findViewById(R.id.dateOfBirth);
         mEmailField = (EditText) findViewById(R.id.input_email);
         mPasswordField = (EditText) findViewById(R.id.input_password);
-        mLicenseNum = (EditText) findViewById(R.id.input_licenseNum);
+        mLicense = (EditText) findViewById(R.id.input_licenseNum);
         mFirstNameField = (EditText) findViewById(R.id.input_firstname);
         mLastNameField = (EditText) findViewById(R.id.input_lastname);
         mPhone = (EditText) findViewById(R.id.input_phone);
@@ -177,23 +169,19 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private void signup() {
         final String email = mEmailField.getText().toString();
         final String password = mPasswordField.getText().toString();
-        final String licensenum = mLicenseNum.getText().toString();
+        final String licensenum = mLicense.getText().toString();
         final String firstname = mFirstNameField.getText().toString();
         final String lastname = mLastNameField.getText().toString();
         final String phone = mPhone.getText().toString();
         final String zip = mZip.getText().toString();
         final String department = mDepartment.getText().toString();
         final String badge = mBadge.getText().toString();
-        final String gender = genderSetter.getSelectedItem().toString();
-        final String language = langSetter.getSelectedItem().toString();
-        final String ethnicity = ethnicitySetter.getSelectedItem().toString();
-        String dateofbirth = Integer.toString(i_month) + "-" + Integer.toString(i_day) + "-" + Integer.toString(i_year);
 
         Log.d(TAG, "createAccount:" + email);
 
 
         if (!validateInput(email, password, licensenum, firstname, lastname, department,
-                badge, phone, zip, dateofbirth)) {
+                badge, phone, zip)) {
             return;
         }
                 // Now we need to attempt to signup - we'll add code for this later (once Firebase is integrated)
@@ -235,16 +223,17 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             officerDatabaseRef.child("license_number").setValue(licensenum);
                             officerDatabaseRef.child("phone_number").setValue(phone);
                             officerDatabaseRef.child("zip_code").setValue(zip);
-                            officerDatabaseRef.child("gender").setValue(gender);
-                            officerDatabaseRef.child("language").setValue(language);
                             //DATE OF BIRTH
                             officerDatabaseRef.child("day").setValue(i_day);
                             officerDatabaseRef.child("month").setValue(i_month);
                             officerDatabaseRef.child("year").setValue(i_year);
 
+                            officerDatabaseRef.child("gender").setValue(i_gender);
+                            officerDatabaseRef.child("language").setValue(i_language);
+                            officerDatabaseRef.child("ethnicity").setValue(i_ethnicity);
+
                             officerDatabaseRef.child("department").setValue(department);
                             officerDatabaseRef.child("badge").setValue(badge);
-                            officerDatabaseRef.child("ethnicity").setValue(ethnicity);
 
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
@@ -296,7 +285,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         yearSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                i_year = getResources().getStringArray(R.array.Year).length + 1909 - position;
+                i_year = position;
             }
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
@@ -332,20 +321,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         genderSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch(position) {
-                    case 0:
-                        //female
-                        gen = 0;
-                        break;
-                    case 1:
-                        //male
-                        gen = 1;
-                        break;
-                    case 2:
-                        //blank
-                        gen = 2;
-                        break;
-                }
+                i_gender = position;
             }
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
@@ -365,29 +341,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         ethnicitySetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch(position) {
-                    case 0: //Prefer not to Answer
-                        eth = 0;
-                        break;
-                    case 1: //American indian
-                        eth = 1;
-                        break;
-                    case 2: //asian
-                        eth = 2;
-                        break;
-                    case 3: //African american
-                        eth = 3;
-                        break;
-                    case 4: //hispanic
-                        eth = 4;
-                        break;
-                    case 5: //pacific islander
-                        eth = 5;
-                        break;
-                    case 6: //white
-                        eth = 6;
-                        break;
-                }
+                i_ethnicity = position;
             }
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
@@ -407,36 +361,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         langSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch(position) {
-                    case 0:
-                        //English
-                        lang = 0;
-                        break;
-                    case 1:
-                        //Spanish
-                        lang = 1;
-                        break;
-                    case 2:
-                        //Mandarin Chinese
-                        lang = 2;
-                        break;
-                    case 3:
-                        //Vietnamese
-                        lang = 3;
-                        break;
-                    case 4:
-                        //French
-                        lang = 4;
-                        break;
-                    case 5:
-                        //Arabic
-                        lang = 5;
-                        break;
-                    case 6:
-                        //German
-                        lang = 6;
-                        break;
-                }
+                i_language = position;
             }
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
@@ -446,18 +371,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
     private boolean validateInput(String email, String password, String licensenum, String firstname,
                                   String lastname, String department, String badge, String phone,
-                                  String zip, String dateofbirth) {
-
-
-        //DATE OF BIRTH
-        mDateView.clearFocus();
-        if (!SignupVerification.validDateOfBirth(dateofbirth)) {
-            mDateView.setError("Invalid Date of Birth.");
-            mDateView.requestFocus();
-            return false;
-        } else {
-            mDateView.setError(null);
-        }
+                                  String zip) {
 
         //FIRST NAME CHECK
         if (!SignupVerification.validFirstName(firstname)) {
@@ -515,11 +429,11 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
 
         if(!SignupVerification.validLicense(licensenum)) {
-            mLicenseNum.setError("Enter a letter followed by eight numbers\nExample: A12345678");
-            mLicenseNum.requestFocus();
+            mLicense.setError("Enter a letter followed by eight numbers\nExample: A12345678");
+            mLicense.requestFocus();
             return false;
         } else {
-            mLicenseNum.setError(null);
+            mLicense.setError(null);
         }
 
         //PHONE REGEX
@@ -539,6 +453,16 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             return false;
         } else {
             mZip.setError(null);
+        }
+
+        //DATE OF BIRTH
+        mDateOfBirth.clearFocus();
+        if (!SignupVerification.validDateOfBirth(i_month, i_day, 1909 + getResources().getStringArray(R.array.Year).length - i_year )) {
+            mDateOfBirth.setError("Invalid Date of Birth.");
+            mDateOfBirth.requestFocus();
+            return false;
+        } else {
+            mDateOfBirth.setError(null);
         }
 
 
