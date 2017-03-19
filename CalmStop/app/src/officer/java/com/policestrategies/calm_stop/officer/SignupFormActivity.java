@@ -100,8 +100,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         monthSetter = (Spinner) findViewById(R.id.monthSetter);
         daySetter = (Spinner) findViewById(R.id.daySetter);
         yearSetter = (Spinner) findViewById(R.id.yearSetter);
-        daySetter.setFocusable(true);
-        daySetter.setFocusableInTouchMode(true);
+
         setUpGenderSetter();
         setUpLangSetter();
         setUpEthnicitySetter();

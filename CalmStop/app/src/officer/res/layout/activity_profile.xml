@@ -97,8 +97,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp"
                 android:id="@+id/departmentnumber"
-                android:layout_alignRight="@+id/LastName"
-                android:layout_alignEnd="@+id/LastName"
+                android:layout_alignRight="@+id/backbutton"
+                android:layout_alignEnd="@+id/backbutton"
                 android:typeface="monospace"
                 android:textSize="16sp"
                 android:fontFamily="monospace"
@@ -143,7 +143,7 @@
                 android:typeface="monospace"
                 android:textSize="16sp"
                 android:textColor="@android:color/black" />
-
+<!-- DOB
             <TextView
                 android:text="Date of Birth: "
                 android:layout_width="match_parent"
@@ -171,18 +171,18 @@
                 android:fontFamily="monospace"
                 android:typeface="monospace"
                 android:textColor="@android:color/background_dark" />
-
+-->
             <TextView
                 android:text="Email:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/dateOfBirth"
+                android:layout_below="@+id/LastName"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp"
                 android:id="@+id/Email"
-                android:layout_alignRight="@+id/Name"
-                android:layout_alignEnd="@+id/Name"
+                android:layout_alignRight="@+id/backButton"
+                android:layout_alignEnd="@+id/backbutton"
                 android:fontFamily="monospace"
                 android:typeface="monospace"
                 android:textSize="16sp"
@@ -283,18 +283,53 @@
                 android:typeface="monospace"
                 android:textColor="@android:color/background_dark" />
 
-
             <TextView
-                android:text="Gender:"
+                android:text="Date of Birth:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/LicenseNumber"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp"
+                android:id="@+id/dateOfBirth"
+                android:layout_alignRight="@+id/backbutton"
+                android:layout_alignEnd="@+id/backbutton"
+                android:fontFamily="monospace"
+                android:typeface="monospace"
+                android:textSize="16sp"
+                android:textColor="@android:color/background_dark" />
+
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/monthSetter"
+                android:background="@android:color/background_light" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/daySetter"
+                android:background="@android:color/background_light" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/yearSetter"
+                android:background="@android:color/background_light" />
+
+
+            <TextView
+                android:text="Gender:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dateOfBirth"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="20dp"
                 android:id="@+id/gender"
-                android:layout_alignRight="@+id/phonenumber"
-                android:layout_alignEnd="@+id/phonenumber"
+                android:layout_alignRight="@+id/backbutton"
+                android:layout_alignEnd="@+id/backbutton"
                 android:fontFamily="monospace"
                 android:typeface="monospace"
                 android:textSize="16sp"

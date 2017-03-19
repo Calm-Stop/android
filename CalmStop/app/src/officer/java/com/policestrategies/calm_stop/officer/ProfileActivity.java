@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,6 +35,9 @@ import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SignupVerification;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
+    private Spinner daySetter;
+    private Spinner monthSetter;
+    private Spinner yearSetter;
     private Spinner genderSetter;
     private Spinner ethnicitySetter;
     private Spinner languageSetter;
@@ -41,7 +45,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private EditText mLastNameField;
     private EditText mEmailField;
     private EditText mPhone;
-    private EditText mDateOfBirth;
+    private TextView mDateOfBirth;
 
     private EditText mZip;
     private EditText mLicense;
@@ -55,7 +59,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private int eth = 0;
     private int lan = 2;
     private int ethTrue = 0;
-
+    private int i_year, i_day, i_month;
     int month;
     int day;
     int year;
@@ -97,12 +101,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mFirstNameField = (EditText)findViewById(R.id.editFirstName);
         mLastNameField = (EditText)findViewById(R.id.editLastName);
         mEmailField = (EditText)findViewById(R.id.editEmail);
-        mDateOfBirth = (EditText)findViewById(R.id.editDateOfBirth);
         mPhone = (EditText)findViewById(R.id.editPhonenum);
         mLicense= (EditText)findViewById(R.id.editLicenseNumber);
         mZip = (EditText)findViewById(R.id.editZip);
         mDepartmentNum = (EditText)findViewById(R.id.editdepartnum);
         mBadgeNum = (EditText)findViewById(R.id.editBadgenum);
+        mDateOfBirth = (TextView) findViewById(R.id.dateOfBirth);
 
         mphoto = (ImageView)findViewById(R.id.profilePicture);
         mphoto.setOnClickListener(this);
@@ -113,17 +117,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
         languageSetter = (Spinner) findViewById(R.id.languageSetter);
+        monthSetter = (Spinner) findViewById(R.id.monthSetter);
+        daySetter = (Spinner) findViewById(R.id.daySetter);
+        yearSetter = (Spinner) findViewById(R.id.yearSetter);
 
         setUpGenderSetter();
         setUpEthnicitySetter();
         setUpLanguageSetter();
-
-        // set current date into textview
-        mDateOfBirth.setText(new StringBuilder()
-                // Month is 0 based, just add 1
-                .append(month + 1).append("-").append(day).append("-")
-                .append(year).append(" "));
-
+        setUpMonthSetter();
+        setUpDaySetter();
+        setUpYearSetter();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -150,7 +153,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             public void onDataChange(DataSnapshot snapshot) {
                 //NEED TO ADD BADGE NUMBER
                 ZIP = snapshot.child("zip_code").getValue().toString();
-                DOB = snapshot.child("date_of_birth").getValue().toString();
                 Email = snapshot.child("email").getValue().toString();
                 FName = snapshot.child("first_name").getValue().toString();
                 LName = snapshot.child("last_name").getValue().toString();
@@ -188,7 +190,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 LName = mLastNameField.getText().toString();
                 Email = mEmailField.getText().toString();
                 PhoneNumber = mPhone.getText().toString();
-                DOB = mDateOfBirth.getText().toString();
                 License = mLicense.getText().toString();
                 ZIP = mZip.getText().toString();
                 Department = mDepartmentNum.toString();
@@ -206,7 +207,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 updatePhoneNumber();
                 updateEmail();
                 updateZip();
-                updateDOB();
                 updateLicense();
                 updateLanguage();
                 updateGender();
@@ -236,6 +236,56 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         else
             Toast.makeText(ProfileActivity.this, "Error", Toast.LENGTH_LONG).show();
 
+    }
+
+    private void setUpDaySetter() {
+        final ArrayAdapter<CharSequence> dayAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Day_31, android.R.layout.simple_spinner_dropdown_item);
+        dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        daySetter.setAdapter(dayAdapter);
+        daySetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                i_day = position;
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+    }
+
+    private void setUpYearSetter() {
+        final ArrayAdapter<CharSequence> yearAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Year, android.R.layout.simple_spinner_dropdown_item);
+        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        yearSetter.setAdapter(yearAdapter);
+        yearSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                i_year = getResources().getStringArray(R.array.Year).length + 1909 - position;
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
+
+
+    private void setUpMonthSetter() {
+        final ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Month, android.R.layout.simple_spinner_dropdown_item);
+        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        monthSetter.setAdapter(monthAdapter);
+        monthSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                i_month = position;
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
     }
 
 
@@ -386,11 +436,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mEmailField.setText(Email);
         mPhone.setText(PhoneNumber);
         mZip.setText(ZIP);
-        mDateOfBirth.setText(DOB);
         mLicense.setText(License);
         genderSetter.setSelection(setGen());
         ethnicitySetter.setSelection(setEth());
         languageSetter.setSelection(setLan());
+        monthSetter.setSelection(0);
+        daySetter.setSelection(0);
+        yearSetter.setSelection(0);
     }
 
     private int setGen(){

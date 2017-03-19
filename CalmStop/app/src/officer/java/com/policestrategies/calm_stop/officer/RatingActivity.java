@@ -32,7 +32,7 @@ import java.util.List;
 import static android.R.attr.data;
 import static android.R.attr.rating;
 import static android.R.attr.value;
-import static com.policestrategies.calm_stop.R.id.Name;
+//import static com.policestrategies.calm_stop.R.id.Name;
 // import static com.policestrategies.calm_stop.R.id.ratingBar;
 
 
