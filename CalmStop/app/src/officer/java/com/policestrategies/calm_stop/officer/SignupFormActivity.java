@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SignupVerification;
 
+import org.w3c.dom.Text;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +36,7 @@ import java.util.regex.Pattern;
 
 public class SignupFormActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private TextView mDateView;
     private EditText mFirstNameField;
     private EditText mLastNameField;
     private static EditText  mEmailField;
@@ -48,6 +53,16 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private Spinner genderSetter;
     private Spinner langSetter;
     private Spinner ethnicitySetter;
+    private Spinner monthSetter;
+    private Spinner daySetter;
+    private Spinner yearSetter;
+    private String s_day;
+    private String s_month;
+    private String s_year;
+    private int i_day;
+    private int i_month;
+    private int i_year;
+
 
     private static final String TAG = "Signup";
 
@@ -73,6 +88,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signupform);
 
+        mDateView = (TextView) findViewById(R.id.dateOfBirth);
         mEmailField = (EditText) findViewById(R.id.input_email);
         mPasswordField = (EditText) findViewById(R.id.input_password);
         mLicenseNum = (EditText) findViewById(R.id.input_licenseNum);
@@ -87,9 +103,17 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         langSetter = (Spinner) findViewById(R.id.langSetter);
         ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
+        monthSetter = (Spinner) findViewById(R.id.monthSetter);
+        daySetter = (Spinner) findViewById(R.id.daySetter);
+        yearSetter = (Spinner) findViewById(R.id.yearSetter);
+        daySetter.setFocusable(true);
+        daySetter.setFocusableInTouchMode(true);
         setUpGenderSetter();
         setUpLangSetter();
         setUpEthnicitySetter();
+        setUpDaySetter();
+//        setUpMonthSetter();
+//        setUpYearSetter();
 
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
@@ -171,11 +195,12 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         final String gender = genderSetter.getSelectedItem().toString();
         final String language = langSetter.getSelectedItem().toString();
         final String ethnicity = ethnicitySetter.getSelectedItem().toString();
-
+        final String day = daySetter.getSelectedItem().toString();
         Log.d(TAG, "createAccount:" + email);
 
 
-        if (!validateInput(email, password, licensenum, firstname, lastname, department, badge, phone, zip, dateofbirth)) {
+        if (!validateInput(email, password, licensenum, firstname, lastname, department,
+                badge, phone, zip, dateofbirth, day)) {
             return;
         }
 
@@ -238,104 +263,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private boolean validateInput(String email, String password, String licensenum, String firstname,
-                                  String lastname, String department, String badge, String phone,
-                                  String zip, String dateofbirth) {
-
-        //FIRST NAME CHECK
-        if (!SignupVerification.validFirstName(firstname)) {
-            mFirstNameField.setError("Please enter a valid first name.");
-            mFirstNameField.requestFocus();
-            return false;
-        } else {
-            mFirstNameField.setError(null);
-        }
-        //LAST NAME CHECK
-        if (!SignupVerification.validLastName(lastname)) {
-            mLastNameField.setError("Please enter a valid last name.");
-            mLastNameField.requestFocus();
-            return false;
-        } else {
-            mLastNameField.setError(null);
-        }
-
-        //DEPARTMENT CHECK
-        if (department.isEmpty()) {
-            mDepartment.setError("Enter your department number");
-            mDepartment.requestFocus();
-            return false;
-        } else {
-            mDepartment.setError(null);
-        }
-
-        //BADGE CHECK
-        if (badge.isEmpty()) {
-            mBadge.setError("Enter your badge number");
-            mBadge.requestFocus();
-            return false;
-        } else {
-            mBadge.setError(null);
-        }
-
-        //EMAIL CHECK
-        if (!SignupVerification.validEmail(email)) {
-            mEmailField.setError("Enter a valid email address.");
-            mEmailField.requestFocus();
-            return false;
-        } else {
-            mEmailField.setError(null);
-        }
-
-        //PASSWORD REGEX
-        if (!SignupVerification.validPassword(password)) {
-            mPasswordField.setError("Password must be at least 6 characters and contain at least a letter and a number.");
-            mPasswordField.requestFocus();
-            return false;
-        } else {
-            mPasswordField.setError(null);
-        }
-
-        //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
-
-        if(!SignupVerification.validLicense(licensenum)) {
-            mLicenseNum.setError("Enter a letter followed by eight numbers\nExample: A12345678");
-            mLicenseNum.requestFocus();
-            return false;
-        } else {
-            mLicenseNum.setError(null);
-        }
-
-        //PHONE REGEX
-        if(!SignupVerification.validPhone(phone)) {
-            mPhone.setError("Invalid Phone Number.");
-            mPhone.requestFocus();
-            return false;
-        } else {
-            mPhone.setError(null);
-        }
-
-        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
-        if (!SignupVerification.validDateOfBirth(dateofbirth)){
-            mDateOfBirth.setError("DD-MM-YYYY");
-            mDateOfBirth.requestFocus();
-            return false;
-        } else {
-            mDateOfBirth.setError(null);
-        }
-
-        //zip gender language DOB
-        //ZIP CODE REGEX
-        if (!SignupVerification.validZip(zip)){
-            mZip.setError("This field was left empty.");
-            mZip.requestFocus();
-            return false;
-        } else {
-            mZip.setError(null);
-        }
-
-        return true;
-    }
-
     public static String getEmail(){
         String emailInput = mEmailField.getText().toString();
 
@@ -348,6 +275,23 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         return emailInput;
     }
 
+    private void setUpDaySetter() {
+        final ArrayAdapter<CharSequence> dayAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Day_31, android.R.layout.simple_spinner_dropdown_item);
+        dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        daySetter.setAdapter(dayAdapter);
+
+        daySetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                i_day = position;
+                s_day = Integer.toString(i_day);
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
 
     private void setUpGenderSetter() {
 
@@ -472,6 +416,113 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
+    private boolean validateInput(String email, String password, String licensenum, String firstname,
+                                  String lastname, String department, String badge, String phone,
+                                  String zip, String dateofbirth, String day) {
+
+        if (day.equalsIgnoreCase("day")) {
+            mDateView.setError("Select a day.");
+            mDateView.requestFocus();
+            return false;
+        } else {
+            mDateView.setError(null);
+        }
+
+            //FIRST NAME CHECK
+        if (!SignupVerification.validFirstName(firstname)) {
+            mFirstNameField.setError("Please enter a valid first name.");
+            mFirstNameField.requestFocus();
+            return false;
+        } else {
+            mFirstNameField.setError(null);
+        }
+        //LAST NAME CHECK
+        if (!SignupVerification.validLastName(lastname)) {
+            mLastNameField.setError("Please enter a valid last name.");
+            mLastNameField.requestFocus();
+            return false;
+        } else {
+            mLastNameField.setError(null);
+        }
+
+        //DEPARTMENT CHECK
+        if (department.isEmpty()) {
+            mDepartment.setError("Enter your department number");
+            mDepartment.requestFocus();
+            return false;
+        } else {
+            mDepartment.setError(null);
+        }
+
+        //BADGE CHECK
+        if (badge.isEmpty()) {
+            mBadge.setError("Enter your badge number");
+            mBadge.requestFocus();
+            return false;
+        } else {
+            mBadge.setError(null);
+        }
+
+        //EMAIL CHECK
+        if (!SignupVerification.validEmail(email)) {
+            mEmailField.setError("Enter a valid email address.");
+            mEmailField.requestFocus();
+            return false;
+        } else {
+            mEmailField.setError(null);
+        }
+
+        //PASSWORD REGEX
+        if (!SignupVerification.validPassword(password)) {
+            mPasswordField.setError("Password must be at least 6 characters and contain at least a letter and a number.");
+            mPasswordField.requestFocus();
+            return false;
+        } else {
+            mPasswordField.setError(null);
+        }
+
+        //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
+
+        if(!SignupVerification.validLicense(licensenum)) {
+            mLicenseNum.setError("Enter a letter followed by eight numbers\nExample: A12345678");
+            mLicenseNum.requestFocus();
+            return false;
+        } else {
+            mLicenseNum.setError(null);
+        }
+
+        //PHONE REGEX
+        if(!SignupVerification.validPhone(phone)) {
+            mPhone.setError("Invalid Phone Number.");
+            mPhone.requestFocus();
+            return false;
+        } else {
+            mPhone.setError(null);
+        }
+
+        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
+        if (!SignupVerification.validDateOfBirth(dateofbirth)){
+            mDateOfBirth.setError("DD-MM-YYYY");
+            mDateOfBirth.requestFocus();
+            return false;
+        } else {
+            mDateOfBirth.setError(null);
+        }
+
+        //zip gender language DOB
+        //ZIP CODE REGEX
+        if (!SignupVerification.validZip(zip)){
+            mZip.setError("This field was left empty.");
+            mZip.requestFocus();
+            return false;
+        } else {
+            mZip.setError(null);
+        }
+
+
+
+        return true;
+    }
 
 } // end class SignupformActivity
 

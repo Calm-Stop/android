@@ -13,7 +13,6 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
-spinn
         <!--  fName Label -->
         <EditText
             android:id="@+id/input_firstname"
@@ -97,6 +96,38 @@ spinn
             android:hint="ZIP Code" />
 
         <!-- SPINNER -->
+
+        <TextView
+            android:text = "Date Of Birth:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dateOfBirth"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textSize="16sp"
+            android:textColor="@android:color/background_dark" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/monthSetter"
+            android:background="@android:color/background_light" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/daySetter"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:background="@android:color/background_light" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/yearSetter"
+            android:background="@android:color/background_light" />
+
+
         <TextView
             android:text="Gender:"
             android:layout_width="match_parent"
