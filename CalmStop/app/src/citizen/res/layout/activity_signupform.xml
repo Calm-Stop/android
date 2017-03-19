@@ -61,14 +61,6 @@
             android:inputType="text"
             android:hint="Phone Number" />
 
-        <!--  DateOfBirth Label -->
-        <EditText
-            android:id="@+id/input_DateOfBirth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Date of Birth" />
-
         <!--  Zip Code Label -->
         <EditText
             android:id="@+id/input_zip"
@@ -78,17 +70,54 @@
             android:hint="Zip Code" />
 
 <!-- SPINNER -->
+
+        <!--  Date of Birth Label -->
         <TextView
-            android:text="Gender:"
+            android:text="Date of Birth:"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/input_zip"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:layout_marginTop="20dp"
-            android:id="@+id/gender"
+            android:id="@+id/text_dateOfBirth"
             android:layout_alignRight="@+id/input_zip"
             android:layout_alignEnd="@+id/input_zip"
+            android:fontFamily="monospace"
+            android:typeface="monospace"
+            android:textSize="16sp"
+            android:textColor="@android:color/background_dark" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/daySetter"
+            android:background="@android:color/background_light" />
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/monthSetter"
+            android:background="@android:color/background_light" />
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/yearSetter"
+            android:background="@android:color/background_light" />
+
+        <!-- Gender Label -->
+        <TextView
+            android:text="Gender:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_dateOfBirth"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="20dp"
+            android:id="@+id/gender"
+            android:layout_alignRight="@+id/text_dateOfBirth"
+            android:layout_alignEnd="@+id/text_dateOfBirth"
             android:fontFamily="monospace"
             android:typeface="monospace"
             android:textSize="16sp"

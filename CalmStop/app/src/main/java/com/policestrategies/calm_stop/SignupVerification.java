@@ -79,7 +79,7 @@ public class SignupVerification {
 
     public static boolean validDateOfBirth(int I_month, int I_day, int I_year) {
         if ((I_day > 31) || (I_day < 1) || (I_month > 12) || (I_year < 1910) || (I_year > 2001)) {
-            return true;
+            return false;
         } else {
             //FEBRUARY
             if (I_month == 2) {

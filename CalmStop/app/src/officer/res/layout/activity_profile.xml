@@ -325,7 +325,7 @@
                 android:text="Gender:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/dateOfBirth"
+                android:layout_below="@+id/text_dateOfBirth"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp"
