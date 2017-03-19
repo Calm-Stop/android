@@ -79,14 +79,6 @@
             android:inputType="text"
             android:hint="Phone Number" />
 
-        <!--  DateOfBirth Label -->
-        <EditText
-            android:id="@+id/input_DateOfBirth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Date of Birth" />
-
         <!--  ZIP CODE Label -->
         <EditText
             android:id="@+id/input_zip"
