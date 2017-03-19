@@ -56,13 +56,9 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private Spinner monthSetter;
     private Spinner daySetter;
     private Spinner yearSetter;
-    private String s_day;
-    private String s_month;
-    private String s_year;
-    private int i_day;
     private int i_month;
+    private int i_day;
     private int i_year;
-
 
     private static final String TAG = "Signup";
 
@@ -112,8 +108,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         setUpLangSetter();
         setUpEthnicitySetter();
         setUpDaySetter();
-//        setUpMonthSetter();
-//        setUpYearSetter();
+        setUpMonthSetter();
+        setUpYearSetter();
 
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
@@ -189,18 +185,20 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         final String lastname = mLastNameField.getText().toString();
         final String phone = mPhone.getText().toString();
         final String zip = mZip.getText().toString();
-        final String dateofbirth = mDateOfBirth.getText().toString();
         final String department = mDepartment.getText().toString();
         final String badge = mBadge.getText().toString();
         final String gender = genderSetter.getSelectedItem().toString();
         final String language = langSetter.getSelectedItem().toString();
         final String ethnicity = ethnicitySetter.getSelectedItem().toString();
         final String day = daySetter.getSelectedItem().toString();
+        final String month = monthSetter.getSelectedItem().toString();
+        final String year = yearSetter.getSelectedItem().toString();
+
         Log.d(TAG, "createAccount:" + email);
 
 
         if (!validateInput(email, password, licensenum, firstname, lastname, department,
-                badge, phone, zip, dateofbirth, day)) {
+                badge, phone, zip, day, month, year)) {
             return;
         }
 
@@ -245,7 +243,11 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             officerDatabaseRef.child("zip_code").setValue(zip);
                             officerDatabaseRef.child("gender").setValue(gender);
                             officerDatabaseRef.child("language").setValue(language);
-                            officerDatabaseRef.child("date_of_birth").setValue(dateofbirth);
+                            //DATE OF BIRTH
+                            officerDatabaseRef.child("day").setValue(i_day);
+                            officerDatabaseRef.child("month").setValue(i_month);
+                            officerDatabaseRef.child("year").setValue(i_year);
+
                             officerDatabaseRef.child("department").setValue(department);
                             officerDatabaseRef.child("badge").setValue(badge);
                             officerDatabaseRef.child("ethnicity").setValue(ethnicity);
@@ -280,12 +282,44 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                 R.array.Day_31, android.R.layout.simple_spinner_dropdown_item);
         dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         daySetter.setAdapter(dayAdapter);
-
         daySetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 i_day = position;
-                s_day = Integer.toString(i_day);
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+    }
+
+    private void setUpYearSetter() {
+        final ArrayAdapter<CharSequence> yearAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Year, android.R.layout.simple_spinner_dropdown_item);
+        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        yearSetter.setAdapter(yearAdapter);
+        yearSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                i_year = getResources().getStringArray(R.array.Year).length + 1909 - position;
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
+
+
+    private void setUpMonthSetter() {
+        final ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Month, android.R.layout.simple_spinner_dropdown_item);
+        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        monthSetter.setAdapter(monthAdapter);
+        monthSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                i_month = position;
             }
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
@@ -418,7 +452,16 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
     private boolean validateInput(String email, String password, String licensenum, String firstname,
                                   String lastname, String department, String badge, String phone,
-                                  String zip, String dateofbirth, String day) {
+                                  String zip, String day, String month, String year) {
+        //DATE OF BIRTH
+        mDateView.clearFocus();
+        if (month.equalsIgnoreCase("month")) {
+            mDateView.setError("Select a month.");
+            mDateView.requestFocus();
+            return false;
+        } else {
+            mDateView.setError(null);
+        }
 
         if (day.equalsIgnoreCase("day")) {
             mDateView.setError("Select a day.");
@@ -428,6 +471,13 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mDateView.setError(null);
         }
 
+        if (year.equalsIgnoreCase("year")) {
+            mDateView.setError("Select a year.");
+            mDateView.requestFocus();
+            return false;
+        } else {
+            mDateView.setError(null);
+        }
             //FIRST NAME CHECK
         if (!SignupVerification.validFirstName(firstname)) {
             mFirstNameField.setError("Please enter a valid first name.");
@@ -500,15 +550,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mPhone.setError(null);
         }
 
-        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
-        if (!SignupVerification.validDateOfBirth(dateofbirth)){
-            mDateOfBirth.setError("DD-MM-YYYY");
-            mDateOfBirth.requestFocus();
-            return false;
-        } else {
-            mDateOfBirth.setError(null);
-        }
-
         //zip gender language DOB
         //ZIP CODE REGEX
         if (!SignupVerification.validZip(zip)){
@@ -518,7 +559,31 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         } else {
             mZip.setError(null);
         }
+        //DATE OF BIRTH
+        mDateView.clearFocus();
+        if (month.equalsIgnoreCase("month")) {
+            mDateView.setError("Select a month.");
+            mDateView.requestFocus();
+            return false;
+        } else {
+            mDateView.setError(null);
+        }
 
+        if (day.equalsIgnoreCase("day")) {
+            mDateView.setError("Select a day.");
+            mDateView.requestFocus();
+            return false;
+        } else {
+            mDateView.setError(null);
+        }
+
+        if (year.equalsIgnoreCase("year")) {
+            mDateView.setError("Select a year.");
+            mDateView.requestFocus();
+            return false;
+        } else {
+            mDateView.setError(null);
+        }
 
 
         return true;
