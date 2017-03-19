@@ -140,9 +140,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             //mphoto.setImageURI();
         }else {
             mphoto.setImageURI(Photo);
-        }
-
-        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        }profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         //NEED TO ADD BADGE NUMBER

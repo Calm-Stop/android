@@ -202,8 +202,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             citizenDatabaseRef.child("day").setValue(i_day);
                             citizenDatabaseRef.child("year").setValue(i_year);
 
-
-//                            databaseRef.child("citizen").child(uuid).child("profile").setValue(mUser);
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
                             finish();

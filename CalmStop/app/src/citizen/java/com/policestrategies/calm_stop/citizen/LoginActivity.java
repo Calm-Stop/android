@@ -20,6 +20,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
 
 /**
@@ -123,8 +128,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * Begins the login process. Validates the input and - if input is valid - attempts to log in.
      */
     private void login(String email, String password) {
-        final String m_email = email;
-        final String m_password = password;
         Log.d(TAG, "signIn" + email);
         if (!validateInput()) {
             Toast.makeText(LoginActivity.this, "Validation Failed", Toast.LENGTH_SHORT).show();
@@ -151,10 +154,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             finish();
                         }
                         if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
-                            //Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(getBaseContext(), HomepageActivity.class);
-                            startActivity(i);
+
+                            final String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            DatabaseReference acctypeRef = FirebaseDatabase.getInstance().getReference("citizen");
+                            acctypeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.hasChild(Uid)) {
+                                        Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
+                                        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+                                        startActivity(i);
+                                    } else {
+                                        FirebaseAuth.getInstance().signOut();
+                                        Toast.makeText(LoginActivity.this, "This is not an citizen account.", Toast.LENGTH_SHORT).show();
+                                        Intent i = new Intent(getBaseContext(), LoginActivity.class);
+                                        startActivity(i);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    //TODO Empty Stud
+                                }
+                            });
                         }
 
                     }
