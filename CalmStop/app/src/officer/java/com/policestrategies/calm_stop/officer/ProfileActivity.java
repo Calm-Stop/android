@@ -59,7 +59,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private int eth = 0;
     private int lan = 2;
     private int ethTrue = 0;
-    private int i_year, i_day, i_month;
+    private int i_year, i_year_pos, i_day, i_month;
     int month;
     int day;
     int year;
@@ -164,7 +164,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 Department = snapshot.child("department").getValue().toString();
                 Badge = snapshot.child("badge").getValue().toString();
                 Ethnicity = snapshot.child("ethnicity").getValue().toString();
-
+                i_day = Integer.parseInt(snapshot.child("day").getValue().toString());
+                i_month = Integer.parseInt(snapshot.child("month").getValue().toString());
+                i_year = Integer.parseInt(snapshot.child("year").getValue().toString());
+                i_year_pos = getResources().getStringArray(R.array.Year).length + 1909 - i_year;
                 setEverything();
             }
 
@@ -192,14 +195,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 PhoneNumber = mPhone.getText().toString();
                 License = mLicense.getText().toString();
                 ZIP = mZip.getText().toString();
-                Department = mDepartmentNum.toString();
-                Badge = mBadgeNum.toString();
+                Department = mDepartmentNum.getText().toString();
+                Badge = mBadgeNum.getText().toString();
                 Gender = genderSetter.getSelectedItem().toString();
                 Ethnicity = ethnicitySetter.getSelectedItem().toString();
                 Language = languageSetter.getSelectedItem().toString();
+                DOB = i_month + "-" + i_day + "-" + i_year;
 
-
-                if (!validateInput(Email, License, FName, LName, PhoneNumber, ZIP, DOB)) return;
+                if (!validateInput(FName, LName, Department, Badge, Email, PhoneNumber, ZIP, License, DOB)) return;
                 //WRITE TO FIREBASE
                 updateFName();
                 updateLName();
@@ -213,6 +216,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 updateEthnicity();
                 updateDepartment();
                 updateBadge();
+                updateDOB();
 
                 recreate();
                 break;
@@ -440,9 +444,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         genderSetter.setSelection(setGen());
         ethnicitySetter.setSelection(setEth());
         languageSetter.setSelection(setLan());
-        monthSetter.setSelection(0);
-        daySetter.setSelection(0);
-        yearSetter.setSelection(0);
+        monthSetter.setSelection(i_month);
+        daySetter.setSelection(i_day);
+        yearSetter.setSelection(i_year_pos);
     }
 
     private int setGen(){
@@ -585,10 +589,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private void updateLName() { profileRef.child("last_name").setValue(LName); }
     private void updatePhoneNumber() { profileRef.child("phone_number").setValue(PhoneNumber); }
     private void updateZip() {profileRef.child("zip_code").setValue(ZIP);}
-    private void updateDOB() { profileRef.child("date_of_birth").setValue(DOB); }
     private void updateLicense() { profileRef.child("license_number").setValue(License); }
     private void updateDepartment() { profileRef.child("department").setValue(Department); }
     private void updateBadge() { profileRef.child("badge").setValue(Badge); }
+    private void updateDOB() {
+        //DATE OF BIRTH
+        profileRef.child("day").setValue(i_day);
+        profileRef.child("month").setValue(i_month);
+        profileRef.child("year").setValue(i_year);
+    }
+
 
     private void updateGender() {
         if(gen == 2)
@@ -647,11 +657,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         startActivity(i);
     }
 
+    private boolean validateInput(String firstname, String lastname, String department, String badge, String email,
+                                  String phone, String zip, String license, String dateofbirth) {
 
-    private boolean validateInput(String email, String licensenum, String firstname,
-                                  String lastname, String phone, String zip, String dateofbirth) {
-
-//(8 fns)validEmail, validPassword, validLicense, validZip, validPhone, validFirstname, validLastname, validDateOfBirth
+//FName, LName, Department, Badge, Email, PhoneNumber, ZIP, License, DOB
         //FIRST NAME CHECK
         if (!SignupVerification.validFirstName(firstname)) {
             mFirstNameField.setError("Please enter a valid first name.");
@@ -669,6 +678,24 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             mLastNameField.setError(null);
         }
 
+        //DEPARTMENT CHECK
+        if (!SignupVerification.validDepartment(department)) {
+            mDepartmentNum.setError("Enter your Department Number.");
+            mDepartmentNum.requestFocus();
+            return false;
+        } else {
+            mDepartmentNum.setError(null);
+        }
+
+        //BADGE NUMBER CHECK
+        if (!SignupVerification.validBadge(badge)) {
+            mBadgeNum.setError("Enter your Badge Number.");
+            mBadgeNum.requestFocus();
+            return false;
+        } else {
+            mBadgeNum.setError(null);
+        }
+
         //EMAIL CHECK
         if (!SignupVerification.validEmail(email)) {
             mEmailField.setError("Enter a valid email address.");
@@ -676,15 +703,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             return false;
         } else {
             mEmailField.setError(null);
-        }
-
-        //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
-        if(!SignupVerification.validLicense(licensenum)) {
-            mLicense.setError("Enter a letter followed by eight numbers\nExample: A12345678");
-            mLicense.requestFocus();
-            return false;
-        } else {
-            mLicense.setError(null);
         }
 
         //PHONE REGEX
@@ -696,27 +714,34 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             mPhone.setError(null);
         }
 
-        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
-        if (!SignupVerification.validDateOfBirth(dateofbirth)){
-            mDateOfBirth.setError("DD-MM-YYYY");
-            mDateOfBirth.requestFocus();
-            return false;
-        } else {
-            mDateOfBirth.setError(null);
-        }
-
-        //zip gender language DOB
-        //ZIP CODE REGEX
-        if (!SignupVerification.validZip(zip)){
-            mZip.setError("This field was left empty.");
+        //ZIP CODE REGEX - 5 DIGIT NUMBER
+        if(!SignupVerification.validZip(zip)) {
+            mZip.setError("Invalid ZIP");
             mZip.requestFocus();
             return false;
         } else {
             mZip.setError(null);
         }
 
-        return true;
+        //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
+        if(!SignupVerification.validLicense(license)) {
+            mLicense.setError("Enter a letter followed by eight numbers\nExample: A12345678");
+            mLicense.requestFocus();
+            return false;
+        } else {
+            mLicense.setError(null);
+        }
 
+        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
+        mDateOfBirth.clearFocus();
+        if (!SignupVerification.validDateOfBirth(i_month, i_day, i_year)){
+            mDateOfBirth.setError("Invalid Date of Birth");
+            mDateOfBirth.requestFocus();
+            return false;
+        } else {
+            mDateOfBirth.setError(null);
+        }
+        return true;
 
     }
 }

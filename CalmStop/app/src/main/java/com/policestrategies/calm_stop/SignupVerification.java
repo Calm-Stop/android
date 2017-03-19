@@ -40,6 +40,10 @@ public class SignupVerification {
         return (!lastname.isEmpty());
     }
 
+    public static boolean validDepartment(String department) { return (!department.isEmpty()); }
+
+    public static boolean validBadge(String badge) { return (!badge.isEmpty()); }
+
     public static boolean validDateOfBirth(String dateofbirth) {
         if (dateofbirth.matches("^\\d{1,2}-\\d{1,2}-\\d{4}")) {
             int i, j, k;
@@ -75,7 +79,7 @@ public class SignupVerification {
 
     public static boolean validDateOfBirth(int I_month, int I_day, int I_year) {
         if ((I_day > 31) || (I_day < 1) || (I_month > 12) || (I_year < 1910) || (I_year > 2001)) {
-            return false;
+            return true;
         } else {
             //FEBRUARY
             if (I_month == 2) {
