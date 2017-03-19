@@ -42,7 +42,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private static EditText  mEmailField;
     private EditText mPasswordField;
     private EditText mLicenseNum;
-    private EditText mDateOfBirth;
     private EditText mPhone;
     private EditText mZip;
     private EditText mGender;
@@ -92,7 +91,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         mLastNameField = (EditText) findViewById(R.id.input_lastname);
         mPhone = (EditText) findViewById(R.id.input_phone);
         mZip = (EditText) findViewById(R.id.input_zip);
-        mDateOfBirth = (EditText) findViewById(R.id.input_DateOfBirth);
         mDepartment = (EditText) findViewById(R.id.input_department);
         mBadge = (EditText) findViewById(R.id.input_badge);
 
@@ -190,19 +188,16 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         final String gender = genderSetter.getSelectedItem().toString();
         final String language = langSetter.getSelectedItem().toString();
         final String ethnicity = ethnicitySetter.getSelectedItem().toString();
-        final String day = daySetter.getSelectedItem().toString();
-        final String month = monthSetter.getSelectedItem().toString();
-        final String year = yearSetter.getSelectedItem().toString();
+        String dateofbirth = Integer.toString(i_month) + "-" + Integer.toString(i_day) + "-" + Integer.toString(i_year);
 
         Log.d(TAG, "createAccount:" + email);
 
 
         if (!validateInput(email, password, licensenum, firstname, lastname, department,
-                badge, phone, zip, day, month, year)) {
+                badge, phone, zip, dateofbirth)) {
             return;
         }
-
-        // Now we need to attempt to signup - we'll add code for this later (once Firebase is integrated)
+                // Now we need to attempt to signup - we'll add code for this later (once Firebase is integrated)
         // [START create_user_with_email]
 
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -452,33 +447,20 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
     private boolean validateInput(String email, String password, String licensenum, String firstname,
                                   String lastname, String department, String badge, String phone,
-                                  String zip, String day, String month, String year) {
+                                  String zip, String dateofbirth) {
+
+
         //DATE OF BIRTH
         mDateView.clearFocus();
-        if (month.equalsIgnoreCase("month")) {
-            mDateView.setError("Select a month.");
+        if (!SignupVerification.validDateOfBirth(dateofbirth)) {
+            mDateView.setError("Invalid Date of Birth.");
             mDateView.requestFocus();
             return false;
         } else {
             mDateView.setError(null);
         }
 
-        if (day.equalsIgnoreCase("day")) {
-            mDateView.setError("Select a day.");
-            mDateView.requestFocus();
-            return false;
-        } else {
-            mDateView.setError(null);
-        }
-
-        if (year.equalsIgnoreCase("year")) {
-            mDateView.setError("Select a year.");
-            mDateView.requestFocus();
-            return false;
-        } else {
-            mDateView.setError(null);
-        }
-            //FIRST NAME CHECK
+        //FIRST NAME CHECK
         if (!SignupVerification.validFirstName(firstname)) {
             mFirstNameField.setError("Please enter a valid first name.");
             mFirstNameField.requestFocus();
@@ -558,31 +540,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             return false;
         } else {
             mZip.setError(null);
-        }
-        //DATE OF BIRTH
-        mDateView.clearFocus();
-        if (month.equalsIgnoreCase("month")) {
-            mDateView.setError("Select a month.");
-            mDateView.requestFocus();
-            return false;
-        } else {
-            mDateView.setError(null);
-        }
-
-        if (day.equalsIgnoreCase("day")) {
-            mDateView.setError("Select a day.");
-            mDateView.requestFocus();
-            return false;
-        } else {
-            mDateView.setError(null);
-        }
-
-        if (year.equalsIgnoreCase("year")) {
-            mDateView.setError("Select a year.");
-            mDateView.requestFocus();
-            return false;
-        } else {
-            mDateView.setError(null);
         }
 
 

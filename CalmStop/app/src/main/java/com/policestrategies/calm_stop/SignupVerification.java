@@ -74,19 +74,19 @@ public class SignupVerification {
     }
 
     public static boolean validDateOfBirth(int I_month, int I_day, int I_year) {
-        if ((I_day > 31) || (I_month > 12) || (I_year < 1930) || (I_year > 2001)) {
+        if ((I_day > 31) || (I_day < 1) || (I_month > 12) || (I_year < 1910) || (I_year > 2001)) {
             return false;
         } else {
             //FEBRUARY
             if (I_month == 2) {
                 //LEAPYEAR FEBRUARY
                 if ((I_year % 4) == 0) {
-                    if (I_day < 30 && I_day > 0) {
+                    if (I_day < 30) {
                         return true;
                     }
                 } else {
                     //NOT LEAPYEAR FEBRUARY
-                    if (I_day < 29 && I_day > 0) {
+                    if (I_day < 29) {
                         return true;
                     }
                 }
@@ -94,10 +94,10 @@ public class SignupVerification {
             }
             //MONTHS with 31 days
             if ((I_month == 1 || I_month == 3 || I_month == 5 || I_month == 7 || I_month == 8 || I_month == 10 || I_month == 12)
-                    && (I_day < 32 || I_day > 0)) {
+                    && (I_day < 32)) {
                 return true;
                 //MONTHS WITH 30 DAYS
-            } else if ((I_month == 4 || I_month == 6 || I_month == 9 || I_month == 11) && (I_day < 31 || I_day > 0)) {
+            } else if ((I_month == 4 || I_month == 6 || I_month == 9 || I_month == 11) && (I_day < 31)) {
                 return true;
             } else {
                 return false;
