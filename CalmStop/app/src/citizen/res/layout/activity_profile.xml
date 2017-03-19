@@ -32,6 +32,7 @@
                 android:scaleType="fitXY"
                 android:background="@mipmap/ic_launcher" />
 
+            <!-- FIRST NAME LABEL -->
             <TextView
                 android:text="First Name: "
                 android:layout_width="match_parent"
@@ -60,6 +61,7 @@
                 android:typeface="monospace"
                 android:textColor="@android:color/background_dark" />
 
+            <!-- LAST NAME LABEL -->
             <TextView
                 android:text="Last Name: "
                 android:layout_width="match_parent"
@@ -88,15 +90,16 @@
                 android:typeface="monospace"
                 android:textColor="@android:color/background_dark" />
 
+            <!-- EMAIL ADDERSS LABEL -->
             <TextView
-                android:text="Date of Birth: "
+                android:text="Email Address: "
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/LastName"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp"
-                android:id="@+id/text_dateOfBirth"
+                android:id="@+id/Email"
                 android:layout_alignRight="@+id/backButton"
                 android:layout_alignEnd="@+id/backButton"
                 android:textSize="16sp"
@@ -107,49 +110,14 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:text="mm-dd-yyyy"
-                android:ems="10"
-                android:id="@+id/editDateOfBirth"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark"></EditText>
-<!--
-            <DatePicker
-                android:id="@+id/dateofbirthPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:datePickerMode="spinner"
-                android:calendarViewShown="false"/>
--->
-            <TextView
-                android:text="Email:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_dateOfBirth"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
-                android:id="@+id/Email"
-                android:layout_alignRight="@+id/Name"
-                android:layout_alignEnd="@+id/Name"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textSize="16sp"
-                android:textColor="@android:color/background_dark" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:text="Email"
+                android:text="Email Address"
                 android:ems="10"
                 android:id="@+id/editEmail"
+                android:textSize="16sp"
                 android:fontFamily="monospace"
                 android:typeface="monospace"
-                android:textSize="16sp"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/background_dark" />
 
             <TextView
                 android:text="Phone Number:"
@@ -233,6 +201,45 @@
                 android:fontFamily="monospace"
                 android:typeface="monospace"
                 android:textColor="@android:color/background_dark" />
+
+
+            <!-- SPINNER LABELS -->
+
+            <!-- DATE OF BIRTH LABEL-->
+            <TextView
+                android:text="Date of Birth:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LicenseNumber"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_marginTop="20dp"
+                android:id="@+id/text_dateOfBirth"
+                android:layout_alignRight="@+id/phonenumber"
+                android:layout_alignEnd="@+id/phonenumber"
+                android:fontFamily="monospace"
+                android:typeface="monospace"
+                android:textSize="16sp"
+                android:textColor="@android:color/background_dark" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/monthSetter"
+                android:background="@android:color/background_light" />
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/daySetter"
+                android:background="@android:color/background_light" />
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/yearSetter"
+                android:background="@android:color/background_light" />
+
 
             <TextView
                 android:text="Gender:"

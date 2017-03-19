@@ -161,11 +161,10 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         final String lastname = mLastNameField.getText().toString();
         final String phone = mPhone.getText().toString();
         final String zip = mZip.getText().toString();
-        final String dateofbirth = i_month + "-" + i_day + "-" + i_year;
 
         Log.d(TAG, "createAccount:" + email);
 
-        if (!validateInput(email, password, licensenum, firstname, lastname, phone, zip, dateofbirth)) {
+        if (!validateInput(email, password, licensenum, firstname, lastname, phone, zip)) {
             return;
         }
 
@@ -219,17 +218,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     }
 
     private boolean validateInput(String email, String password, String licensenum, String firstname,
-                                  String lastname, String phone, String zip, String dateofbirth) {
-
-        //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
-        mDateOfBirth.clearFocus();
-        if (!SignupVerification.validDateOfBirth(dateofbirth)){
-            mDateOfBirth.setError("Invald Date of Birth");
-            mDateOfBirth.requestFocus();
-            return false;
-        } else {
-            mDateOfBirth.setError(null);
-        }
+                                  String lastname, String phone, String zip) {
 
         //FIRST NAME CHECK
         if (!SignupVerification.validFirstName(firstname)) {
@@ -285,7 +274,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mPhone.setError(null);
         }
 
-        //zip gender language DOB
         //ZIP CODE REGEX
         if (!SignupVerification.validZip(zip)){
             mZip.setError("Example: 95064");
@@ -295,7 +283,15 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mZip.setError(null);
         }
 
-
+        //DATE OF BIRTH REGEX;
+        mDateOfBirth.clearFocus();
+        if (!SignupVerification.validDateOfBirth(i_month, i_day, i_year)){
+            mDateOfBirth.setError("Invald Date of Birth");
+            mDateOfBirth.requestFocus();
+            return false;
+        } else {
+            mDateOfBirth.setError(null);
+        }
 
         return true;
     }
@@ -371,6 +367,21 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
+    private void setUpMonthSetter() {
+        final ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Month, android.R.layout.simple_spinner_dropdown_item);
+        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        monthSetter.setAdapter(monthAdapter);
+        monthSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                i_month = position;
+            }
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
 
     private void setUpDaySetter() {
         final ArrayAdapter<CharSequence> dayAdapter = ArrayAdapter.createFromResource(this,
@@ -397,24 +408,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         yearSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                i_year = getResources().getStringArray(R.array.Year).length + 1909 - position;
-            }
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-            }
-        });
-    }
-
-
-    private void setUpMonthSetter() {
-        final ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Month, android.R.layout.simple_spinner_dropdown_item);
-        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        monthSetter.setAdapter(monthAdapter);
-        monthSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                i_month = position;
+                i_year = position;
             }
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
