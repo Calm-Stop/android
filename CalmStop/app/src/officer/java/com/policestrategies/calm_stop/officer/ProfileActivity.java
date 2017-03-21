@@ -247,7 +247,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         yearSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                i_year = getResources().getStringArray(R.array.Year).length + 1909 - position;
+                i_year = position
             }
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
