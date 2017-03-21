@@ -76,7 +76,7 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
             final String userId = user.getUid();
 
             // Get officer rating
-            mDatabase.child("officer").child("14566").child(userId).child("ratings").child("avg_rating").addListenerForSingleValueEvent(
+            mDatabase.child("officer").child(userId).child("ratings").child("avg_rating").addListenerForSingleValueEvent(
                     new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -100,7 +100,7 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
 
 
             // Get officer comments
-            mDatabase.child("officer").child("14566").child(userId).child("comments").addValueEventListener(
+            mDatabase.child("officer").child(userId).child("comments").addValueEventListener(
                     new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {

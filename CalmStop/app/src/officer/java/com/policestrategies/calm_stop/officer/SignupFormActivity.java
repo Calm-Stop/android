@@ -235,6 +235,18 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             officerDatabaseRef.child("department").setValue(department);
                             officerDatabaseRef.child("badge").setValue(badge);
 
+                            //Set up empty ratings section
+                            DatabaseReference officerRatingDatabaseRef = databaseRef.child("officer")
+                                    .child(uuid).child("ratings").getRef();
+                            officerRatingDatabaseRef.child("avg_rating").setValue(0);
+                            officerRatingDatabaseRef.child("number_of_ratings").setValue(0);
+
+                            //Set up empty comments section
+                            DatabaseReference officerCommentsDatabaseRef = databaseRef.child("officer")
+                                    .child(uuid).child("comments").getRef();
+
+
+
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
                             finish();
