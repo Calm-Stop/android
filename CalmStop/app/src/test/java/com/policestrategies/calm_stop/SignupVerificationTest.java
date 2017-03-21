@@ -197,8 +197,8 @@ public class SignupVerificationTest {
     }
 
     @Test
-    public void testLessThanNineteenThirtyDateOfBirth() {
-        String testDateOfBirth = "1-20-1929";
+    public void testLessThanNineteenTenDateOfBirth() {
+        String testDateOfBirth = "1-20-1909";
         Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
     }
 //RECHECK
