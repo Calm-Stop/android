@@ -284,7 +284,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
         //DATE OF BIRTH REGEX;
         mDateOfBirth.clearFocus();
-        if (!SignupVerification.validDateOfBirth(i_month, i_day, i_year)){
+        if (!SignupVerification.validDateOfBirth(i_month, i_day, getResources().getStringArray(R.array.Year).length + 1909 - i_year)){
             mDateOfBirth.setError("Invald Date of Birth");
             mDateOfBirth.requestFocus();
             return false;

@@ -93,12 +93,12 @@
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/daySetter"
+            android:id="@+id/monthSetter"
             android:background="@android:color/background_light" />
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/monthSetter"
+            android:id="@+id/daySetter"
             android:background="@android:color/background_light" />
         <Spinner
             android:layout_width="match_parent"
