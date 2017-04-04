@@ -7,7 +7,7 @@ import android.util.Patterns;
  * Contains verification methods for all fields (officer & citizen) used in the signup process.
  * @author Talal Abou Haiba
  */
-public class SignupVerification {
+public class RegexChecks {
 
     public static boolean validEmail(String email) {
         return (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches());
@@ -144,4 +144,4 @@ public class SignupVerification {
         }
     }
 
-} // end class SignupVerification
+} // end ass RegexChecks

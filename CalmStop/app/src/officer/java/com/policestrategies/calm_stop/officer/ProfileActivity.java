@@ -32,7 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
-import com.policestrategies.calm_stop.SignupVerification;
+import com.policestrategies.calm_stop.RegexChecks;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
     private Spinner daySetter;
@@ -465,7 +465,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 //FName, LName, Department, Badge, Email, PhoneNumber, ZIP, License, DOB
         //FIRST NAME CHECK
-        if (!SignupVerification.validFirstName(firstname)) {
+        if (!RegexChecks.validFirstName(firstname)) {
             mFirstNameField.setError("Please enter a valid first name.");
             mFirstNameField.requestFocus();
             return false;
@@ -473,7 +473,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             mFirstNameField.setError(null);
         }
         //LAST NAME CHECK
-        if (!SignupVerification.validLastName(lastname)) {
+        if (!RegexChecks.validLastName(lastname)) {
             mLastNameField.setError("Please enter a valid last name.");
             mLastNameField.requestFocus();
             return false;
@@ -482,7 +482,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         //DEPARTMENT CHECK
-        if (!SignupVerification.validDepartment(department)) {
+        if (!RegexChecks.validDepartment(department)) {
             mDepartmentNum.setError("Enter your Department Number.");
             mDepartmentNum.requestFocus();
             return false;
@@ -491,7 +491,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         //BADGE NUMBER CHECK
-        if (!SignupVerification.validBadge(badge)) {
+        if (!RegexChecks.validBadge(badge)) {
             mBadgeNum.setError("Enter your Badge Number.");
             mBadgeNum.requestFocus();
             return false;
@@ -500,7 +500,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         //EMAIL CHECK
-        if (!SignupVerification.validEmail(email)) {
+        if (!RegexChecks.validEmail(email)) {
             mEmailField.setError("Enter a valid email address.");
             mEmailField.requestFocus();
             return false;
@@ -509,7 +509,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         //PHONE REGEX
-        if(!SignupVerification.validPhone(phone)) {
+        if(!RegexChecks.validPhone(phone)) {
             mPhone.setError("Invalid Phone Number.");
             mPhone.requestFocus();
             return false;
@@ -518,7 +518,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         //ZIP CODE REGEX - 5 DIGIT NUMBER
-        if(!SignupVerification.validZip(zip)) {
+        if(!RegexChecks.validZip(zip)) {
             mZip.setError("Invalid ZIP");
             mZip.requestFocus();
             return false;
@@ -527,7 +527,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
-        if(!SignupVerification.validLicense(license)) {
+        if(!RegexChecks.validLicense(license)) {
             mLicense.setError("Enter a letter followed by eight numbers\nExample: A12345678");
             mLicense.requestFocus();
             return false;
@@ -537,7 +537,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         //DATE OF BIRTH REGEX; replace with spinner for month, day, and year.
         mDateOfBirth.clearFocus();
-        if (!SignupVerification.validDateOfBirth(i_month, i_day, getResources().getStringArray(R.array.Year).length + 1909 - i_year)){
+        if (!RegexChecks.validDateOfBirth(i_month, i_day, getResources().getStringArray(R.array.Year).length + 1909 - i_year)){
             mDateOfBirth.setError("Invalid Date of Birth");
             mDateOfBirth.requestFocus();
             return false;

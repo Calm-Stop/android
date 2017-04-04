@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,12 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
-import com.policestrategies.calm_stop.SignupVerification;
-
-import org.w3c.dom.Text;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.policestrategies.calm_stop.RegexChecks;
 
 /**
  * Allows the user to sign up or return to the log in page.
@@ -374,7 +367,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                                   String zip) {
 
         //FIRST NAME CHECK
-        if (!SignupVerification.validFirstName(firstname)) {
+        if (!RegexChecks.validFirstName(firstname)) {
             mFirstNameField.setError("Please enter a valid first name.");
             mFirstNameField.requestFocus();
             return false;
@@ -382,7 +375,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
             mFirstNameField.setError(null);
         }
         //LAST NAME CHECK
-        if (!SignupVerification.validLastName(lastname)) {
+        if (!RegexChecks.validLastName(lastname)) {
             mLastNameField.setError("Please enter a valid last name.");
             mLastNameField.requestFocus();
             return false;
@@ -409,7 +402,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //EMAIL CHECK
-        if (!SignupVerification.validEmail(email)) {
+        if (!RegexChecks.validEmail(email)) {
             mEmailField.setError("Enter a valid email address.");
             mEmailField.requestFocus();
             return false;
@@ -418,7 +411,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //PASSWORD REGEX
-        if (!SignupVerification.validPassword(password)) {
+        if (!RegexChecks.validPassword(password)) {
             mPasswordField.setError("Password must be at least 6 characters and contain at least a letter and a number.");
             mPasswordField.requestFocus();
             return false;
@@ -428,7 +421,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
         //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
 
-        if(!SignupVerification.validLicense(licensenum)) {
+        if(!RegexChecks.validLicense(licensenum)) {
             mLicense.setError("Enter a letter followed by eight numbers\nExample: A12345678");
             mLicense.requestFocus();
             return false;
@@ -437,7 +430,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         }
 
         //PHONE REGEX
-        if(!SignupVerification.validPhone(phone)) {
+        if(!RegexChecks.validPhone(phone)) {
             mPhone.setError("Invalid Phone Number.");
             mPhone.requestFocus();
             return false;
@@ -447,7 +440,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
         //zip gender language DOB
         //ZIP CODE REGEX
-        if (!SignupVerification.validZip(zip)){
+        if (!RegexChecks.validZip(zip)){
             mZip.setError("This field was left empty.");
             mZip.requestFocus();
             return false;
@@ -457,7 +450,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
         //DATE OF BIRTH
         mDateOfBirth.clearFocus();
-        if (!SignupVerification.validDateOfBirth(i_month, i_day, 1909 + getResources().getStringArray(R.array.Year).length - i_year )) {
+        if (!RegexChecks.validDateOfBirth(i_month, i_day, 1909 + getResources().getStringArray(R.array.Year).length - i_year )) {
             mDateOfBirth.setError("Invalid Date of Birth.");
             mDateOfBirth.requestFocus();
             return false;
