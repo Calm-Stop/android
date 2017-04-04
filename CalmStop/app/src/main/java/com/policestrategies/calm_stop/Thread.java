@@ -1,16 +1,26 @@
 package com.policestrategies.calm_stop;
-
+/* Usage:
+ * (NOTE: All constructor fields must be retrieved beforehand
+ *  e.g. timestamp is an integer time variable based on UNIX time stamp)
+ * 1) Create thread:
+ *  Thread thread = new Thread(timestamp(int), threadID(int), citizenID(int), officerID(int);
+ * 2) Generate a Message object each time user types in content to the messager:
+ *  Message message = new Message(content(String), timestamp(String), authorID(String), threadID(String), messageID(String));
+ * 3) Insert into thread as messages are generated:
+ *  thread.insertMessage(message(Message));
+ *
+ */
 public class Thread {
 //FIELDS
     private Message[] Messages;
     private int numMessages=0;
     private int timestamp; //stores time at which thread was created/instantiated
-    private int threadID;
-    private int citizenID;
-    private int officerID;
+    private String threadID;
+    private String citizenID;
+    private String officerID;
 
 //CONSTRUCTOR
-    public Thread(int timestamp, int threadID, int citizenID, int officerID) {
+    public Thread(int timestamp, String threadID, String citizenID, String officerID) {
         this.timestamp = timestamp;
         this.threadID = threadID;
         this.citizenID = citizenID;
@@ -24,14 +34,14 @@ public class Thread {
     public int getTimestamp() { return timestamp; }
     public void setTimestamp(int timestamp) { this.timestamp = timestamp; }
 
-    public int getOfficerID() { return officerID; }
-    public void setOfficerID(int officerID) { this.officerID = officerID; }
+    public String getOfficerID() { return officerID; }
+    public void setOfficerID(String officerID) { this.officerID = officerID; }
 
-    public int getThreadID() { return threadID; }
-    public void setThreadID(int threadID) { this.threadID = threadID; }
+    public String getThreadID() { return threadID; }
+    public void setThreadID(String threadID) { this.threadID = threadID; }
 
-    public int getCitizenID() { return citizenID; }
-    public void setCitizenID(int citizenID) { this.citizenID = citizenID; }
+    public String getCitizenID() { return citizenID; }
+    public void setCitizenID(String citizenID) { this.citizenID = citizenID; }
 
 //INSERTING INTO MESSAGE ARRAY:
     public void insertMessage(Message message) {
