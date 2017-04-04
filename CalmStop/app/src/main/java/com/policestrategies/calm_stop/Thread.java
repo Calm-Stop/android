@@ -1,5 +1,6 @@
 package com.policestrategies.calm_stop;
-/* Usage:
+/*
+ * Usage:
  * (NOTE: All constructor fields must be retrieved beforehand
  *  e.g. timestamp is an integer time variable based on UNIX time stamp)
  * 1) Create thread:
@@ -8,7 +9,6 @@ package com.policestrategies.calm_stop;
  *  Message message = new Message(content(String), timestamp(String), authorID(String), threadID(String), messageID(String));
  * 3) Insert into thread as messages are generated:
  *  thread.insertMessage(message(Message));
- *
  */
 public class Thread {
 //FIELDS
