@@ -21,18 +21,18 @@ public class Message {
 
     //GETTERS AND SETTERS
     public int getTimestamp() { return timestamp; }
-    public void setTimestamp(int timestamp) { this.timestamp = timestamp; }
+//    public void setTimestamp(int timestamp) { this.timestamp = timestamp; }
 
     public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+//    public void setContent(String content) { this.content = content; }
 
     public String getAuthorID() { return authorID; }
-    public void setAuthorID(String author) { this.authorID = author; }
+//    public void setAuthorID(String author) { this.authorID = author; }
 
     public String getThreadID(){ return threadID; }
-    public void setThreadID(String threadID) { this.threadID = threadID; }
+//    public void setThreadID(String threadID) { this.threadID = threadID; }
 
     public String getMessageID() { return messageID; }
-    public void setMessageID(String messageID) { this.messageID = messageID; }
+//    public void setMessageID(String messageID) { this.messageID = messageID; }
 
 } // end class Message

@@ -32,16 +32,16 @@ public class Thread {
     public void setMessages(Message[] messages) { Messages = messages; }
 
     public int getTimestamp() { return timestamp; }
-    public void setTimestamp(int timestamp) { this.timestamp = timestamp; }
+//    public void setTimestamp(int timestamp) { this.timestamp = timestamp; }
 
     public String getOfficerID() { return officerID; }
-    public void setOfficerID(String officerID) { this.officerID = officerID; }
+//    public void setOfficerID(String officerID) { this.officerID = officerID; }
 
     public String getThreadID() { return threadID; }
-    public void setThreadID(String threadID) { this.threadID = threadID; }
+//    public void setThreadID(String threadID) { this.threadID = threadID; }
 
     public String getCitizenID() { return citizenID; }
-    public void setCitizenID(String citizenID) { this.citizenID = citizenID; }
+//    public void setCitizenID(String citizenID) { this.citizenID = citizenID; }
 
 //INSERTING INTO MESSAGE ARRAY:
     public void insertMessage(Message message) {
