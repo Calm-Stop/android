@@ -164,7 +164,7 @@
                     android:layout_weight="6"
                     android:background="@drawable/rounded_corner1"
                     android:padding="16dp"
-                    android:text="Android charting application xml ui design. Android charting application xml ui design tutorial with example. Android charting application xml ui design. Android charting application xml ui design. "
+                    android:text="Test chat UI"
                     android:textColor="#000" />
             </LinearLayout>
         </RelativeLayout>
