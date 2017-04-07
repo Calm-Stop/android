@@ -1,6 +1,7 @@
 package com.policestrategies.calm_stop.officer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -157,6 +158,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     // Validate department number
                                     if (dataSnapshot.hasChild(departmentNumber)) {
                                         if (dataSnapshot.child(departmentNumber).hasChild(Uid)) {
+                                            getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE)
+                                                    .edit().putString(getString(R.string.shared_preferences_department_number),
+                                                    departmentNumber).commit();
                                             Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                                             startActivity(i);

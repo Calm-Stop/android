@@ -2,6 +2,9 @@
     <string name="app_name">Calm Stop</string>
     <string name="app_name_officer">Calm Stop Officer</string>
 
+    <string name="shared_preferences">shared_preferences</string>
+    <string name="shared_preferences_department_number">officer_dept_number</string>
+
     <string name="auth_failed">Authentication failed</string>
 
     <string-array name = "Gender">
