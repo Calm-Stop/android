@@ -20,9 +20,6 @@
             android:name=".officer.LoginActivity" />
 
         <activity
-            android:name=".officer.SignupActivity" />
-
-        <activity
             android:name=".officer.HomepageActivity" />
 
         <activity
