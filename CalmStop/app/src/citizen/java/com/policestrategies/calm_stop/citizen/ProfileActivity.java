@@ -36,9 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
-import com.policestrategies.calm_stop.SignupVerification;
-
-import java.util.Calendar;
+import com.policestrategies.calm_stop.RegexChecks;
 
 
 /**
@@ -472,7 +470,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 //(8 fns)validEmail, validPassword, validLicense, validZip, validPhone, validFirstname, validLastname, validDateOfBirth
         //FIRST NAME CHECK
-        if (!SignupVerification.validFirstName(firstname)) {
+        if (!RegexChecks.validFirstName(firstname)) {
             mFirstNameField.setError("Please enter a valid first name.");
             mFirstNameField.requestFocus();
             return false;
@@ -480,7 +478,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             mFirstNameField.setError(null);
         }
         //LAST NAME CHECK
-        if (!SignupVerification.validLastName(lastname)) {
+        if (!RegexChecks.validLastName(lastname)) {
             mLastNameField.setError("Please enter a valid last name.");
             mLastNameField.requestFocus();
             return false;
@@ -489,7 +487,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         //EMAIL CHECK
-        if (!SignupVerification.validEmail(email)) {
+        if (!RegexChecks.validEmail(email)) {
             mEmailField.setError("Enter a valid email address.");
             mEmailField.requestFocus();
             return false;
@@ -498,7 +496,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
-        if(!SignupVerification.validLicense(licensenum)) {
+        if(!RegexChecks.validLicense(licensenum)) {
             mLicense.setError("Enter a letter followed by eight numbers\nExample: A12345678");
             mLicense.requestFocus();
             return false;
@@ -507,7 +505,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         //PHONE REGEX
-        if(!SignupVerification.validPhone(phone)) {
+        if(!RegexChecks.validPhone(phone)) {
             mPhone.setError("Invalid Phone Number.");
             mPhone.requestFocus();
             return false;
@@ -517,7 +515,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         //DATE OF BIRTH REGEX
         mDateOfBirth.clearFocus();
-        if (!SignupVerification.validDateOfBirth(i_month, i_day, getResources().getStringArray(R.array.Year).length - i_year + 1909 )){
+        if (!RegexChecks.validDateOfBirth(i_month, i_day, getResources().getStringArray(R.array.Year).length - i_year + 1909 )){
             mDateOfBirth.setError("Invalid Date of Birth");
             mDateOfBirth.requestFocus();
             return false;
@@ -527,7 +525,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         //zip gender language DOB
         //ZIP CODE REGEX
-        if (!SignupVerification.validZip(zip)){
+        if (!RegexChecks.validZip(zip)){
             mZip.setError("This field was left empty.");
             mZip.requestFocus();
             return false;

@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.policestrategies.calm_stop.BeaconSimulator;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.citizen.LoginActivity;
 
@@ -69,6 +70,11 @@ public class BeaconDetectionActivity extends AppCompatActivity {
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        if (BeaconSimulator.USE_SIMULATED_BEACONS) {
+            BeaconManager.setBeaconSimulator(new BeaconSimulator());
+            ((BeaconSimulator) BeaconManager.getBeaconSimulator()).createBasicSimulatedBeacons();
+        }
+
         enableBeaconRanging();
     }
 
@@ -86,12 +92,15 @@ public class BeaconDetectionActivity extends AppCompatActivity {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
 
+                if (collection.size() == 0) {
+                    return;
+                }
+
                 final List<String> scannedInstanceIds = new ArrayList<>();
 
                 for (Beacon beacon : collection) {
                     if (beacon.getServiceUuid() == 0xfeaa && beacon.getBeaconTypeCode() == 0x00) {
                         scannedInstanceIds.add(beacon.getId2().toString());
-                        scannedInstanceIds.add("0xffff"); // DEBUG
                     }
                 }
                 try {

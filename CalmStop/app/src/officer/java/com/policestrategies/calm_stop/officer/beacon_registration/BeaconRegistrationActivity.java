@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.policestrategies.calm_stop.BeaconSimulator;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.officer.LoginActivity;
 
@@ -73,6 +74,11 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(null);
         mBeaconManager.bind(this);
+
+        if (BeaconSimulator.USE_SIMULATED_BEACONS) {
+            BeaconManager.setBeaconSimulator(new BeaconSimulator());
+            ((BeaconSimulator) BeaconManager.getBeaconSimulator()).createBasicSimulatedBeacons();
+        }
 
     } // end onCreate
 
@@ -136,6 +142,10 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         mBeaconManager.addRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> collection, final Region region) {
+
+                if (collection.size() == 0) {
+                    return;
+                }
 
                 final List<BeaconObject> scannedBeacons = new ArrayList<>();
 
