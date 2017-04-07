@@ -1,6 +1,5 @@
 package com.policestrategies.calm_stop.citizen;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,9 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,8 +30,7 @@ import com.policestrategies.calm_stop.R;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    // References to the EditText (text fields) in activity_login.xml
-    private static EditText  mEmailField;
+    private static EditText mEmailField;
     private EditText mPasswordField;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -54,6 +50,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // hide the titlebar
         getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
@@ -64,11 +61,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
 
-        // START initialize_auth so you can track when user signs in and signs out
         mAuth = FirebaseAuth.getInstance();
-        // END initialize_auth
 
-        // START auth_state_listener
+        // TODO: Is this necessary?
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -83,18 +78,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // ...
             }
         };
-        // END auth_state_listener
 
     }
 
-    // START on_start_add_listener
     @Override
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
     }
 
-    // Remove FirebaseAuth instance on onStop()
     @Override
     public void onStop() {
         super.onStop();
@@ -134,7 +126,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -175,16 +166,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 }
                             });
                         }
-
                     }
                 });
-        // [END sign_in_with_email]
-        //you signed up, CONGRATS
-
-
     }
-
-
 
     /**
      * Validates the given email and password. Does not connect to server, simply ensures that
@@ -212,18 +196,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         return true;
-    }
-
-    public static String getEmail(){
-        String emailInput = mEmailField.getText().toString();
-
-        //parse. Don't care about email after @....
-        String delimiter = "@";
-        //split into 2 after @
-        String[] token = emailInput.split(delimiter);
-        //first part
-        emailInput = token[0];
-        return emailInput;
     }
 
 } // end class LoginActivity

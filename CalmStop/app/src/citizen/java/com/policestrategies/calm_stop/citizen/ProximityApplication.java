@@ -46,7 +46,7 @@ public class ProximityApplication extends Application implements BootstrapNotifi
         mBeaconManager.setBackgroundScanPeriod(1100l);
         // set the time between each scan to be 1 minute (60 seconds)
         mBeaconManager.setBackgroundBetweenScanPeriod(5000);
-        mBeaconManager.setDebug(true);
+        //mBeaconManager.setDebug(true);
 
 
         try {
