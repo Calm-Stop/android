@@ -121,6 +121,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void logout() {
+
+        // Clear department number
+        getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE)
+                .edit().putString(getString(R.string.shared_preferences_department_number),
+                "").commit();
+
         FirebaseAuth.getInstance().signOut();
         Intent i = new Intent(getBaseContext(), LoginActivity.class);
         startActivity(i);

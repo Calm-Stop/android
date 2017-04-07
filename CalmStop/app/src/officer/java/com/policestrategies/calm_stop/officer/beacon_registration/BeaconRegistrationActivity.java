@@ -44,6 +44,8 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
     private RecyclerView mRecyclerView;
     private String mUid;
 
+    private String mDepartmentNumber;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,11 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
-        if (mAuth.getCurrentUser() != null) {
+        mDepartmentNumber = getSharedPreferences(getString(R.string.shared_preferences),
+                MODE_PRIVATE).getString(getString(R.string.shared_preferences_department_number),
+                "");
+
+        if (mAuth.getCurrentUser() != null && !mDepartmentNumber.isEmpty()) {
             mUid = mAuth.getCurrentUser().getUid();
         } else {
             mAuth.signOut();
@@ -130,7 +136,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         DatabaseReference officerDatabaseReference = mDatabase.child("beacons")
                 .child(beaconInstanceId[beaconInstanceId.length - 1]).child("officer").getRef();
 
-        officerDatabaseReference.child("department").setValue("14566");
+        officerDatabaseReference.child("department").setValue(mDepartmentNumber);
         officerDatabaseReference.child("uid").setValue(mUid);
         finish(); // TODO: Validate success?
     }
