@@ -22,9 +22,6 @@
             android:name=".citizen.LoginActivity" />
 
         <activity
-            android:name=".citizen.SignupActivity" />
-
-        <activity
             android:name=".citizen.DocumentsActivity" />
 
         <activity

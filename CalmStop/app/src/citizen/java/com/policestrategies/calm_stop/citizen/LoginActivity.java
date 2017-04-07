@@ -149,9 +149,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(LoginActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                             Toast.makeText(LoginActivity.this, "Validation failed.", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(getBaseContext(), SignupActivity.class);
-                            startActivity(i);
-                            finish();
                         }
                         if (task.isSuccessful()) {
 
