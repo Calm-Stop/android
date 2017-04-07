@@ -48,10 +48,10 @@
         <!-- Department Label -->
 
         <EditText
-            android:id="@+id/input_department"
+            android:id="@+id/input_department_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
+            android:inputType="numberSigned"
             android:hint="Department Number"/>
 
         <!-- Badge Label -->
@@ -60,64 +60,10 @@
             android:id="@+id/input_badge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
+            android:inputType="numberSigned"
             android:hint="Badge Number"/>
 
-        <!--  Driver's License Label -->
-        <EditText
-            android:id="@+id/input_licenseNum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Driver's License Number" />
-
-        <!--  Phone Label -->
-        <EditText
-            android:id="@+id/input_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Phone Number" />
-
-        <!--  ZIP CODE Label -->
-        <EditText
-            android:id="@+id/input_zip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="ZIP Code" />
-
         <!-- SPINNER -->
-
-        <TextView
-            android:text = "Date Of Birth:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/dateOfBirth"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:textSize="16sp"
-            android:textColor="@android:color/background_dark" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/monthSetter"
-            android:background="@android:color/background_light" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/daySetter"
-            android:background="@android:color/background_light" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/yearSetter"
-            android:background="@android:color/background_light" />
-
-
         <TextView
             android:text="Gender:"
             android:layout_width="match_parent"
@@ -139,60 +85,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/genderSetter"
             android:background="@android:color/background_light" />
-
-        <TextView
-            android:text="Preferred Language:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/gender"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="20dp"
-
-            android:id="@+id/language"
-            android:layout_alignRight="@+id/gender"
-            android:layout_alignEnd="@+id/gender"
-            android:fontFamily="monospace"
-            android:typeface="monospace"
-            android:textSize="16sp"
-            android:textColor="@android:color/background_dark" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/langSetter"
-            android:background="@android:color/background_light" />
-
-        <TextView
-            android:text="Ethnicity:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/language"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="20dp"
-
-            android:id="@+id/ethnicity"
-            android:layout_alignRight="@+id/language"
-            android:layout_alignEnd="@+id/language"
-            android:fontFamily="monospace"
-            android:typeface="monospace"
-            android:textSize="16sp"
-            android:textColor="@android:color/background_dark" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ethnicitySetter"
-            android:background="@android:color/background_light" />
-
-        <!-- END SPINNER -->
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"></android.support.design.widget.TextInputLayout>
 
 
         <!-- Signup Button -->
