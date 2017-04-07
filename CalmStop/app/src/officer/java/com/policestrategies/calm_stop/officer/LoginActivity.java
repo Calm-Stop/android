@@ -30,8 +30,8 @@ import com.policestrategies.calm_stop.R;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    // References to the EditText (text fields) in activity_login.xml
-    private static EditText mEmailField;
+    private EditText mDepartmentField;
+    private EditText mEmailField;
     private EditText mPasswordField;
 
     private FirebaseAuth mAuth;
@@ -54,8 +54,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
 
-        mEmailField = (EditText) findViewById(R.id.input_email);
-        mPasswordField = (EditText) findViewById(R.id.input_password);
+        mDepartmentField = (EditText) findViewById(R.id.login_input_department);
+        mEmailField = (EditText) findViewById(R.id.login_input_email);
+        mPasswordField = (EditText) findViewById(R.id.login_input_password);
 
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
@@ -109,7 +110,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch(v.getId()) {
 
             case R.id.button_login: // The login button was pressed - let's run the login function
-                login(mEmailField.getText().toString(), mPasswordField.getText().toString());
+                login(mDepartmentField.getText().toString(), mEmailField.getText().toString(),
+                        mPasswordField.getText().toString());
                 break;
 
             case R.id.button_signup: // Signup was pressed, begin the SignupActivity
@@ -123,14 +125,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     /**
      * Begins the login process. Validates the input and - if input is valid - attempts to log in.
      */
-    private void login(String email, String password) {
-        Log.d(TAG, "signIn" + email);
+    private void login(final String departmentNumber, String email, String password) {
+        Log.d(TAG, "Signing in with email: " + email);
         if (!validateInput()) {
             Toast.makeText(LoginActivity.this, "Validation Failed", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -153,33 +153,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             acctypeRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.hasChild(Uid)) {
-                                        Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
-                                        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
-                                        startActivity(i);
+
+                                    // Validate department number
+                                    if (dataSnapshot.hasChild(departmentNumber)) {
+                                        if (dataSnapshot.child(departmentNumber).hasChild(Uid)) {
+                                            Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
+                                            Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+                                            startActivity(i);
+                                        } else {
+                                            FirebaseAuth.getInstance().signOut();
+                                            Toast.makeText(LoginActivity.this, "This is not an officer account.", Toast.LENGTH_SHORT).show();
+                                        }
+
                                     } else {
                                         FirebaseAuth.getInstance().signOut();
-                                        Toast.makeText(LoginActivity.this, "This is not an officer account.", Toast.LENGTH_SHORT).show();
-                                        Intent i = new Intent(getBaseContext(), LoginActivity.class);
-                                        startActivity(i);
+                                        mDepartmentField.setError("Invalid department number");
+                                        mDepartmentField.requestFocus();
                                     }
                                 }
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
-                                    //TODO Empty Stud
                                 }
                             });
                         }
-
                     }
                 });
-        // [END sign_in_with_email]
-
-
     }
-
-
 
     /**
      * Validates the given email and password. Does not connect to server, simply ensures that
@@ -187,8 +187,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * @return true if the email and password are correctly formed
      */
     private boolean validateInput() {
+        String departmentInput = mDepartmentField.getText().toString();
         String emailInput = mEmailField.getText().toString();
         String passwordInput = mPasswordField.getText().toString();
+
+        if (departmentInput.isEmpty()) {
+            mDepartmentField.setError("Please enter your department number");
+            mDepartmentField.requestFocus();
+            return false;
+        } else {
+            mPasswordField.setError(null);
+        }
+
 
         if (emailInput.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
             mEmailField.setError("Please enter a valid email address");
@@ -207,18 +217,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         return true;
-    }
-
-    public static String getEmail(){
-        String emailInput = mEmailField.getText().toString();
-
-        //parse. Don't care about email after @....
-        String delimiter = "@";
-        //split into 2 after @
-        String[] token = emailInput.split(delimiter);
-        //first part
-        emailInput = token[0];
-        return emailInput;
     }
 
 } // end class LoginActivity
