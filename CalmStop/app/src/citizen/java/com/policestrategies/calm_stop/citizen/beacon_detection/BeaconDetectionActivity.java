@@ -142,6 +142,10 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                     String officerLastName;
                     String officerDepartmentNumber;
 
+                    if(!dataSnapshot.child("beacons").hasChild(instance)) {
+                        continue;
+                    }
+
                     // Look up the beacon and obtain officerUid and department number
                     officerUid = dataSnapshot.child("beacons").child(instance)
                             .child("officer").child("uid").getValue().toString();
