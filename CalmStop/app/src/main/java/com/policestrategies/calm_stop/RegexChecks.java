@@ -1,6 +1,5 @@
 package com.policestrategies.calm_stop;
 
-import android.util.Log;
 import android.util.Patterns;
 
 /**
@@ -97,11 +96,12 @@ public class RegexChecks {
                 return false;
             }
             //MONTHS with 31 days
-            if ((I_month == 1 || I_month == 3 || I_month == 5 || I_month == 7 || I_month == 8 || I_month == 10 || I_month == 12)
-                    && (I_day < 32)) {
+            if ((I_month == 1 || I_month == 3 || I_month == 5 || I_month == 7 || I_month == 8
+                    || I_month == 10 || I_month == 12) && (I_day < 32)) {
                 return true;
                 //MONTHS WITH 30 DAYS
-            } else if ((I_month == 4 || I_month == 6 || I_month == 9 || I_month == 11) && (I_day < 31)) {
+            } else if ((I_month == 4 || I_month == 6 || I_month == 9 || I_month == 11)
+                    && (I_day < 31)) {
                 return true;
             } else {
                 return false;
@@ -109,39 +109,4 @@ public class RegexChecks {
         }
     }
 
-    public static boolean validDateOfBirth(String S_month, String S_day, String S_year) {
-        int I_day = Integer.parseInt(S_day);
-        int I_month = Integer.parseInt(S_month);
-        int I_year = Integer.parseInt(S_year);
-        if ((I_day > 31) || (I_month > 12) || (I_year < 1930) || (I_year > 2001)) {
-            return false;
-        } else {
-            //FEBRUARY
-            if (I_month == 2) {
-                //LEAPYEAR FEBRUARY
-                if ((I_year % 4) == 0) {
-                    if (I_day < 30 && I_day > 0) {
-                        return true;
-                    }
-                } else {
-                    //NOT LEAPYEAR FEBRUARY
-                    if (I_day < 29 && I_day > 0) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            //MONTHS with 31 days
-            if ((I_month == 1 || I_month == 3 || I_month == 5 || I_month == 7 || I_month == 8 || I_month == 10 || I_month == 12)
-                    && (I_day < 32 || I_day > 0)) {
-                return true;
-                //MONTHS WITH 30 DAYS
-            } else if ((I_month == 4 || I_month == 6 || I_month == 9 || I_month == 11) && (I_day < 31 || I_day > 0)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
-} // end ass RegexChecks
+} // end class RegexChecks
