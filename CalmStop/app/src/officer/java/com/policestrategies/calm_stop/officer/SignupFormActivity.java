@@ -53,12 +53,12 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signupform);
 
-        mEmailField = (EditText) findViewById(R.id.input_email);
-        mPasswordField = (EditText) findViewById(R.id.input_password);
-        mFirstNameField = (EditText) findViewById(R.id.input_firstname);
-        mLastNameField = (EditText) findViewById(R.id.input_lastname);
-        mDepartmentField = (EditText) findViewById(R.id.input_department_number);
-        mBadgeField = (EditText) findViewById(R.id.input_badge);
+        mEmailField = (EditText) findViewById(R.id.signup_input_email);
+        mPasswordField = (EditText) findViewById(R.id.signup_input_password);
+        mFirstNameField = (EditText) findViewById(R.id.signup_input_firstname);
+        mLastNameField = (EditText) findViewById(R.id.signup_input_lastname);
+        mDepartmentField = (EditText) findViewById(R.id.signup_input_department_number);
+        mBadgeField = (EditText) findViewById(R.id.signup_input_badge_number);
 
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
 

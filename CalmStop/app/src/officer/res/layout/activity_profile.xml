@@ -44,8 +44,8 @@
                     android:id="@+id/profile_input_firstname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="First Name: "
-                    android:inputType="text"
+                    android:hint="First Name"
+                    android:inputType="textCapWords"
                     android:textColor="@android:color/black"
                     android:textColorLink="@android:color/black" />
             </android.support.design.widget.TextInputLayout>
@@ -62,7 +62,7 @@
                     android:id="@+id/profile_input_lastname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Last Name: "
+                    android:hint="Last Name"
                     android:inputType="text"
                     android:textColor="@android:color/black"
                     android:textColorLink="@android:color/black" />
@@ -80,7 +80,7 @@
                     android:id="@+id/profile_input_badge_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Badge Number: "
+                    android:hint="Badge Number"
                     android:inputType="numberSigned"
                     android:textColor="@android:color/black"
                     android:textColorLink="@android:color/black" />
@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:fontFamily="monospace"
-                android:text="Gender:"
+                android:text="Gender"
                 android:textColor="@android:color/background_dark"
                 android:textSize="16sp"
                 android:typeface="monospace" />
