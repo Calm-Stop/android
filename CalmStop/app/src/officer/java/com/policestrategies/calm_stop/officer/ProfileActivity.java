@@ -33,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.RegexChecks;
+import com.policestrategies.calm_stop.SharedUtil;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
     private Spinner genderSetter;
@@ -115,7 +116,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 mEmailField.setText(email);
                 genderSetter.setSelection(gender);
 
-                Utility.dismissProgressDialog(mProgressDialog);
+                SharedUtil.dismissProgressDialog(mProgressDialog);
             }
 
             @Override

@@ -1,6 +1,5 @@
 package com.policestrategies.calm_stop.officer;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 
 import com.policestrategies.calm_stop.R;
@@ -16,10 +15,4 @@ public class Utility {
                 .getString(ctx.getString(R.string.shared_preferences_department_number), "");
     }
 
-    public static void dismissProgressDialog(ProgressDialog progressDialog) {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-    }
-
-}
+} // end class Utility
