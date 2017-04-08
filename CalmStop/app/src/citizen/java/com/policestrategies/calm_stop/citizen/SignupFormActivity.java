@@ -79,13 +79,13 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         setUpDaySetter();
         setUpYearSetter();
 
-        mEmailField = (EditText) findViewById(R.id.input_email);
-        mPasswordField = (EditText) findViewById(R.id.input_password);
-        mLicense = (EditText) findViewById(R.id.input_licenseNum);
-        mFirstNameField = (EditText) findViewById(R.id.input_firstname);
-        mLastNameField = (EditText) findViewById(R.id.input_lastname);
+        mEmailField = (EditText) findViewById(R.id.signup_input_email);
+        mPasswordField = (EditText) findViewById(R.id.signup_input_password);
+        mLicense = (EditText) findViewById(R.id.signup_input_license_number);
+        mFirstNameField = (EditText) findViewById(R.id.signup_input_firstname);
+        mLastNameField = (EditText) findViewById(R.id.signup_input_lastname);
         mPhone = (EditText) findViewById(R.id.input_phone);
-        mZip = (EditText) findViewById(R.id.input_zip);
+        mZip = (EditText) findViewById(R.id.signup_input_zipcode);
         mDateOfBirth = (TextView) findViewById(R.id.text_dateOfBirth);
 
         findViewById(R.id.button_login).setOnClickListener(this);
@@ -415,35 +415,5 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-
-
-    /*
-     *  local private class
-     *  Citizen is used to store data that is dumped into firebase on account creation here
-     */
-/*    private class Citizen {
-        String email, password, licensenum,
-                firstname, lastname, phone, address, gender, language, dateofbirth;
-
-        public Citizen(String email, String password, String licenseNum, String firstname,
-                       String lastname, String phone, String address, String gender, String language,
-                       String dateofbirth) {
-            this.email = email;
-            this.password = password;
-            this.licensenum = licenseNum;
-            this.firstname = firstname;
-            this.lastname = lastname;
-            this.phone = phone;
-            this.address = address;
-            this.gender = gender;
-            this.language = language;
-            this.dateofbirth = dateofbirth;
-        }
-
-        public Citizen(final String email, final String password) {
-            this.email = email;
-            this.password = password;
-        }
-    }*/
 } // end class SignupActivity
 

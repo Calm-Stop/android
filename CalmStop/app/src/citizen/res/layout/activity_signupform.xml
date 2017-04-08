@@ -13,45 +13,96 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
-        <!--  fName Label -->
-        <EditText
-            android:id="@+id/input_firstname"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapWords"
-            android:hint="First Name" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:textColorHint="@android:color/black">
 
-        <!--  lName Label -->
-        <EditText
-            android:id="@+id/input_lastname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textCapWords"
-            android:hint="Last Name" />
+            <EditText
+                android:id="@+id/signup_input_firstname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="First Name: "
+                android:inputType="textCapWords"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/black" />
+        </android.support.design.widget.TextInputLayout>
 
-        <!--  Email Label -->
-        <EditText
-            android:id="@+id/input_email"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="Email" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:textColorHint="@android:color/black">
 
-        <!--  Password Label -->
-        <EditText
-            android:id="@+id/input_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="Password" />
+            <EditText
+                android:id="@+id/signup_input_lastname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Last Name: "
+                android:inputType="textCapWords"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/black" />
+        </android.support.design.widget.TextInputLayout>
 
-        <!--  Driver's License Label -->
-        <EditText
-            android:id="@+id/input_licenseNum"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Driver's License Number" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:textColorHint="@android:color/black">
+
+            <EditText
+                android:id="@+id/signup_input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email Address"
+                android:inputType="textEmailAddress"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/black" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:textColorHint="@android:color/black">
+
+            <EditText
+                android:id="@+id/signup_input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/black" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:textColorHint="@android:color/black">
+
+            <EditText
+                android:id="@+id/signup_input_license_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Driver's License Number"
+                android:inputType="text"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/black" />
+        </android.support.design.widget.TextInputLayout>
+
 
         <!--  Phone Label -->
         <EditText
@@ -61,13 +112,23 @@
             android:inputType="text"
             android:hint="Phone Number" />
 
-        <!--  Zip Code Label -->
-        <EditText
-            android:id="@+id/input_zip"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Zip Code" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:textColorHint="@android:color/black">
+
+            <EditText
+                android:id="@+id/signup_input_zipcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Zip Code"
+                android:inputType="numberSigned"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/black" />
+        </android.support.design.widget.TextInputLayout>
 
 <!-- SPINNER -->
 
