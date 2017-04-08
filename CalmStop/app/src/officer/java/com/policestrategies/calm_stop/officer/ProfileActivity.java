@@ -1,5 +1,6 @@
 package com.policestrategies.calm_stop.officer;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,7 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,49 +40,36 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private EditText mLastNameField;
     private EditText mEmailField;
 
-    private String mDepartmentNumber;
-
-    private EditText mDepartmentNum;
     private EditText mBadgeNum;
     private ImageView mphoto;
+
+    private DatabaseReference profileReference;
 
     private static final int chosenImage = 1;
 
     private int i_gender;
-
-    private String FName;
-    private String LName;
-    private String Email;
-
-    private String Department;
-    private String Badge;
-
     private Uri Photo;
     private String officerUid;
 
-    private FirebaseUser user;
-    private DatabaseReference mDatabase;
-    private DatabaseReference profileRef;
+    private FirebaseUser mCurrentUser;
 
     private String valueEmail;
     private String valuePassword;
 
-    private static final String TAG = "Profile Edit";
+    private static final String TAG = "ProfileActivity";
+
+    private ProgressDialog mProgressDialog;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        mDepartmentNumber = getSharedPreferences(getString(R.string.shared_preferences),
-                MODE_PRIVATE).getString(getString(R.string.shared_preferences_department_number),
-                "");
+        mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
 
-        //mFname, mLname, memail, mDOB, mphoneNum, mLicense, mZip, mLanguage, mphoto
-        mFirstNameField = (EditText)findViewById(R.id.editFirstName);
-        mLastNameField = (EditText)findViewById(R.id.editLastName);
-        mEmailField = (EditText)findViewById(R.id.editEmail);
-        mDepartmentNum = (EditText)findViewById(R.id.editdepartnum);
-        mBadgeNum = (EditText)findViewById(R.id.editBadgenum);
+        mFirstNameField = (EditText)findViewById(R.id.profile_input_firstname);
+        mLastNameField = (EditText)findViewById(R.id.profile_input_lastname);
+        mEmailField = (EditText)findViewById(R.id.profile_input_email);
+        mBadgeNum = (EditText)findViewById(R.id.profile_input_badge_number);
 
         mphoto = (ImageView)findViewById(R.id.profilePicture);
         mphoto.setOnClickListener(this);
@@ -94,37 +81,41 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         setUpGenderSetter();
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user == null) {
+        if (mCurrentUser == null) {
             officerUid = "";
-        }
-        else{
-            officerUid = user.getUid();
+        } else {
+            officerUid = mCurrentUser.getUid();
         }
 
-        mDatabase = FirebaseDatabase.getInstance().getReference("officer");
-        profileRef = mDatabase.child(mDepartmentNumber).child(officerUid).child("profile");
+        profileReference = FirebaseDatabase.getInstance().getReference("officer")
+                .child(Utility.getCurrentDepartmentNumber(this)).child(officerUid).child("profile");
 
-        Photo = user.getPhotoUrl();
+        Photo = mCurrentUser.getPhotoUrl();
 
         if(Photo == null) {
             //mphoto.setImageURI();
-        }else {
+        } else {
             mphoto.setImageURI(Photo);
         }
 
-        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        profileReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                //NEED TO ADD BADGE NUMBER
-                Email = snapshot.child("email").getValue().toString();
-                FName = snapshot.child("first_name").getValue().toString();
-                LName = snapshot.child("last_name").getValue().toString();
-                Department = snapshot.child("department").getValue().toString();
-                Badge = snapshot.child("badge").getValue().toString();
-                i_gender = Integer.parseInt(snapshot.child("gender").getValue().toString());
-                setEverything();
+                String email = snapshot.child("email").getValue().toString();
+                String firstName = snapshot.child("first_name").getValue().toString();
+                String lastName = snapshot.child("last_name").getValue().toString();
+                String badgeNumber = snapshot.child("badge").getValue().toString();
+                int gender = Integer.parseInt(snapshot.child("gender").getValue().toString());
+
+                mFirstNameField.setText(firstName);
+                mLastNameField.setText(lastName);
+                mBadgeNum.setText(badgeNumber);
+                mEmailField.setText(email);
+                genderSetter.setSelection(gender);
+
+                Utility.dismissProgressDialog(mProgressDialog);
             }
 
             @Override
@@ -145,24 +136,22 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             case R.id.savebutton:
 
-                FName = mFirstNameField.getText().toString();
-                LName = mLastNameField.getText().toString();
-                Email = mEmailField.getText().toString();
-                Department = mDepartmentNum.getText().toString();
-                Badge = mBadgeNum.getText().toString();
+                String firstName = mFirstNameField.getText().toString();
+                String lastName = mLastNameField.getText().toString();
+                String email = mEmailField.getText().toString();
+                String badgeNumber = mBadgeNum.getText().toString();
 
-                if (!validateInput(FName, LName, Department, Badge, Email)) return;
-                //WRITE TO FIREBASE
-                updateFName();
-                updateLName();
+                if (!validateInput(firstName, lastName, email, badgeNumber)) {
+                    return;
+                }
+
+                updateFName(firstName);
+                updateLName(lastName);
                 updatePhoto();
-                updateEmail();
-                updateGender();
-                updateDepartment();
-                updateBadge();
-                updateDOB();
+                updateEmail(email);
+                updateGender(i_gender);
+                updateBadge(badgeNumber);
 
-                recreate();
                 break;
 
             case R.id.profilePicture:
@@ -208,17 +197,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-
-    private void setEverything() {
-
-        mFirstNameField.setText(FName);
-        mLastNameField.setText(LName);
-        mDepartmentNum.setText(Department);
-        mBadgeNum.setText(Badge);
-        mEmailField.setText(Email);
-        genderSetter.setSelection(i_gender);
-    }
-
     private void authentication() {
         AlertDialog.Builder authen = new AlertDialog.Builder(this);
         authen.setTitle("Reauthentication");
@@ -249,9 +227,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         authen.show();
     }
     //mFname, mLname, memail, mDOB, mphoneNum, mLicense, mZip, mLanguage, mphoto
-    private void updateEmail() {
-        profileRef.child("email").setValue(Email);
-        user.updateEmail(Email)
+    private void updateEmail(String email) {
+        profileReference.child("email").setValue(email);
+        mCurrentUser.updateEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -268,7 +246,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                                 AuthCredential credential = EmailAuthProvider
                                         .getCredential(valueEmail, valuePassword );
-                                user.reauthenticate(credential)
+                                mCurrentUser.reauthenticate(credential)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
@@ -286,12 +264,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     private void updatePhoto() {
-        profileRef.child("photo").setValue(Photo);
+        profileReference.child("photo").setValue(Photo);
         UserProfileChangeRequest updatePhoto = new UserProfileChangeRequest.Builder()
                 .setPhotoUri(Photo)
                 .build();
 
-        user.updateProfile(updatePhoto)
+        mCurrentUser.updateProfile(updatePhoto)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -306,15 +284,21 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    private void updateFName() { profileRef.child("first_name").setValue(FName); }
-    private void updateLName() { profileRef.child("last_name").setValue(LName); }
-    private void updateDepartment() { profileRef.child("department").setValue(Department); }
-    private void updateBadge() { profileRef.child("badge").setValue(Badge); }
-    private void updateDOB() {
+    private void updateFName(String firstName) {
+        profileReference.child("first_name").setValue(firstName);
     }
-    private void updateGender() { profileRef.child("gender").setValue(i_gender); }
 
+    private void updateLName(String lastName) {
+        profileReference.child("last_name").setValue(lastName);
+    }
 
+    private void updateBadge(String badgeNumber) {
+        profileReference.child("badge").setValue(badgeNumber);
+    }
+
+    private void updateGender(int gender) {
+        profileReference.child("gender").setValue(gender);
+    }
 
 
     private void toHomepage() {
@@ -322,10 +306,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         startActivity(i);
     }
 
-    private boolean validateInput(String firstname, String lastname, String department, String badge, String email
-                                  ) {
+    private boolean validateInput(String firstname, String lastname, String email, String badge) {
 
-//FName, LName, Department, Badge, Email, PhoneNumber, ZIP, License, DOB
         //FIRST NAME CHECK
         if (!RegexChecks.validFirstName(firstname)) {
             mFirstNameField.setError("Please enter a valid first name.");
@@ -334,6 +316,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         } else {
             mFirstNameField.setError(null);
         }
+
         //LAST NAME CHECK
         if (!RegexChecks.validLastName(lastname)) {
             mLastNameField.setError("Please enter a valid last name.");
@@ -341,15 +324,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             return false;
         } else {
             mLastNameField.setError(null);
-        }
-
-        //DEPARTMENT CHECK
-        if (!RegexChecks.validDepartment(department)) {
-            mDepartmentNum.setError("Enter your Department Number.");
-            mDepartmentNum.requestFocus();
-            return false;
-        } else {
-            mDepartmentNum.setError(null);
         }
 
         //BADGE NUMBER CHECK
@@ -372,4 +346,5 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         return true;
     }
+
 } // end ProfileActivity
