@@ -1,5 +1,6 @@
 package com.policestrategies.calm_stop.citizen;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,6 +25,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.RegexChecks;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 /**
  * Allows the user to sign up or return to the log in page.
  */
@@ -31,34 +37,25 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private Spinner genderSetter;
     private Spinner langSetter;
     private Spinner ethnicitySetter;
-    private Spinner daySetter;
-    private Spinner monthSetter;
-    private Spinner yearSetter;
-    private int i_gender, i_language, i_ethnicity, i_day, i_month, i_year;
+    private int i_gender, i_language, i_ethnicity;
 
     private EditText mFirstNameField;
     private EditText mLastNameField;
-    private static EditText mEmailField;
+    private EditText mEmailField;
     private EditText mPasswordField;
-    private EditText mLicense;
-    private TextView mDateOfBirth;
-    private EditText mPhone;
-    private EditText mZip;
+    private EditText mDateOfBirthField;
+    private EditText mLicenseField;
+    private EditText mPhoneNumberField;
+    private EditText mZipField;
 
     private static final String TAG = "Signup";
 
-    // [START declare_auth]
     private FirebaseAuth mAuth;
-    // [END declare_auth]
 
-    // [START declare_auth_listener]
     private FirebaseAuth.AuthStateListener mAuthListener;
-    // [END declare_auth_listener]
 
-    // [START declare databaseRef & database]
     private DatabaseReference databaseRef;
     private FirebaseDatabase database;
-    // [END declare databaseRef & database]
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,29 +65,24 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         langSetter = (Spinner) findViewById(R.id.langSetter);
         ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
-        monthSetter = (Spinner) findViewById(R.id.monthSetter);
-        daySetter = (Spinner) findViewById(R.id.daySetter);
-        yearSetter = (Spinner) findViewById(R.id.yearSetter);
 
         setUpGenderSetter();
         setUpLangSetter();
         setUpEthnicitySetter();
-        setUpMonthSetter();
-        setUpDaySetter();
-        setUpYearSetter();
 
         mEmailField = (EditText) findViewById(R.id.signup_input_email);
         mPasswordField = (EditText) findViewById(R.id.signup_input_password);
-        mLicense = (EditText) findViewById(R.id.signup_input_license_number);
+        mLicenseField = (EditText) findViewById(R.id.signup_input_license_number);
         mFirstNameField = (EditText) findViewById(R.id.signup_input_firstname);
         mLastNameField = (EditText) findViewById(R.id.signup_input_lastname);
-        mPhone = (EditText) findViewById(R.id.input_phone);
-        mZip = (EditText) findViewById(R.id.signup_input_zipcode);
-        mDateOfBirth = (TextView) findViewById(R.id.text_dateOfBirth);
+        mPhoneNumberField = (EditText) findViewById(R.id.input_phone);
+        mZipField = (EditText) findViewById(R.id.signup_input_zipcode);
+        mDateOfBirthField = (EditText) findViewById(R.id.signup_input_dob);
 
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
 
+        setUpCalendar();
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference();
         // START initialize_auth so you can track when user signs in and signs out
@@ -157,15 +149,16 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private void signup() {
         final String email = mEmailField.getText().toString();
         final String password = mPasswordField.getText().toString();
-        final String licensenum = mLicense.getText().toString();
+        final String licensenum = mLicenseField.getText().toString();
         final String firstname = mFirstNameField.getText().toString();
         final String lastname = mLastNameField.getText().toString();
-        final String phone = mPhone.getText().toString();
-        final String zip = mZip.getText().toString();
+        final String phone = mPhoneNumberField.getText().toString();
+        final String zip = mZipField.getText().toString();
+        final String dateOfBirth = mDateOfBirthField.getText().toString();
 
         Log.d(TAG, "createAccount:" + email);
 
-        if (!validateInput(email, password, licensenum, firstname, lastname, phone, zip)) {
+        if (!validateInput(email, password, licensenum, firstname, lastname, phone, zip, dateOfBirth)) {
             return;
         }
 
@@ -199,9 +192,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             citizenDatabaseRef.child("gender").setValue(i_gender);
                             citizenDatabaseRef.child("language").setValue(i_language);
                             citizenDatabaseRef.child("ethnicity").setValue(i_ethnicity);
-                            citizenDatabaseRef.child("month").setValue(i_month);
-                            citizenDatabaseRef.child("day").setValue(i_day);
-                            citizenDatabaseRef.child("year").setValue(i_year);
+                            citizenDatabaseRef.child("dob").setValue(dateOfBirth);
 
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
@@ -210,14 +201,10 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
                     }
                 });
-        // [END create_user_with_email]
-        //you signed up, CONGRATS
-
-
     }
 
     private boolean validateInput(String email, String password, String licensenum, String firstname,
-                                  String lastname, String phone, String zip) {
+                                  String lastname, String phone, String zip, String dateOfBirth) {
 
         //FIRST NAME CHECK
         if (!RegexChecks.validFirstName(firstname)) {
@@ -257,54 +244,39 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         //DRIVER'S LICENSE REGEX (CALIFORNIA FORMAT)
 
         if(!RegexChecks.validLicense(licensenum)) {
-            mLicense.setError("Enter a letter followed by eight numbers\nExample: A12345678");
-            mLicense.requestFocus();
+            mLicenseField.setError("Enter a letter followed by eight numbers\nExample: A12345678");
+            mLicenseField.requestFocus();
             return false;
         } else {
-            mLicense.setError(null);
+            mLicenseField.setError(null);
         }
 
         //PHONE REGEX
         if(!RegexChecks.validPhone(phone)) {
-            mPhone.setError("Invalid Phone Number.");
-            mPhone.requestFocus();
+            mPhoneNumberField.setError("Invalid Phone Number.");
+            mPhoneNumberField.requestFocus();
             return false;
         } else {
-            mPhone.setError(null);
+            mPhoneNumberField.setError(null);
         }
 
         //ZIP CODE REGEX
         if (!RegexChecks.validZip(zip)){
-            mZip.setError("Example: 95064");
-            mZip.requestFocus();
+            mZipField.setError("Example: 95064");
+            mZipField.requestFocus();
             return false;
         } else {
-            mZip.setError(null);
+            mZipField.setError(null);
         }
 
-        //DATE OF BIRTH REGEX;
-        mDateOfBirth.clearFocus();
-        if (!RegexChecks.validDateOfBirth(i_month, i_day, getResources().getStringArray(R.array.Year).length + 1909 - i_year)){
-            mDateOfBirth.setError("Invald Date of Birth");
-            mDateOfBirth.requestFocus();
+        if (!RegexChecks.validDateOfBirth(dateOfBirth)) {
+            mDateOfBirthField.performClick();
+            Toast.makeText(SignupFormActivity.this, "Please enter your date of birth",
+                    Toast.LENGTH_SHORT).show();
             return false;
-        } else {
-            mDateOfBirth.setError(null);
         }
 
         return true;
-    }
-
-    public static String getEmail(){
-        String emailInput = mEmailField.getText().toString();
-
-        //parse. Don't care about email after @....
-        String delimiter = "@";
-        //split into 2 after @
-        String[] token = emailInput.split(delimiter);
-        //first part
-        emailInput = token[0];
-        return emailInput;
     }
 
     private void setUpGenderSetter() {
@@ -346,7 +318,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-
     private void setUpLangSetter() {
 
         final ArrayAdapter<CharSequence> langAdapter = ArrayAdapter.createFromResource(this,
@@ -366,53 +337,37 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-    private void setUpMonthSetter() {
-        final ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Month, android.R.layout.simple_spinner_dropdown_item);
-        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        monthSetter.setAdapter(monthAdapter);
-        monthSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void setUpCalendar() {
+        final Calendar calendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                i_month = position;
-            }
-            public void onNothingSelected(AdapterView<?> arg0) {
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
                 // TODO Auto-generated method stub
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                String myFormat = "MM/dd/yy"; //In which you need put here
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                mDateOfBirthField.setText(sdf.format(calendar.getTime()));
+
+            }
+
+        };
+
+        mDateOfBirthField.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(SignupFormActivity.this, date, calendar
+                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-    }
 
-    private void setUpDaySetter() {
-        final ArrayAdapter<CharSequence> dayAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Day_31, android.R.layout.simple_spinner_dropdown_item);
-        dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        daySetter.setAdapter(dayAdapter);
-        daySetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                i_day = position;
-            }
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-            }
-        });
-
-    }
-
-    private void setUpYearSetter() {
-        final ArrayAdapter<CharSequence> yearAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Year, android.R.layout.simple_spinner_dropdown_item);
-        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        yearSetter.setAdapter(yearAdapter);
-        yearSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                i_year = position;
-            }
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-            }
-        });
     }
 
 } // end class SignupActivity

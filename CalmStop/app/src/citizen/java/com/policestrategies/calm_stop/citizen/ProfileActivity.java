@@ -515,7 +515,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         //DATE OF BIRTH REGEX
         mDateOfBirth.clearFocus();
-        if (!RegexChecks.validDateOfBirth(i_month, i_day, getResources().getStringArray(R.array.Year).length - i_year + 1909 )){
+        if (!false){//RegexChecks.validDateOfBirth(i_month, i_day, getResources().getStringArray(R.array.Year).length - i_year + 1909 )){
             mDateOfBirth.setError("Invalid Date of Birth");
             mDateOfBirth.requestFocus();
             return false;
