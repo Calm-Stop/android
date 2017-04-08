@@ -13,21 +13,24 @@ public class RegexChecks {
     }
 
     public static boolean validPassword(String password) {
-        return (!(password.length() < 6) && password.matches("((.*\\d.*)(.*[A-Za-z].*))|((.*[A-Za-z].*)(.*\\d.*))"));
+        return (!(password.length() < 6) &&
+                password.matches("((.*\\d.*)(.*[A-Za-z].*))|((.*[A-Za-z].*)(.*\\d.*))"));
     }
 
     public static boolean validLicense(String license) {
-        return (license.matches("^[A-Z]([0-9]{8})"));
+        return (license.matches("^[A-Za-z]([0-9]{8})"));
     }
 
     public static boolean validAddress(String address) {
         return (!address.isEmpty());
     }
 
-    public static boolean validZip(String zip) { return (zip.matches("^\\d{5}")); }
+    public static boolean validZip(String zip) {
+        return (zip.matches("^\\d{5}"));
+    }
 
     public static boolean validPhone(String phone) {
-        return (phone.matches("^(1|(1(-|\\s)))?(\\d{10}|" + "\\(?\\d{3}\\)?(-|\\s)?\\d{3}(-|\\s)?\\d{4})\\s?"));
+        return (!phone.isEmpty() && Patterns.PHONE.matcher(phone).matches());
     }
 
 

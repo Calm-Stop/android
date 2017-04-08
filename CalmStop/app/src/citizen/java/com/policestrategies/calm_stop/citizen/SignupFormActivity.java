@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,14 +48,11 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     private EditText mPhoneNumberField;
     private EditText mZipField;
 
-    private static final String TAG = "Signup";
+    private static final String TAG = "SignupActivity";
 
     private FirebaseAuth mAuth;
 
-    private FirebaseAuth.AuthStateListener mAuthListener;
-
     private DatabaseReference databaseRef;
-    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,53 +72,21 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         mLicenseField = (EditText) findViewById(R.id.signup_input_license_number);
         mFirstNameField = (EditText) findViewById(R.id.signup_input_firstname);
         mLastNameField = (EditText) findViewById(R.id.signup_input_lastname);
-        mPhoneNumberField = (EditText) findViewById(R.id.input_phone);
+        mPhoneNumberField = (EditText) findViewById(R.id.signup_input_phone_number);
         mZipField = (EditText) findViewById(R.id.signup_input_zipcode);
         mDateOfBirthField = (EditText) findViewById(R.id.signup_input_dob);
 
-        findViewById(R.id.button_login).setOnClickListener(this);
-        findViewById(R.id.button_signup).setOnClickListener(this);
+        mPhoneNumberField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+
+        findViewById(R.id.signup_button_login).setOnClickListener(this);
+        findViewById(R.id.signup_button_signup).setOnClickListener(this);
 
         setUpCalendar();
-        database = FirebaseDatabase.getInstance();
-        databaseRef = database.getReference();
-        // START initialize_auth so you can track when user signs in and signs out
+
+        databaseRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-        // END initialize_auth
 
-        // START auth_state_listener
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
-            }
-        };
-        // END auth_state_listener
-    }
-
-    // START on_start_add_listener
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-
-    // Remove FirebaseAuth instance on onStop()
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
+    } // end onCreate
 
     /**
      * Any onClicks that we register will be handled in here
@@ -130,15 +95,15 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
 
         switch(v.getId()) {
-            case R.id.button_login:
+            case R.id.signup_button_login:
                 Intent i = new Intent(getBaseContext(), LoginActivity.class);
                 startActivity(i);
+                finish();
                 break;
 
-            case R.id.button_signup: // Signup was pressed, begin the SignupActivity
+            case R.id.signup_button_signup: // Signup was pressed, begin the SignupActivity
                 signup();
                 break;
-
         }
     }
 
@@ -156,7 +121,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         final String zip = mZipField.getText().toString();
         final String dateOfBirth = mDateOfBirthField.getText().toString();
 
-        Log.d(TAG, "createAccount:" + email);
+        Log.d(TAG, "Creating account: " + email);
 
         if (!validateInput(email, password, licensenum, firstname, lastname, phone, zip, dateOfBirth)) {
             return;
@@ -168,21 +133,15 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful())  {
-                            Toast.makeText(SignupFormActivity.this, R.string.auth_failed,
-                                    Toast.LENGTH_SHORT).show();
-                            finish();
-                            startActivity(getIntent());
+                        if (!task.isSuccessful() || mAuth.getCurrentUser() == null)  {
+                            Toast.makeText(SignupFormActivity.this, "Error signing up",
+                                    Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(SignupFormActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             String uuid = user.getUid();
                             DatabaseReference citizenDatabaseRef = databaseRef.child("citizen")
                                     .child(uuid).child("profile").getRef();
-                            //email, password, licensenum, firstname, lastname, phone, zip, dateofbirth, gender, language
+
                             citizenDatabaseRef.child("email").setValue(email);
                             citizenDatabaseRef.child("first_name").setValue(firstname);
                             citizenDatabaseRef.child("last_name").setValue(lastname);
@@ -201,7 +160,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
                     }
                 });
-    }
+    } // end signup
 
     private boolean validateInput(String email, String password, String licensenum, String firstname,
                                   String lastname, String phone, String zip, String dateOfBirth) {
@@ -234,7 +193,8 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
         //PASSWORD REGEX
         if (!RegexChecks.validPassword(password)) {
-            mPasswordField.setError("Password must be at least 6 characters and contain at least a letter and a number.");
+            mPasswordField.setError("Password must be at least 6 characters and contain at least" +
+                    " a letter and a number.");
             mPasswordField.requestFocus();
             return false;
         } else {
@@ -298,7 +258,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-
     private void setUpEthnicitySetter() {
 
         final ArrayAdapter<CharSequence> ethnicityAdapter = ArrayAdapter.createFromResource(this,
@@ -358,7 +317,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         };
 
         mDateOfBirthField.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -367,7 +325,6 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-
     }
 
 } // end class SignupActivity
