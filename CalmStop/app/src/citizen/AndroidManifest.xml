@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".citizen.SplashActivity">
+        <activity android:name=".citizen.ChatActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,7 +19,7 @@
         </activity>
 
         <activity
-            android:name="citizen.ChatActivity" />
+            android:name="citizen.SplashActivity" />
 
         <activity
             android:name=".citizen.LoginActivity" />
@@ -53,7 +53,7 @@
             android:name=".citizen.beacon_detection.BeaconDetectionActivity" />
 
     </application>
-    
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
 </manifest>
