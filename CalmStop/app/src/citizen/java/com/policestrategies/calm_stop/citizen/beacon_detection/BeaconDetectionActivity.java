@@ -133,7 +133,6 @@ public class BeaconDetectionActivity extends AppCompatActivity {
     /**
      * Obtains the officer information associated with each beacon instance id from firebase.
      * @param instanceIds detected by the didRangeBeaconsInRegion function
-     * @param dist list of distances for each beacon detected
      */
     private void downloadOfficerInformation(final List<Pair<String, String>> instanceIds) {
 
@@ -148,6 +147,7 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                     String officerLastName;
                     String officerDepartmentNumber;
                     String officerBadgeNumber;
+                    String officerProfilePicturePath;
 
                     if(!dataSnapshot.child("beacons").hasChild(instance.first)) {
                         continue;
@@ -168,9 +168,13 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                             .child(officerDepartmentNumber).child(officerUid)
                             .child("profile").child("badge").getValue().toString();
 
+                    officerProfilePicturePath = dataSnapshot.child("officer")
+                            .child(officerDepartmentNumber).child(officerUid)
+                            .child("profile").child("photo").getValue().toString();
 
                     scannedBeacons.add(new BeaconObject(officerLastName, officerDepartmentNumber,
-                            officerUid, instance.first, officerBadgeNumber, instance.second));
+                            officerUid, instance.first, officerBadgeNumber, instance.second,
+                            officerProfilePicturePath));
                 }
 
                 runOnUiThread(new Runnable() {
@@ -180,7 +184,8 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                     //new DownloadImageTask((ImageView) findViewById(R.id.officer_photo))
                     //.execute(officerPhotoUrl);
 
-                        mRecyclerView.setAdapter(new BeaconDetectionAdapter(scannedBeacons,
+                        mRecyclerView.setAdapter(
+                                new BeaconDetectionAdapter(BeaconDetectionActivity.this, scannedBeacons,
                                 new BeaconDetectionAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(BeaconObject item) {
