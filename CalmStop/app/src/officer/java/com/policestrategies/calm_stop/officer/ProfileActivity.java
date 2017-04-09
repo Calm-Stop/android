@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -44,7 +46,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private EditText mEmailField;
 
     private EditText mBadgeNum;
-    private ImageView mphoto;
+    private ImageView mProfileImageView;
 
     private DatabaseReference profileReference;
     private StorageReference mStorageReference;
@@ -75,8 +77,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mEmailField = (EditText)findViewById(R.id.profile_input_email);
         mBadgeNum = (EditText)findViewById(R.id.profile_input_badge_number);
 
-        mphoto = (ImageView)findViewById(R.id.profilePicture);
-        mphoto.setOnClickListener(this);
+        mProfileImageView = (ImageView)findViewById(R.id.profilePicture);
+        mProfileImageView.setOnClickListener(this);
 
         findViewById(R.id.backbutton).setOnClickListener(this);
         findViewById(R.id.savebutton).setOnClickListener(this);
@@ -99,11 +101,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         Photo = mCurrentUser.getPhotoUrl();
 
-        if(Photo == null) {
-            //mphoto.setImageURI();
-        } else {
-            mphoto.setImageURI(Photo);
-        }
+//        if(Photo == null) {
+//            //mphoto.setImageURI();
+//        } else {
+//            mphoto.setImageURI(Photo);
+//        }
 
         profileReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -112,6 +114,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 String firstName = snapshot.child("first_name").getValue().toString();
                 String lastName = snapshot.child("last_name").getValue().toString();
                 String badgeNumber = snapshot.child("badge").getValue().toString();
+                String photoPath = snapshot.child("photo").getValue().toString();
                 int gender = Integer.parseInt(snapshot.child("gender").getValue().toString());
 
                 mFirstNameField.setText(firstName);
@@ -119,6 +122,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 mBadgeNum.setText(badgeNumber);
                 mEmailField.setText(email);
                 genderSetter.setSelection(gender);
+
+                profileReference.child("photo").child(photoPath);
+
+                Glide.with(ProfileActivity.this)
+                        .using(new FirebaseImageLoader())
+                        .load(mStorageReference.child(photoPath))
+                        .into(mProfileImageView);
 
                 SharedUtil.dismissProgressDialog(mProgressDialog);
             }
@@ -173,7 +183,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == chosenImage && resultCode == RESULT_OK && data != null){
             Photo = data.getData();
-            mphoto.setImageURI(Photo);
+            mProfileImageView.setImageURI(Photo);
         }
         else
             Toast.makeText(ProfileActivity.this, "Error", Toast.LENGTH_LONG).show();
