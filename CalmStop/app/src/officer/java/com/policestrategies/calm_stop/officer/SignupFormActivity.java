@@ -178,6 +178,16 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                             officerDatabaseRef.child("department").setValue(department);
                             officerDatabaseRef.child("badge").setValue(badge);
 
+                            String photoPath;
+                            if (i_gender == 0) {
+                                photoPath = "images/profile/default_female";
+                            } else {
+                                photoPath = "images/profile/default_male";
+                            }
+
+                            officerDatabaseRef.child("photo").setValue(photoPath);
+
+
                             //Set up empty ratings section
                             DatabaseReference officerRatingDatabaseRef = databaseRef.child("officer")
                                     .child(department).child(uuid).child("ratings").getRef();

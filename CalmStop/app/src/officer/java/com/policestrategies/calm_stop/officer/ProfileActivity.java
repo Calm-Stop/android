@@ -25,12 +25,14 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.RegexChecks;
 import com.policestrategies.calm_stop.SharedUtil;
@@ -45,6 +47,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView mphoto;
 
     private DatabaseReference profileReference;
+    private StorageReference mStorageReference;
 
     private static final int chosenImage = 1;
 
@@ -92,6 +95,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         profileReference = FirebaseDatabase.getInstance().getReference("officer")
                 .child(Utility.getCurrentDepartmentNumber(this)).child(officerUid).child("profile");
+        mStorageReference = FirebaseStorage.getInstance().getReference();
 
         Photo = mCurrentUser.getPhotoUrl();
 
@@ -265,23 +269,38 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     private void updatePhoto() {
-        profileReference.child("photo").setValue(Photo);
-        UserProfileChangeRequest updatePhoto = new UserProfileChangeRequest.Builder()
-                .setPhotoUri(Photo)
-                .build();
 
-        mCurrentUser.updateProfile(updatePhoto)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User profile updated.");
-                        }
-                        else
-                            Toast.makeText(ProfileActivity.this, "Error Uploading Image",
-                                    Toast.LENGTH_LONG).show();
-                    }
-                });
+        String photoPath = "images/profile/" + officerUid;
+        profileReference.child("photo").setValue(photoPath);
+
+        StorageReference profilePictureRef = mStorageReference.child(photoPath);
+
+        UploadTask uploadTask = profilePictureRef.putFile(Photo);
+        uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                System.out.println("Upload task complete!");
+                Toast.makeText(ProfileActivity.this, "Uploaded!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+//        profileReference.child("photo").setValue(Photo);
+//        UserProfileChangeRequest updatePhoto = new UserProfileChangeRequest.Builder()
+//                .setPhotoUri(Photo)
+//                .build();
+//
+//        mCurrentUser.updateProfile(updatePhoto)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful()) {
+//                            Log.d(TAG, "User profile updated.");
+//                        }
+//                        else
+//                            Toast.makeText(ProfileActivity.this, "Error Uploading Image",
+//                                    Toast.LENGTH_LONG).show();
+//                    }
+//                });
     }
 
 
