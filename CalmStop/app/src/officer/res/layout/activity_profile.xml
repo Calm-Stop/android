@@ -14,8 +14,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="50dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,397 +29,128 @@
                 android:layout_height="150dp"
                 android:layout_gravity="center_horizontal"
                 android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:background="@mipmap/ic_launcher" />
+                android:background="@mipmap/ic_launcher"
+                android:scaleType="fitXY" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:textColorHint="@android:color/black">
+
+                <EditText
+                    android:id="@+id/profile_input_firstname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="First Name"
+                    android:inputType="textCapWords"
+                    android:textColor="@android:color/black"
+                    android:textColorLink="@android:color/black" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:textColorHint="@android:color/black">
+
+                <EditText
+                    android:id="@+id/profile_input_lastname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Last Name"
+                    android:inputType="text"
+                    android:textColor="@android:color/black"
+                    android:textColorLink="@android:color/black" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:textColorHint="@android:color/black">
+
+                <EditText
+                    android:id="@+id/profile_input_badge_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Badge Number"
+                    android:inputType="numberSigned"
+                    android:textColor="@android:color/black"
+                    android:textColorLink="@android:color/black" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:textColorHint="@android:color/black">
+
+                <EditText
+                    android:id="@+id/profile_input_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email Address"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@android:color/black"
+                    android:textColorLink="@android:color/black" />
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
-                android:text="First Name: "
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/backButton"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="0dp"
-                android:id="@+id/FirstName"
-                android:layout_alignRight="@+id/backButton"
-                android:layout_alignEnd="@+id/backButton"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="First Name"
-                android:ems="10"
-                android:id="@+id/editFirstName"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
-
-            <TextView
-                android:text="Last Name: "
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/FirstName"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
-                android:id="@+id/LastName"
-                android:layout_alignRight="@+id/backButton"
-                android:layout_alignEnd="@+id/backButton"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="Last Name"
-                android:ems="10"
-                android:id="@+id/editLastName"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
-
-            <TextView
-                android:text="Department Number:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/LastName"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
-                android:id="@+id/departmentnumber"
-                android:layout_alignRight="@+id/backbutton"
-                android:layout_alignEnd="@+id/backbutton"
-                android:typeface="monospace"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:textColor="@android:color/background_dark"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/editdepartnum"
-                android:text="Department Number"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textSize="16sp"
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:text="Badge Number:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/departmentnumber"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
-                android:id="@+id/badgenumber"
-                android:layout_alignRight="@+id/departmentnumber"
-                android:layout_alignEnd="@+id/departmentnumber"
-                android:typeface="monospace"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:textColor="@android:color/background_dark"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/editBadgenum"
-                android:text="Badge Number"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textSize="16sp"
-                android:textColor="@android:color/black" />
-<!-- DOB
-            <TextView
-                android:text="Date of Birth: "
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/LastName"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
-                android:id="@+id/dateOfBirth"
-                android:layout_alignRight="@+id/backButton"
-                android:layout_alignEnd="@+id/backButton"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:text="mm/dd/yyyy"
-                android:ems="10"
-                android:id="@+id/editDateOfBirth"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
--->
-            <TextView
-                android:text="Email:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/LastName"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
-                android:id="@+id/Email"
-                android:layout_alignRight="@+id/backButton"
-                android:layout_alignEnd="@+id/backbutton"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textSize="16sp"
-                android:textColor="@android:color/background_dark" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:text="Email"
-                android:ems="10"
-                android:id="@+id/editEmail"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textSize="16sp"
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:text="Phone Number:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/Email"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
-                android:id="@+id/phonenumber"
-                android:layout_alignRight="@+id/Email"
-                android:layout_alignEnd="@+id/Email"
-                android:typeface="monospace"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:textColor="@android:color/background_dark"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:ems="10"
-                android:id="@+id/editPhonenum"
-                android:text="Phone Number"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textSize="16sp"
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:text="ZIP Code: "
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/phonenumber"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
-                android:id="@+id/Zip"
-                android:layout_alignRight="@+id/backButton"
-                android:layout_alignEnd="@+id/backButton"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="ZIP Code"
-                android:ems="10"
-                android:id="@+id/editZip"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
-
-            <TextView
-                android:text="License Number: "
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/Zip"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
-                android:id="@+id/LicenseNumber"
-                android:layout_alignRight="@+id/backButton"
-                android:layout_alignEnd="@+id/backButton"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="License Number"
-                android:ems="10"
-                android:id="@+id/editLicenseNumber"
-                android:textSize="16sp"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
-
-            <TextView
-                android:text="Date of Birth:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/LicenseNumber"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:layout_marginTop="20dp"
-                android:id="@+id/dateOfBirth"
-                android:layout_alignRight="@+id/backbutton"
-                android:layout_alignEnd="@+id/backbutton"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textSize="16sp"
-                android:textColor="@android:color/background_dark" />
-
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/monthSetter"
-                android:background="@android:color/background_light" />
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/daySetter"
-                android:background="@android:color/background_light" />
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/yearSetter"
-                android:background="@android:color/background_light" />
-
-
-            <TextView
-                android:text="Gender:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_dateOfBirth"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
                 android:id="@+id/gender"
-                android:layout_alignRight="@+id/backbutton"
-                android:layout_alignEnd="@+id/backbutton"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textSize="16sp"
-                android:textColor="@android:color/background_dark" />
-
-            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="monospace"
+                android:text="Gender"
+                android:textColor="@android:color/background_dark"
+                android:textSize="16sp"
+                android:typeface="monospace" />
+
+            <Spinner
                 android:id="@+id/genderSetter"
-                android:background="@android:color/background_light" />
-
-            <TextView
-                android:text="Ethnicity:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/gender"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
-
-                android:id="@+id/ethnicity"
-                android:layout_alignRight="@+id/gender"
-                android:layout_alignEnd="@+id/gender"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textSize="16sp"
-                android:textColor="@android:color/background_dark" />
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/ethnicitySetter"
-                android:background="@android:color/background_light" />
-
-            <!--Language spinner-->
-            <TextView
-                android:text="Preferred Language:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/ethnicity"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
-
-                android:id="@+id/language"
-                android:layout_alignRight="@+id/ethnicity"
-                android:layout_alignEnd="@+id/ethnicity"
-                android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textSize="16sp"
-                android:textColor="@android:color/background_dark" />
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/languageSetter"
                 android:background="@android:color/background_light" />
 
         </LinearLayout>
     </ScrollView>
 
     <Button
-        android:text="Back"
+        android:id="@+id/backbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/backbutton"
         android:background="@android:color/background_light"
         android:fontFamily="monospace"
-        android:typeface="monospace"
+        android:text="Back"
         android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
         android:textSize="14sp"
-        android:textColor="@android:color/background_dark" />
+        android:typeface="monospace" />
 
     <Button
-        android:text="Save"
+        android:id="@+id/savebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/savebutton"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/background_light"
         android:fontFamily="monospace"
-        android:typeface="monospace"
-        android:textSize="14sp"
-        android:textColor="@android:color/black"
+        android:text="Save"
         android:textAlignment="center"
-        android:background="@android:color/background_light" />
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        android:typeface="monospace" />
 
 </RelativeLayout>

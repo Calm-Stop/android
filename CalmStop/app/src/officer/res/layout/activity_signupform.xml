@@ -1,198 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="56dp"
+        android:orientation="vertical"
         android:paddingLeft="24dp"
-        android:paddingRight="24dp">
-
-        <!--  fName Label -->
-        <EditText
-            android:id="@+id/input_firstname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textCapWords"
-            android:hint="First Name" />
-
-        <!--  lName Label -->
-        <EditText
-            android:id="@+id/input_lastname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textCapWords"
-            android:hint="Last Name" />
-
-        <!--  Email Label -->
-        <EditText
-            android:id="@+id/input_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="Email" />
-
-        <!--  Password Label -->
-        <EditText
-            android:id="@+id/input_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="Password" />
-
-        <!-- Department Label -->
-
-        <EditText
-            android:id="@+id/input_department"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Department Number"/>
-
-        <!-- Badge Label -->
-
-        <EditText
-            android:id="@+id/input_badge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Badge Number"/>
-
-        <!--  Driver's License Label -->
-        <EditText
-            android:id="@+id/input_licenseNum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Driver's License Number" />
-
-        <!--  Phone Label -->
-        <EditText
-            android:id="@+id/input_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Phone Number" />
-
-        <!--  ZIP CODE Label -->
-        <EditText
-            android:id="@+id/input_zip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="ZIP Code" />
-
-        <!-- SPINNER -->
-
-        <TextView
-            android:text = "Date Of Birth:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/dateOfBirth"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:textSize="16sp"
-            android:textColor="@android:color/background_dark" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/monthSetter"
-            android:background="@android:color/background_light" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/daySetter"
-            android:background="@android:color/background_light" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/yearSetter"
-            android:background="@android:color/background_light" />
-
-
-        <TextView
-            android:text="Gender:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/input_zip"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="20dp"
-            android:id="@+id/gender"
-            android:layout_alignRight="@+id/input_zip"
-            android:layout_alignEnd="@+id/input_zip"
-            android:fontFamily="monospace"
-            android:typeface="monospace"
-            android:textSize="16sp"
-            android:textColor="@android:color/background_dark" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/genderSetter"
-            android:background="@android:color/background_light" />
-
-        <TextView
-            android:text="Preferred Language:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/gender"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="20dp"
-
-            android:id="@+id/language"
-            android:layout_alignRight="@+id/gender"
-            android:layout_alignEnd="@+id/gender"
-            android:fontFamily="monospace"
-            android:typeface="monospace"
-            android:textSize="16sp"
-            android:textColor="@android:color/background_dark" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/langSetter"
-            android:background="@android:color/background_light" />
-
-        <TextView
-            android:text="Ethnicity:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/language"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="20dp"
-
-            android:id="@+id/ethnicity"
-            android:layout_alignRight="@+id/language"
-            android:layout_alignEnd="@+id/language"
-            android:fontFamily="monospace"
-            android:typeface="monospace"
-            android:textSize="16sp"
-            android:textColor="@android:color/background_dark" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ethnicitySetter"
-            android:background="@android:color/background_light" />
-
-        <!-- END SPINNER -->
+        android:paddingRight="24dp"
+        android:paddingTop="56dp">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"></android.support.design.widget.TextInputLayout>
+            android:layout_weight="1"
+            android:textColorHint="@android:color/black">
+
+            <EditText
+                android:id="@+id/signup_input_firstname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="First Name: "
+                android:inputType="textCapWords"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/black" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:textColorHint="@android:color/black">
+
+            <EditText
+                android:id="@+id/signup_input_lastname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Last Name: "
+                android:inputType="textCapWords"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/black" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:textColorHint="@android:color/black">
+
+            <EditText
+                android:id="@+id/signup_input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email Address"
+                android:inputType="textEmailAddress"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/black" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:textColorHint="@android:color/black">
+
+            <EditText
+                android:id="@+id/signup_input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/black" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:textColorHint="@android:color/black">
+
+            <EditText
+                android:id="@+id/signup_input_department_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Department Number"
+                android:inputType="numberSigned"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/black" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:textColorHint="@android:color/black">
+
+            <EditText
+                android:id="@+id/signup_input_badge_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Badge Number"
+                android:inputType="numberSigned"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/black" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- SPINNER -->
+        <TextView
+            android:id="@+id/gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/input_zip"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/input_zip"
+            android:layout_below="@+id/input_zip"
+            android:layout_marginTop="20dp"
+            android:fontFamily="monospace"
+            android:text="Gender:"
+            android:textColor="@android:color/background_dark"
+            android:textSize="16sp"
+            android:typeface="monospace" />
+
+        <Spinner
+            android:id="@+id/genderSetter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_light" />
 
 
         <!-- Signup Button -->
@@ -200,18 +149,19 @@
             android:id="@+id/button_signup"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
+            android:layout_marginTop="24dp"
             android:padding="12dp"
-            android:text="Create Account"/>
+            android:text="Create Account" />
 
-        <TextView android:id="@+id/button_login"
+        <TextView
+            android:id="@+id/button_login"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:text="Already have an account? Login"
             android:gravity="center"
-            android:textSize="16dip"/>
+            android:text="Already have an account? Login"
+            android:textSize="16dip" />
 
     </LinearLayout>
 </ScrollView>
