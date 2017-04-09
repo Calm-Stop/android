@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,6 +31,7 @@ import org.altbeacon.beacon.Region;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Landing page after a beacon is detected. Find the UUID of the beacon and connect to the officer.
@@ -96,11 +98,14 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                     return;
                 }
 
-                final List<String> scannedInstanceIds = new ArrayList<>();
+                final List<Pair<String, String>> scannedInstanceIds = new ArrayList<>();
 
                 for (Beacon beacon : collection) {
                     if (beacon.getServiceUuid() == 0xfeaa && beacon.getBeaconTypeCode() == 0x00) {
-                        scannedInstanceIds.add(beacon.getId2().toString());
+                        Pair<String, String> beaconInfo = new Pair<>(beacon.getId2().toString(),
+                                String.format(Locale.getDefault(), "%.1f", beacon.getDistance())
+                                        + "m");
+                        scannedInstanceIds.add(beaconInfo);
                     }
                 }
                 try {
@@ -128,8 +133,9 @@ public class BeaconDetectionActivity extends AppCompatActivity {
     /**
      * Obtains the officer information associated with each beacon instance id from firebase.
      * @param instanceIds detected by the didRangeBeaconsInRegion function
+     * @param dist list of distances for each beacon detected
      */
-    private void downloadOfficerInformation(final List<String> instanceIds) {
+    private void downloadOfficerInformation(final List<Pair<String, String>> instanceIds) {
 
         final List<BeaconObject> scannedBeacons = new ArrayList<>();
 
@@ -137,20 +143,20 @@ public class BeaconDetectionActivity extends AppCompatActivity {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (String instance : instanceIds) {
+                for (Pair<String, String> instance : instanceIds) {
                     String officerUid;
                     String officerLastName;
                     String officerDepartmentNumber;
                     String officerBadgeNumber;
 
-                    if(!dataSnapshot.child("beacons").hasChild(instance)) {
+                    if(!dataSnapshot.child("beacons").hasChild(instance.first)) {
                         continue;
                     }
 
                     // Look up the beacon and obtain officerUid and department number
-                    officerUid = dataSnapshot.child("beacons").child(instance)
+                    officerUid = dataSnapshot.child("beacons").child(instance.first)
                             .child("officer").child("uid").getValue().toString();
-                    officerDepartmentNumber = dataSnapshot.child("beacons").child(instance)
+                    officerDepartmentNumber = dataSnapshot.child("beacons").child(instance.first)
                             .child("officer").child("department").getValue().toString();
 
                     // Look up officer name
@@ -164,7 +170,7 @@ public class BeaconDetectionActivity extends AppCompatActivity {
 
 
                     scannedBeacons.add(new BeaconObject(officerLastName, officerDepartmentNumber,
-                            officerUid, instance, officerBadgeNumber));
+                            officerUid, instance.first, officerBadgeNumber, instance.second));
                 }
 
                 runOnUiThread(new Runnable() {

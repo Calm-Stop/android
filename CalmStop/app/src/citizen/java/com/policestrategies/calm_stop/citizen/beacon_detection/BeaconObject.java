@@ -12,13 +12,15 @@ class BeaconObject {
 
     private String mOfficerUid;
     private String mInstanceId;
+    private String mBeaconDistance;
 
-    BeaconObject(String name, String department, String uid, String instance, String badge) {
+    BeaconObject(String name, String department, String uid, String instance, String badge, String dist) {
         mOfficerName = name;
         mDepartmentNumber = department;
         mOfficerUid = uid;
         mInstanceId = instance;
         mBadgeNumber = badge;
+        mBeaconDistance = dist;
     }
 
     String getOfficerName() {
@@ -39,6 +41,10 @@ class BeaconObject {
 
     String getBadgeNumber() {
         return mBadgeNumber;
+    }
+
+    String getDistance() {
+        return mBeaconDistance;
     }
 
 } // end class BeaconObject
