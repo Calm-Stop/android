@@ -141,6 +141,7 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                     String officerUid;
                     String officerLastName;
                     String officerDepartmentNumber;
+                    String officerBadgeNumber;
 
                     if(!dataSnapshot.child("beacons").hasChild(instance)) {
                         continue;
@@ -157,8 +158,13 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                             .child(officerDepartmentNumber).child(officerUid)
                             .child("profile").child("last_name").getValue().toString();
 
+                    officerBadgeNumber = dataSnapshot.child("officer")
+                            .child(officerDepartmentNumber).child(officerUid)
+                            .child("profile").child("badge").getValue().toString();
+
+
                     scannedBeacons.add(new BeaconObject(officerLastName, officerDepartmentNumber,
-                            officerUid, instance));
+                            officerUid, instance, officerBadgeNumber));
                 }
 
                 runOnUiThread(new Runnable() {

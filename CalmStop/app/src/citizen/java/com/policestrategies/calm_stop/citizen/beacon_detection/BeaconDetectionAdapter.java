@@ -59,6 +59,7 @@ class BeaconDetectionAdapter extends RecyclerView.Adapter<BeaconDetectionAdapter
         private CardView mCardView;
         private TextView mOfficerName;
         private TextView mDepartmentNumber;
+        private TextView mBadgeNumber;
         private ImageView mOfficerPhoto;
 
         BeaconView(View view) {
@@ -66,14 +67,18 @@ class BeaconDetectionAdapter extends RecyclerView.Adapter<BeaconDetectionAdapter
             mCardView = (CardView) view.findViewById(R.id.officer_information_card_view);
             mOfficerName = ((TextView) view.findViewById(R.id.text_card_view_officer_name));
             mDepartmentNumber = ((TextView) view.findViewById(R.id.text_card_view_officer_department_number));
+            mBadgeNumber = ((TextView) view.findViewById(R.id.text_card_view_officer_badge_number));
             mOfficerPhoto = ((ImageView) view.findViewById(R.id.officer_photo));
         }
 
         void setBeaconView(final BeaconObject beacon, final OnItemClickListener listener) {
             String officerName = "Officer " + beacon.getOfficerName();
             String departmentNumber = "Department #" + beacon.getDepartmentNumber();
+            String badgeNumber = "Badge #" + beacon.getBadgeNumber();
+
             mOfficerName.setText(officerName);
             mDepartmentNumber.setText(departmentNumber);
+            mBadgeNumber.setText(badgeNumber);
             mOfficerPhoto.setImageResource(R.mipmap.ic_launcher);
             mCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
