@@ -13,12 +13,10 @@ import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.officer.profile.ProfileActivity;
 
 /**
- * Created by mariavizcaino on 2/27/17.
+ * @author mariavizcaino
  */
 
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener {
-
-    //private UserLocalStore localStore;
 
     private BottomNavigationView bottomNavigationView;
 
@@ -29,15 +27,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
-        bottomNavigationView.bringToFront();
-
         findViewById(R.id.aboutus_button).setOnClickListener(this);
         findViewById(R.id.profile_button).setOnClickListener(this);
         findViewById(R.id.settings_button).setOnClickListener(this);
         findViewById(R.id.help_button).setOnClickListener(this);
         findViewById(R.id.logout_button).setOnClickListener(this);
         findViewById(R.id.backbutton).setOnClickListener(this);
-        //localStore = new UserLocalStore(this);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -65,6 +60,13 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 });
 
+    } // end onCreate
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        updateNavigationMenuSelection(3);
     }
 
     @Override
@@ -135,23 +137,30 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
     private void home() {
         Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NEW_TASK |
+                Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
-        finish();
     }
 
     private void ratings() {
         Intent i = new Intent(getBaseContext(), RatingActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(i);
-
     }
-    private void account() {
-        Intent i = new Intent(getBaseContext(), AccountActivity.class);
-        startActivity(i);
 
-    }
     private void history() {
         Intent i = new Intent(getBaseContext(), HistoryActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(i);
-
     }
-}
+
+    private void account() {}
+
+    private void updateNavigationMenuSelection(int menu) {
+        for (int i = 0; i < 4; i++) {
+            MenuItem item = bottomNavigationView.getMenu().getItem(i);
+            item.setChecked(i == menu);
+        }
+    }
+
+} // end AccountActivity
