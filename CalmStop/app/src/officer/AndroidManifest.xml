@@ -38,7 +38,7 @@
             android:name=".officer.HelpActivity" />
 
         <activity
-            android:name=".officer.ProfileActivity"
+            android:name=".officer.profile.ProfileActivity"
             android:windowSoftInputMode="stateHidden" />/>
 
         <activity

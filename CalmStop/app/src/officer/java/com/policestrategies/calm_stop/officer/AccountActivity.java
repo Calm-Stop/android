@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.officer.profile.ProfileActivity;
 
 /**
  * Created by mariavizcaino on 2/27/17.
