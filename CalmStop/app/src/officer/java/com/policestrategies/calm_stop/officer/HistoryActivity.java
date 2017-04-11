@@ -10,10 +10,6 @@ import android.view.View;
 
 import com.policestrategies.calm_stop.R;
 
-/**
- * Created by mariavizcaino on 2/27/17.
- */
-
 public class HistoryActivity extends AppCompatActivity implements View.OnClickListener {
 
     private BottomNavigationView bottomNavigationView;
@@ -53,34 +49,44 @@ public class HistoryActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        updateNavigationMenuSelection(2);
+    }
+
+    @Override
     public void onClick(View v) {
-
         switch(v.getId()) {
-
         }
     }
 
     private void home() {
         Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NEW_TASK |
+                Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
-        finish();
-
     }
 
     private void ratings() {
         Intent i = new Intent(getBaseContext(), RatingActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(i);
-
     }
+
+    private void history() {}
+
     private void account() {
         Intent i = new Intent(getBaseContext(), AccountActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(i);
-
-    }
-    private void history() {
-        Intent i = new Intent(getBaseContext(), HistoryActivity.class);
-        startActivity(i);
-
     }
 
-}
+    private void updateNavigationMenuSelection(int menu) {
+        for (int i = 0; i < 4; i++) {
+            MenuItem item = bottomNavigationView.getMenu().getItem(i);
+            item.setChecked(i == menu);
+        }
+    }
+
+} // end HistoryActivity

@@ -9,18 +9,21 @@ class BeaconObject {
     private String mOfficerName;
     private String mDepartmentNumber;
     private String mBadgeNumber;
+    private String mOfficerPhotoPath;
 
     private String mOfficerUid;
     private String mInstanceId;
     private String mBeaconDistance;
 
-    BeaconObject(String name, String department, String uid, String instance, String badge, String dist) {
+    BeaconObject(String name, String department, String uid, String instance, String badge,
+                 String distance, String photoPath) {
         mOfficerName = name;
         mDepartmentNumber = department;
         mOfficerUid = uid;
         mInstanceId = instance;
         mBadgeNumber = badge;
-        mBeaconDistance = dist;
+        mBeaconDistance = distance;
+        mOfficerPhotoPath = photoPath;
     }
 
     String getOfficerName() {
@@ -45,6 +48,10 @@ class BeaconObject {
 
     String getDistance() {
         return mBeaconDistance;
+    }
+
+    String getPhotoPath() {
+        return mOfficerPhotoPath;
     }
 
 } // end class BeaconObject

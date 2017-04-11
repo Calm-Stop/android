@@ -15,24 +15,13 @@
         android:backgroundTint="@color/colorPrimaryDark"
         app:menu="@menu/bottom_navigation_main" />
 
-    <TextView
-        app:itemBackground="@color/colorPrimary"
-        app:itemIconTint="@color/colorPrimaryDark"
-        app:itemTextColor="@color/cardview_light_background"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello Officer!"
-        android:id="@+id/AboutUsTitle" />
-
     <Button
         android:id="@+id/button_manage_beacon"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="61dp"
-        android:layout_below="@id/AboutUsTitle"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_gravity="center"
-        android:elevation="0dp"
         android:text="Manage Beacon"
         android:visibility="visible" />
 

@@ -17,8 +17,8 @@
 
             <ImageView
                 android:id="@+id/officer_photo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="16dp" />
@@ -42,9 +42,9 @@
                 android:id="@+id/text_card_view_officer_department_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
                 android:layout_below="@+id/text_card_view_officer_name"
-                android:layout_toRightOf="@+id/text_card_view_officer_badge_number" />
+                android:layout_toRightOf="@+id/text_card_view_officer_badge_number"
+                android:paddingLeft="5dp" />
 
             <TextView
                 android:id="@+id/text_cardview_officer_range"

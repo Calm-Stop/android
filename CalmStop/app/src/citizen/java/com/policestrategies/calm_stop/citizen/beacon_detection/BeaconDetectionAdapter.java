@@ -1,5 +1,6 @@
 package com.policestrategies.calm_stop.citizen.beacon_detection;
 
+import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.FirebaseStorage;
 import com.policestrategies.calm_stop.R;
 
 import java.util.List;
@@ -21,9 +25,12 @@ class BeaconDetectionAdapter extends RecyclerView.Adapter<BeaconDetectionAdapter
     private List<BeaconObject> mBeaconObjects;
     private OnItemClickListener mItemClickListener;
 
-    BeaconDetectionAdapter(List<BeaconObject> beaconObjects, OnItemClickListener listener) {
+    private Context mActivityContext;
+
+    BeaconDetectionAdapter(Context ctx, List<BeaconObject> beaconObjects, OnItemClickListener listener) {
         mBeaconObjects = beaconObjects;
         mItemClickListener = listener;
+        mActivityContext = ctx;
     }
 
     @Override
@@ -45,7 +52,7 @@ class BeaconDetectionAdapter extends RecyclerView.Adapter<BeaconDetectionAdapter
     public void onBindViewHolder(BeaconView beaconViewHolder, int i) {
         BeaconObject current = mBeaconObjects.get(i);
         if (current != null) {
-            beaconViewHolder.setBeaconView(current, mItemClickListener);
+            beaconViewHolder.setBeaconView(mActivityContext, current, mItemClickListener);
         }
     }
 
@@ -73,17 +80,21 @@ class BeaconDetectionAdapter extends RecyclerView.Adapter<BeaconDetectionAdapter
             mOfficerPhoto = ((ImageView) view.findViewById(R.id.officer_photo));
         }
 
-        void setBeaconView(final BeaconObject beacon, final OnItemClickListener listener) {
+        void setBeaconView(final Context ctx, final BeaconObject beacon, final OnItemClickListener listener) {
             String officerName = "Officer " + beacon.getOfficerName();
             String departmentNumber = "Department #" + beacon.getDepartmentNumber();
             String badgeNumber = "Badge #" + beacon.getBadgeNumber();
             String officerDistance = beacon.getDistance();
+            String officerPhotoPath = beacon.getPhotoPath();
 
             mOfficerName.setText(officerName);
             mDepartmentNumber.setText(departmentNumber);
             mBadgeNumber.setText(badgeNumber);
             mOfficerDistance.setText(officerDistance);
-            mOfficerPhoto.setImageResource(R.mipmap.ic_launcher);
+            Glide.with(ctx)
+                    .using(new FirebaseImageLoader())
+                    .load(FirebaseStorage.getInstance().getReference().child(officerPhotoPath))
+                    .into(mOfficerPhoto);
             mCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

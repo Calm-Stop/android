@@ -8,27 +8,27 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <Button
-        android:text="Back"
+        android:id="@+id/backbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/backbutton"
         android:background="@android:color/background_light"
         android:fontFamily="monospace"
-        android:typeface="monospace"
+        android:text="Back"
         android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
         android:textSize="14sp"
-        android:textColor="@android:color/background_dark" />
+        android:typeface="monospace" />
 
     <TextView
+        android:id="@+id/AboutUsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello Citizen this is the help page!"
-        android:id="@+id/AboutUsTitle"
-        android:layout_below="@+id/backbutton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="198dp" />
+        android:layout_below="@+id/backbutton"
+        android:layout_marginTop="198dp"
+        android:text="Hello Citizen this is the help page!" />
 
 </RelativeLayout>
