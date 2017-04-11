@@ -26,6 +26,7 @@ import com.policestrategies.calm_stop.R;
 
 /**
  * Allows the officer to log in or create an account.
+ * @author Talal Abou Haiba
  */
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {

@@ -10,10 +10,6 @@ import android.view.View;
 
 import com.policestrategies.calm_stop.R;
 
-/**
- * @author mariavizcaino
- */
-
 public class HistoryActivity extends AppCompatActivity implements View.OnClickListener {
 
     private BottomNavigationView bottomNavigationView;
@@ -61,9 +57,7 @@ public class HistoryActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-
         switch(v.getId()) {
-
         }
     }
 

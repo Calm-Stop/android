@@ -12,10 +12,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.officer.profile.ProfileActivity;
 
-/**
- * @author mariavizcaino
- */
-
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener {
 
     private BottomNavigationView bottomNavigationView;
@@ -94,9 +90,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private void profile() {
         Intent i = new Intent(getBaseContext(), ProfileActivity.class);
         startActivity(i);
-        finish();
-
     }
+
     private void help() {
         Intent i = new Intent(getBaseContext(), HelpActivity.class);
         startActivity(i);
@@ -105,16 +100,14 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private void aboutUs() {
         Intent i = new Intent(getBaseContext(), AboutUsActivity.class);
         startActivity(i);
-
     }
+
     private void settings() {
         Intent i = new Intent(getBaseContext(), SettingsActivity.class);
         startActivity(i);
-
     }
 
     private void logout() {
-
         // Clear department number
         getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE)
                 .edit().putString(getString(R.string.shared_preferences_department_number),
@@ -123,6 +116,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         FirebaseAuth.getInstance().signOut();
         Intent i = new Intent(getBaseContext(), LoginActivity.class);
         startActivity(i);
+        finish();
     }
 
     private void home() {
