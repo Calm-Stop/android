@@ -20,10 +20,6 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_white_36dp);
-        actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle("About Us");
 
         setContentView(R.layout.activity_about_us);

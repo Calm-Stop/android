@@ -251,22 +251,9 @@
                 android:typeface="monospace" />
 
         </LinearLayout>
+
     </ScrollView>
-<!--
-    <Button
-        android:id="@+id/backbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@android:color/background_light"
-        android:fontFamily="monospace"
-        android:text="Back"
-        android:textAlignment="center"
-        android:textColor="@android:color/background_dark"
-        android:textSize="14sp"
-        android:typeface="monospace" />
--->
+
     <Button
         android:id="@+id/savebutton"
         android:layout_width="wrap_content"
