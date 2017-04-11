@@ -10,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,7 +26,7 @@ import com.policestrategies.calm_stop.RegexChecks;
  * Allows the user to sign up or return to the log in page.
  */
 
-public class SignupFormActivity extends AppCompatActivity implements View.OnClickListener {
+public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Spinner genderSetter;
     private int i_gender;
@@ -51,7 +50,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signupform);
+        setContentView(R.layout.activity_signup);
 
         mEmailField = (EditText) findViewById(R.id.signup_input_email);
         mPasswordField = (EditText) findViewById(R.id.signup_input_password);
@@ -157,11 +156,11 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(SignupFormActivity.this, R.string.auth_failed,
+                            Toast.makeText(SignupActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         } else {
 
-                            Toast.makeText(SignupFormActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignupActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             String uuid = user.getUid();
 

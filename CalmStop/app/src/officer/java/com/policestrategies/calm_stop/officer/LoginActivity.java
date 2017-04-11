@@ -1,7 +1,6 @@
 package com.policestrategies.calm_stop.officer;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -116,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.button_signup: // Signup was pressed, begin the SignupActivity
-                Intent i = new Intent(getBaseContext(), SignupFormActivity.class);
+                Intent i = new Intent(getBaseContext(), SignupActivity.class);
                 startActivity(i);
                 break;
 

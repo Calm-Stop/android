@@ -105,7 +105,7 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
                             }
                             // comments_array used in listView
                             ArrayAdapter adapter = new ArrayAdapter<>(getBaseContext(),
-                                    R.layout.activity_drivercommentslistview, comments_array);
+                                    R.layout.listview_driver_comments, comments_array);
                             ListView listView = (ListView) findViewById(R.id.driver_comments);
                             listView.setAdapter(adapter);
                         }
@@ -146,7 +146,7 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
 
 
         ArrayAdapter adapter = new ArrayAdapter<>(this,
-                R.layout.activity_drivercommentslistview, comments_array);
+                R.layout.listview_driver_comments, comments_array);
 
         ListView listView = (ListView) findViewById(R.id.driver_comments);
         listView.setAdapter(adapter);

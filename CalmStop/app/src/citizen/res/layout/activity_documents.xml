@@ -8,46 +8,46 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <Button
-        android:text="Back"
+        android:id="@+id/backbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/backbutton"
         android:background="@android:color/background_light"
         android:fontFamily="monospace"
-        android:typeface="monospace"
+        android:text="Back"
         android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
         android:textSize="14sp"
-        android:textColor="@android:color/background_dark" />
+        android:typeface="monospace" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="50dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
-                android:text="License: "
+                android:id="@+id/licenseTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/backButton"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="0dp"
-                android:id="@+id/licenseTitle"
                 android:layout_alignRight="@+id/backButton"
-                android:layout_alignEnd="@+id/backButton"
-                android:textSize="16sp"
+                android:layout_marginTop="0dp"
                 android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
+                android:text="License: "
+                android:textColor="@android:color/background_dark"
+                android:textSize="16sp"
+                android:typeface="monospace" />
 
             <ImageView
                 android:id="@+id/license"
@@ -55,22 +55,22 @@
                 android:layout_height="200dp"
                 android:layout_gravity="center_horizontal"
                 android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:background="@mipmap/ic_launcher" />
+                android:background="@mipmap/ic_launcher"
+                android:scaleType="fitXY" />
 
             <TextView
-                android:text="Registration: "
+                android:id="@+id/registrationTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/licenseTitle"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_below="@+id/licenseTitle"
                 android:layout_marginTop="0dp"
-                android:id="@+id/registrationTitle"
-                android:textSize="16sp"
                 android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
+                android:text="Registration: "
+                android:textColor="@android:color/background_dark"
+                android:textSize="16sp"
+                android:typeface="monospace" />
 
             <ImageView
                 android:id="@+id/registration"
@@ -78,22 +78,22 @@
                 android:layout_height="200dp"
                 android:layout_gravity="center_horizontal"
                 android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:background="@mipmap/ic_launcher" />
+                android:background="@mipmap/ic_launcher"
+                android:scaleType="fitXY" />
 
             <TextView
-                android:text="Proof of Insurance: "
+                android:id="@+id/insuranceTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/registrationTitle"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_below="@+id/registrationTitle"
                 android:layout_marginTop="0dp"
-                android:id="@+id/insuranceTitle"
-                android:textSize="16sp"
                 android:fontFamily="monospace"
-                android:typeface="monospace"
-                android:textColor="@android:color/background_dark" />
+                android:text="Proof of Insurance: "
+                android:textColor="@android:color/background_dark"
+                android:textSize="16sp"
+                android:typeface="monospace" />
 
             <ImageView
                 android:id="@+id/insurance"
@@ -101,8 +101,8 @@
                 android:layout_height="200dp"
                 android:layout_gravity="center_horizontal"
                 android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:background="@mipmap/ic_launcher" />
+                android:background="@mipmap/ic_launcher"
+                android:scaleType="fitXY" />
 
         </LinearLayout>
 
