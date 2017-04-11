@@ -32,7 +32,7 @@ import java.util.Locale;
 /**
  * Allows the user to sign up or return to the log in page.
  */
-public class SignupFormActivity extends AppCompatActivity implements View.OnClickListener {
+public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Spinner genderSetter;
     private Spinner langSetter;
@@ -57,7 +57,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signupform);
+        setContentView(R.layout.activity_signup);
 
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         langSetter = (Spinner) findViewById(R.id.langSetter);
@@ -134,7 +134,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
                         if (!task.isSuccessful() || mAuth.getCurrentUser() == null)  {
-                            Toast.makeText(SignupFormActivity.this, "Error signing up",
+                            Toast.makeText(SignupActivity.this, "Error signing up",
                                     Toast.LENGTH_LONG).show();
                         } else {
                             FirebaseUser user = mAuth.getCurrentUser();
@@ -231,7 +231,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
 
         if (!RegexChecks.validDateOfBirth(dateOfBirth)) {
             mDateOfBirthField.performClick();
-            Toast.makeText(SignupFormActivity.this, "Please enter your date of birth",
+            Toast.makeText(SignupActivity.this, "Please enter your date of birth",
                     Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -318,7 +318,7 @@ public class SignupFormActivity extends AppCompatActivity implements View.OnClic
         mDateOfBirthField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(SignupFormActivity.this, date, calendar
+                new DatePickerDialog(SignupActivity.this, date, calendar
                         .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
             }

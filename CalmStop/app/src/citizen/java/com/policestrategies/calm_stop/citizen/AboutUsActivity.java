@@ -6,14 +6,17 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+<<<<<<< HEAD
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+=======
+>>>>>>> master
 
 import com.policestrategies.calm_stop.R;
 
 /**
- * Created by mariavizcaino on 2/19/17.
+ * @author mariavizcaino
  */
 
 public class AboutUsActivity extends AppCompatActivity implements View.OnClickListener {
@@ -21,6 +24,7 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
@@ -30,6 +34,9 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
         actionBar.setTitle("About Us");
 
         setContentView(R.layout.activity_aboutus);
+=======
+        setContentView(R.layout.activity_about_us);
+>>>>>>> master
 
         findViewById(R.id.backbutton).setOnClickListener(this);
     }

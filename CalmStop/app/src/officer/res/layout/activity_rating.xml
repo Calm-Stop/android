@@ -1,111 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="1"
     android:paddingLeft="15dp"
-    android:paddingRight="15dp">
+    android:paddingRight="15dp"
+    android:weightSum="1">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/rating_intro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif"
+                android:text="Your current rating:"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/star_rating_digits"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rating_intro"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-light"
+                android:paddingBottom="0dp"
+                android:paddingTop="10dp"
+                android:text="5.00"
+                android:textAlignment="center"
+                android:textSize="66sp" />
+
+            <RatingBar
+                android:id="@+id/officerStarRatingBar"
+                style="@style/Widget.AppCompat.RatingBar.Indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/star_rating_digits"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:numStars="5"
+                android:stepSize=".1"
+                android:theme="@style/RatingBar" />
+        </RelativeLayout>
 
         <TextView
+            android:id="@+id/Comments_intro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rating_intro"
-            android:text="Your current rating:"
+            android:layout_marginBottom="10dp"
             android:fontFamily="sans-serif"
-            android:textAllCaps="false"
-            android:textSize="24sp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/colorPrimary" />
+            android:text="Driver's comments:"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp" />
 
-        <TextView
-            android:text="5.00"
+        <ImageView
+            android:id="@+id/rating_line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/star_rating_digits"
-            android:layout_below="@+id/rating_intro"
-            android:textAlignment="center"
-            android:textSize="66sp"
-            android:fontFamily="sans-serif-light"
-            android:paddingTop="10dp"
-            android:paddingBottom="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" />
+            android:adjustViewBounds="false"
+            android:cropToPadding="false"
+            app:srcCompat="@drawable/rating_line" />
 
-        <RatingBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:theme="@style/RatingBar"
-            android:id="@+id/officerStarRatingBar"
-            android:layout_below="@+id/star_rating_digits"
-            android:numStars="5"
-            android:stepSize=".1"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            style="@style/Widget.AppCompat.RatingBar.Indicator" />
-    </RelativeLayout>
+        <ListView
+            android:id="@+id/driver_comments"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:divider="@drawable/comments_line"
+            android:footerDividersEnabled="false"
+            android:headerDividersEnabled="false" />
 
-    <TextView
-        android:text="Driver's comments:"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/Comments_intro"
-        android:fontFamily="sans-serif"
-        android:textSize="24sp"
-        android:layout_marginBottom="10dp"
-        android:textColor="@color/colorPrimary" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/rating_line"
-        android:id="@+id/rating_line"
-        android:adjustViewBounds="false"
-        android:cropToPadding="false" />
-
-    <ListView
-        android:layout_width="match_parent"
-        android:id="@+id/driver_comments"
-        android:divider="@drawable/comments_line"
-        android:footerDividersEnabled="false"
-        android:headerDividersEnabled="false"
-        android:layout_height="250dp" />
+    </LinearLayout>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:backgroundTint="@color/colorPrimaryDark"
         app:menu="@menu/bottom_navigation_main" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello Citizen this is the help page!"
-        android:id="@+id/AboutUsTitle"
-        android:layout_below="@+id/backbutton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="198dp" />
-
-    <Button
-        android:text="Back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/backbutton"
-        android:background="@android:color/background_light"
-        android:fontFamily="monospace"
-        android:typeface="monospace"
-        android:textAlignment="center"
-        android:textSize="14sp"
-        android:textColor="@android:color/background_dark" />
-
-</LinearLayout>
+</RelativeLayout>
