@@ -1,17 +1,25 @@
 package com.policestrategies.calm_stop.citizen;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import android.content.pm.ActivityInfo;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.policestrategies.calm_stop.R;
@@ -31,16 +39,30 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     private DrawerLayout mDrawerLayout;
     private String mActivityTitle;
 
+
     private String[] mMenuList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+       // getSupportActionBar().hide();
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_dehaze_black_24dp);
+        actionBar.setDisplayShowHomeEnabled(true);
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffffff"))); //white
         setContentView(R.layout.activity_homepage);
+
+
 
         mHomeText = (TextView) findViewById(R.id.AboutUsTitle);
 
         mHomeText.setText("Hello " + "Citizen" + "!\n\nSwipe from Left to Right -> to see menu!");
+
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mDrawerList = (ListView)findViewById(R.id.navList);
@@ -52,11 +74,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         addDrawerItems();
         setupDrawer();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
-        //findViewById(R.id.button_logout).setOnClickListener(this);
-
         Toast.makeText(HomepageActivity.this, "Swipe Right for Menu", Toast.LENGTH_LONG).show();
     }
 
@@ -67,7 +84,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch(position){
+                switch (position) {
                     case 0:
                         profile();
                         break;
@@ -121,6 +138,13 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If the nav drawer is open, hide action items related to the content view
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

@@ -1,9 +1,13 @@
 package com.policestrategies.calm_stop.citizen;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.policestrategies.calm_stop.R;
@@ -17,6 +21,14 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_white_36dp);
+        actionBar.setDisplayShowHomeEnabled(true);
+
+        actionBar.setTitle("Help");
         setContentView(R.layout.activity_help);
 
         findViewById(R.id.backbutton).setOnClickListener(this);
