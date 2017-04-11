@@ -32,7 +32,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         findViewById(R.id.settings_button).setOnClickListener(this);
         findViewById(R.id.help_button).setOnClickListener(this);
         findViewById(R.id.logout_button).setOnClickListener(this);
-        findViewById(R.id.backbutton).setOnClickListener(this);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -89,10 +88,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.help_button:
                 help();
                 break;
-            case R.id.backbutton:
-                toHomepage();
-                break;
-
         }
     }
 
@@ -116,11 +111,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         Intent i = new Intent(getBaseContext(), SettingsActivity.class);
         startActivity(i);
 
-    }
-
-    private void toHomepage() {
-        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
-        startActivity(i);
     }
 
     private void logout() {

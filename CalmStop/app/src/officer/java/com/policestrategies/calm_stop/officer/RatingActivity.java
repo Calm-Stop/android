@@ -104,7 +104,7 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
                                 comments_array.add("You have not received any comments yet.");
                             }
                             // comments_array used in listView
-                            ArrayAdapter adapter = new ArrayAdapter<String>(getBaseContext(),
+                            ArrayAdapter adapter = new ArrayAdapter<>(getBaseContext(),
                                     R.layout.activity_drivercommentslistview, comments_array);
                             ListView listView = (ListView) findViewById(R.id.driver_comments);
                             listView.setAdapter(adapter);

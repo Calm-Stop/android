@@ -16,13 +16,13 @@
         app:menu="@menu/bottom_navigation_main" />
 
     <TextView
-        app:itemBackground="@color/colorPrimary"
-        app:itemIconTint="@color/colorPrimaryDark"
-        app:itemTextColor="@color/cardview_light_background"
+        android:id="@+id/AboutUsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello Officer!"
-        android:id="@+id/AboutUsTitle" />
+        app:itemBackground="@color/colorPrimary"
+        app:itemIconTint="@color/colorPrimaryDark"
+        app:itemTextColor="@color/cardview_light_background" />
 
     <Button
         android:id="@+id/button_manage_beacon"
