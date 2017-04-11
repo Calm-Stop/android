@@ -10,14 +10,9 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.policestrategies.calm_stop.R;
-
-/**
- * Created by mariavizcaino on 2/27/17.
- */
+import com.policestrategies.calm_stop.officer.profile.ProfileActivity;
 
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener {
-
-    //private UserLocalStore localStore;
 
     private BottomNavigationView bottomNavigationView;
 
@@ -28,15 +23,11 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
-        bottomNavigationView.bringToFront();
-
         findViewById(R.id.aboutus_button).setOnClickListener(this);
         findViewById(R.id.profile_button).setOnClickListener(this);
         findViewById(R.id.settings_button).setOnClickListener(this);
         findViewById(R.id.help_button).setOnClickListener(this);
         findViewById(R.id.logout_button).setOnClickListener(this);
-        findViewById(R.id.backbutton).setOnClickListener(this);
-        //localStore = new UserLocalStore(this);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -64,6 +55,13 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 });
 
+    } // end onCreate
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        updateNavigationMenuSelection(3);
     }
 
     @Override
@@ -86,19 +84,14 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.help_button:
                 help();
                 break;
-            case R.id.backbutton:
-                toHomepage();
-                break;
-
         }
     }
 
     private void profile() {
         Intent i = new Intent(getBaseContext(), ProfileActivity.class);
         startActivity(i);
-        finish();
-
     }
+
     private void help() {
         Intent i = new Intent(getBaseContext(), HelpActivity.class);
         startActivity(i);
@@ -107,44 +100,51 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private void aboutUs() {
         Intent i = new Intent(getBaseContext(), AboutUsActivity.class);
         startActivity(i);
-
     }
+
     private void settings() {
         Intent i = new Intent(getBaseContext(), SettingsActivity.class);
-        startActivity(i);
-
-    }
-
-    private void toHomepage() {
-        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
         startActivity(i);
     }
 
     private void logout() {
+        // Clear department number
+        getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE)
+                .edit().putString(getString(R.string.shared_preferences_department_number),
+                "").commit();
+
         FirebaseAuth.getInstance().signOut();
         Intent i = new Intent(getBaseContext(), LoginActivity.class);
-        startActivity(i);
-    }
-
-    private void home() {
-        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
         startActivity(i);
         finish();
     }
 
+    private void home() {
+        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NEW_TASK |
+                Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+    }
+
     private void ratings() {
         Intent i = new Intent(getBaseContext(), RatingActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(i);
-
     }
-    private void account() {
-        Intent i = new Intent(getBaseContext(), AccountActivity.class);
-        startActivity(i);
 
-    }
     private void history() {
         Intent i = new Intent(getBaseContext(), HistoryActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(i);
-
     }
-}
+
+    private void account() {}
+
+    private void updateNavigationMenuSelection(int menu) {
+        for (int i = 0; i < 4; i++) {
+            MenuItem item = bottomNavigationView.getMenu().getItem(i);
+            item.setChecked(i == menu);
+        }
+    }
+
+} // end AccountActivity

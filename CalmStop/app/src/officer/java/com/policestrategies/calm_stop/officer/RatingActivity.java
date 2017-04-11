@@ -1,7 +1,6 @@
 package com.policestrategies.calm_stop.officer;
 
 import android.content.Intent;
-import android.media.Rating;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -10,14 +9,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.api.model.StringList;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,25 +23,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import static android.R.attr.data;
-import static android.R.attr.rating;
-import static android.R.attr.value;
-//import static com.policestrategies.calm_stop.R.id.Name;
-// import static com.policestrategies.calm_stop.R.id.ratingBar;
-
-
-
 /**
- * Created by mariavizcaino on 2/27/17.
+ * @author mariavizcaino
  */
-
 public class RatingActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    List<String> comments_array = new ArrayList<String>();
+    List<String> comments_array = new ArrayList<>();
     RatingBar officerStarRating;
     float officerStarRatingValue;
 
@@ -105,7 +92,7 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // empty comments_array
-                            List<String> comments_array = new ArrayList<String>();
+                            List<String> comments_array = new ArrayList<>();
                             // add comments from Firebase to comments_array
                             for (DataSnapshot commentSnapshot : dataSnapshot.getChildren()) {
                                 String comment = commentSnapshot.getValue(String.class);
@@ -116,8 +103,8 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
                                 comments_array.add("You have not received any comments yet.");
                             }
                             // comments_array used in listView
-                            ArrayAdapter adapter = new ArrayAdapter<String>(getBaseContext(),
-                                    R.layout.activity_drivercommentslistview, comments_array);
+                            ArrayAdapter adapter = new ArrayAdapter<>(getBaseContext(),
+                                    R.layout.listview_driver_comments, comments_array);
                             ListView listView = (ListView) findViewById(R.id.driver_comments);
                             listView.setAdapter(adapter);
                         }
@@ -157,12 +144,19 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
                 });
 
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,
-                R.layout.activity_drivercommentslistview, comments_array);
+        ArrayAdapter adapter = new ArrayAdapter<>(this,
+                R.layout.listview_driver_comments, comments_array);
 
         ListView listView = (ListView) findViewById(R.id.driver_comments);
         listView.setAdapter(adapter);
 
+    } // end onCreate
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        updateNavigationMenuSelection(1);
     }
 
     @Override
@@ -175,25 +169,30 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
 
     private void home() {
         Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NEW_TASK |
+                Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
-        finish();
-
     }
 
-    private void ratings() {
-        Intent i = new Intent(getBaseContext(), RatingActivity.class);
-        startActivity(i);
+    private void ratings() {}
 
-    }
-    private void account() {
-        Intent i = new Intent(getBaseContext(), AccountActivity.class);
-        startActivity(i);
-
-    }
     private void history() {
         Intent i = new Intent(getBaseContext(), HistoryActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(i);
-
     }
 
-}
+    private void account() {
+        Intent i = new Intent(getBaseContext(), AccountActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(i);
+    }
+
+    private void updateNavigationMenuSelection(int menu) {
+        for (int i = 0; i < 4; i++) {
+            MenuItem item = bottomNavigationView.getMenu().getItem(i);
+            item.setChecked(i == menu);
+        }
+    }
+
+} // end RatingActivity

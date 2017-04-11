@@ -6,12 +6,11 @@
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true"> -->
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fitsSystemWindows="true"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    android:fitsSystemWindows="true">
 
     <!--<ImageView
         android:layout_width="match_parent"
@@ -20,53 +19,55 @@
         android:id="@+id/imageView" /> -->
 
     <ImageView
+        android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/background_image"
         android:scaleType="fitXY"
-        android:id="@+id/backgroundImage" />
+        android:src="@mipmap/background_image" />
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/background_tint"
         android:scaleType="fitXY"
-        android:id="@+id/imageView" />
+        android:src="@drawable/background_tint" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="56dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:paddingTop="56dp">
 
-        <ImageView android:src="@drawable/stopalog_logo"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="72dp"
-            android:layout_marginBottom="70dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="70dp"
+            android:layout_marginTop="70dp"
             android:layout_weight="10"
-            android:layout_marginTop="70dp" />
+            android:src="@drawable/stopalog_logo" />
 
         <!-- Email Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:textColorHint="@android:color/white"
-            android:layout_weight="1">
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:textColorHint="@android:color/white">
 
-            <EditText android:id="@+id/input_email"
+            <EditText
+                android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Email"
                 android:inputType="textEmailAddress"
                 android:textColor="@android:color/white"
-                android:hint="Email"
                 android:textColorLink="@android:color/white" />
             <!-- android:textColorHint="@android:color/white" -->
         </android.support.design.widget.TextInputLayout>
@@ -82,17 +83,18 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:textColorHint="@android:color/white"
-            android:layout_weight="1">
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:textColorHint="@android:color/white">
 
-            <EditText android:id="@+id/input_password"
+            <EditText
+                android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Password"
                 android:inputType="textPassword"
                 android:textColor="@android:color/white"
-                android:hint="Password"
                 android:textColorLink="@android:color/white" />
             <!-- android:textColorHint="@android:color/white" -->
         </android.support.design.widget.TextInputLayout>
@@ -108,28 +110,28 @@
             android:id="@+id/button_login"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-thin"
             android:layout_marginTop="24dp"
-            android:padding="12dp"
             android:layout_weight="1"
-            android:textColor="@android:color/white"
             android:background="@drawable/login_button"
-            android:text="Login"/>
+            android:fontFamily="sans-serif-thin"
+            android:padding="12dp"
+            android:text="Login"
+            android:textColor="@android:color/white" />
 
-        <TextView android:id="@+id/button_signup"
+        <TextView
+            android:id="@+id/button_signup"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
             android:layout_marginTop="40dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-thin"
+            android:gravity="center"
             android:text="Create an account"
             android:textColor="@android:color/white"
-            android:gravity="center"
-            android:layout_weight="1"
             android:textSize="16sp"
-            android:fontFamily="sans-serif-thin"
 
             />
 
     </LinearLayout>
-</RelativeLayout>
-    <!-- </ScrollView> -->
+</RelativeLayout><!-- </ScrollView> -->

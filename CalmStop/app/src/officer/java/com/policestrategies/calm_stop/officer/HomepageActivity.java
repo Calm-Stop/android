@@ -1,35 +1,22 @@
 package com.policestrategies.calm_stop.officer;
 
-/**
- * Created by mariavizcaino on 2/9/17.
- */
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toolbar;
 import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
 
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.officer.beacon_registration.BeaconRegistrationActivity;
 
 /**
- * Created by mariavizcaino on 2/9/17.
+ * @author mariavizcaino
  */
 
 public class HomepageActivity extends AppCompatActivity implements View.OnClickListener {
-    //welcome Officer
 
     private BottomNavigationView bottomNavigationView;
 
@@ -38,10 +25,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-
-        //bottomNavigationView.SetOnItemSelectedListener(this);
-
-        //bottomNavigationView.bringToFront();
 
         findViewById(R.id.button_manage_beacon).setOnClickListener(this);
 
@@ -71,7 +54,14 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                     }
                 });
 
-        Toast.makeText(HomepageActivity.this, "Welcome!", Toast.LENGTH_LONG).show();
+        Toast.makeText(HomepageActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
+    } // end onCreate
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        updateNavigationMenuSelection(0);
     }
 
     @Override
@@ -88,28 +78,32 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void home() {
-        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
-        startActivity(i);
-        finish();
-
-    }
+    private void home() {}
 
     private void ratings() {
         Intent i = new Intent(getBaseContext(), RatingActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(i);
-
     }
-    private void account() {
-        Intent i = new Intent(getBaseContext(), AccountActivity.class);
-        startActivity(i);
 
-    }
     private void history() {
         Intent i = new Intent(getBaseContext(), HistoryActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(i);
-
     }
 
-}
+    private void account() {
+        Intent i = new Intent(getBaseContext(), AccountActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(i);
+    }
+
+    private void updateNavigationMenuSelection(int menu) {
+        for (int i = 0; i < 4; i++) {
+            MenuItem item = bottomNavigationView.getMenu().getItem(i);
+            item.setChecked(i == menu);
+        }
+    }
+
+} // end HomepageActivity
 
