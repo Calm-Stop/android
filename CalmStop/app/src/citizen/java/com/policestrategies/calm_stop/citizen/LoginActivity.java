@@ -1,5 +1,6 @@
 package com.policestrategies.calm_stop.citizen;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.SharedUtil;
 
 /**
  * Allows the user to log in or create an account.
@@ -30,11 +32,13 @@ import com.policestrategies.calm_stop.R;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static EditText mEmailField;
+    private EditText mEmailField;
     private EditText mPasswordField;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mAuth;
+
+    private ProgressDialog mProgressDialog;
 
     private static final String TAG = "Login";
 
@@ -50,10 +54,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // hide the titlebar
-        getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
 
         mEmailField = (EditText) findViewById(R.id.input_email);
         mPasswordField = (EditText) findViewById(R.id.input_password);
@@ -93,6 +98,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+        SharedUtil.dismissProgressDialog(mProgressDialog);
     }
 
 
@@ -104,11 +110,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         switch(v.getId()) {
 
-            case R.id.button_login: // The login button was pressed - let's run the login function
-                login(mEmailField.getText().toString(), mPasswordField.getText().toString());
+            case R.id.button_login:
+                mProgressDialog = ProgressDialog.show(this, "", "Logging in", true, false);
+                login();
                 break;
 
-            case R.id.button_signup: // Signup was pressed, begin the SignupActivity
+            case R.id.button_signup:
                 Intent i = new Intent(getBaseContext(), SignupActivity.class);
                 startActivity(i);
                 break;
@@ -119,10 +126,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     /**
      * Begins the login process. Validates the input and - if input is valid - attempts to log in.
      */
-    private void login(String email, String password) {
+    private void login() {
+        String email = mEmailField.getText().toString();
+        String password = mPasswordField.getText().toString();
+
         Log.d(TAG, "signIn" + email);
         if (!validateInput()) {
-            Toast.makeText(LoginActivity.this, "Validation Failed", Toast.LENGTH_SHORT).show();
+            SharedUtil.dismissProgressDialog(mProgressDialog);
             return;
         }
 
@@ -139,30 +149,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Log.w(TAG, "signInWithEmail:failed", task.getException());
                             Toast.makeText(LoginActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
-                            Toast.makeText(LoginActivity.this, "Validation failed.", Toast.LENGTH_SHORT).show();
-                        }
-                        if (task.isSuccessful()) {
+                            SharedUtil.dismissProgressDialog(mProgressDialog);
+                        } else  {
 
                             final String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                             DatabaseReference acctypeRef = FirebaseDatabase.getInstance().getReference("citizen");
                             acctypeRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
+                                    SharedUtil.dismissProgressDialog(mProgressDialog);
                                     if (dataSnapshot.hasChild(Uid)) {
                                         Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                                         Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                                         startActivity(i);
+                                        finish();
                                     } else {
                                         FirebaseAuth.getInstance().signOut();
-                                        Toast.makeText(LoginActivity.this, "This is not an citizen account.", Toast.LENGTH_SHORT).show();
-                                        Intent i = new Intent(getBaseContext(), LoginActivity.class);
-                                        startActivity(i);
+                                        Toast.makeText(LoginActivity.this, "This is not a citizen account.", Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
-                                    //TODO Empty Stud
+                                    SharedUtil.dismissProgressDialog(mProgressDialog);
                                 }
                             });
                         }
