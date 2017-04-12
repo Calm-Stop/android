@@ -111,7 +111,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.signup_button_signup: // Signup was pressed, begin the SignupActivity
-                mProgressDialog = ProgressDialog.show(this, "", "Logging in", true, false);
+                mProgressDialog = ProgressDialog.show(this, "", "Signing up", true, false);
                 signup();
                 break;
         }
