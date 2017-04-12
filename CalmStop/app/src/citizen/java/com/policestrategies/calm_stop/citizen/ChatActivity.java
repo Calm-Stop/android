@@ -12,6 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import com.policestrategies.calm_stop.ChatArrayAdapter;
 import com.policestrategies.calm_stop.ChatMessage;
 import com.policestrategies.calm_stop.R;
@@ -24,6 +29,13 @@ public class ChatActivity extends Activity {
     private EditText chatText;
     private Button buttonSend;
 
+    private DatabaseReference databaseRef;
+    private FirebaseAuth mAuth;
+    private DatabaseReference threadReference;
+    private DatabaseReference userProfileReference;
+    private String UserID;
+    private String name;
+
     Intent intent;
     private boolean side = false;
 
@@ -34,12 +46,25 @@ public class ChatActivity extends Activity {
         setContentView(R.layout.activity_chat);
 
         buttonSend = (Button) findViewById(R.id.button_send);
-
         listView = (ListView) findViewById(R.id.listView1);
+
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            UserID = user.getUid();
+            databaseRef = FirebaseDatabase.getInstance().getReference();
+            threadReference = databaseRef.child("stops").child("temp_stop_id")
+                    .child("thread").getRef();
+            userProfileReference = databaseRef.child("citizen")
+                    .child(UserID).child("profile").getRef();
+            name = userProfileReference.child("first_name").toString();
+        } else {
+            UserID = "Random UserID String (placeholder)";
+            name = "[Sender_Name]:";
+        }
 
         chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.activity_chat_singlemessage);
         listView.setAdapter(chatArrayAdapter);
-
         chatText = (EditText) findViewById(R.id.chat_text);
         chatText.setOnKeyListener(new OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -70,9 +95,11 @@ public class ChatActivity extends Activity {
     }
 
     private boolean sendChatMessage(){
-        chatArrayAdapter.add(new ChatMessage(side, chatText.getText().toString()));
+        //if user_ID == authorID, set side = false; else set side equal true
+        side = false; //output on the right side
+        chatArrayAdapter.add(new ChatMessage(side,
+                chatText.getText().toString(), 0, UserID, name));
         chatText.setText("");
-        side = !side;
         return true;
     }
 
