@@ -131,14 +131,19 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
     private void synchronize_beacon(BeaconObject beacon) {
 
         String[] beaconInstanceId = beacon.getInstance().split(" ");
+        String beaconId = beaconInstanceId[beaconInstanceId.length - 1];
 
         System.out.println(mDatabase.toString());
-        DatabaseReference officerDatabaseReference = mDatabase.child("beacons")
-                .child(beaconInstanceId[beaconInstanceId.length - 1]).child("officer").getRef();
+        DatabaseReference beaconDatabaseReference = mDatabase.child("beacons")
+                .child(beaconId).child("officer").getRef();
+        DatabaseReference officerDatabaseReference = mDatabase.child("officer")
+                .child(mDepartmentNumber).child(mUid).child("profile").getRef();
 
-        officerDatabaseReference.child("department").setValue(mDepartmentNumber);
-        officerDatabaseReference.child("uid").setValue(mUid);
-        finish(); // TODO: Validate success?
+        beaconDatabaseReference.child("department").setValue(mDepartmentNumber);
+        beaconDatabaseReference.child("uid").setValue(mUid);
+        officerDatabaseReference.child("beacon").setValue(beaconId);
+
+        Toast.makeText(this, "Beacon registration successful", Toast.LENGTH_SHORT).show();
     }
 
     @Override
