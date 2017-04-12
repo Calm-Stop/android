@@ -134,22 +134,32 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
     private void synchronize_beacon(BeaconObject beacon) {
 
         String[] beaconInstanceId = beacon.getInstance().split(" ");
-        mCurrentlyRegisteredBeaconId = beaconInstanceId[beaconInstanceId.length - 1];
+        final String beaconRegistrationId = beaconInstanceId[beaconInstanceId.length - 1];
 
-        System.out.println(mDatabase.toString());
-        DatabaseReference beaconDatabaseReference = mDatabase.child("beacons")
-                .child(mCurrentlyRegisteredBeaconId).child("officer").getRef();
-        DatabaseReference officerDatabaseReference = mDatabase.child("officer")
-                .child(mDepartmentNumber).child(mUid).child("profile").getRef();
+        if (!mCurrentlyRegisteredBeaconId.isEmpty() &&
+                !mCurrentlyRegisteredBeaconId.equals(beaconRegistrationId)) {
+            // Override beacon
+            new AlertDialog.Builder(this)
+                    .setTitle("Override current beacon")
+                    .setMessage("Would you like to override your currently registered beacon with" +
+                            " beacon #" + beaconRegistrationId + "?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            deregisterBeacon(mCurrentlyRegisteredBeaconId);
+                            registerBeacon(beaconRegistrationId);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // Do nothing
+                        }
+                    })
+                    .setCancelable(true)
+                    .show();
+        }
 
-        beaconDatabaseReference.child("department").setValue(mDepartmentNumber);
-        beaconDatabaseReference.child("uid").setValue(mUid);
-        officerDatabaseReference.child("beacon").setValue(mCurrentlyRegisteredBeaconId);
-
-        updateCurrentBeaconInfo();
-        Toast.makeText(this, "Beacon registration successful", Toast.LENGTH_SHORT).show();
-        mRecyclerView.setVisibility(View.GONE);
-        findViewById(R.id.button_scan_beacon_registration).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -241,6 +251,33 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
                     .setImageResource(R.mipmap.ic_warning_black_48dp);
         }
         ((TextView) findViewById(R.id.text_cardview_beacon_status)).setText(beaconStatus);
+    }
+
+    private void registerBeacon(String beaconId) {
+        mCurrentlyRegisteredBeaconId = beaconId;
+
+        DatabaseReference beaconDatabaseReference = mDatabase.child("beacons")
+                .child(beaconId).child("officer").getRef();
+        DatabaseReference officerDatabaseReference = mDatabase.child("officer")
+                .child(mDepartmentNumber).child(mUid).child("profile").getRef();
+
+        beaconDatabaseReference.child("department").setValue(mDepartmentNumber);
+        beaconDatabaseReference.child("uid").setValue(mUid);
+        officerDatabaseReference.child("beacon").setValue(beaconId);
+
+        updateCurrentBeaconInfo();
+        Toast.makeText(this, "Beacon registration successful", Toast.LENGTH_SHORT).show();
+        mRecyclerView.setVisibility(View.GONE);
+        findViewById(R.id.button_scan_beacon_registration).setVisibility(View.VISIBLE);
+    }
+
+    private void deregisterBeacon(String beaconId) {
+        DatabaseReference beaconDatabaseReference = mDatabase.child("beacons").getRef();
+        DatabaseReference officerDatabaseReference = mDatabase.child("officer")
+                .child(mDepartmentNumber).child(mUid).child("profile").getRef();
+
+        beaconDatabaseReference.child(beaconId).removeValue();
+        officerDatabaseReference.child("beacon").removeValue();
     }
 
     private void verifyBluetooth() {
