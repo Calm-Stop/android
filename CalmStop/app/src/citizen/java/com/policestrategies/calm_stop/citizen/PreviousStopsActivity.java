@@ -20,19 +20,19 @@ public class PreviousStopsActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
-        actionBar.setTitle("Previous Stops");
         setContentView(R.layout.activity_previousstops);
 
-        findViewById(R.id.backbutton).setOnClickListener(this);
+//        findViewById(R.id.backbutton).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.backbutton:
-                toHomepage();
-                break;
+//            case R.id.backbutton:
+//                toHomepage();
+//                break;
 
         }
 

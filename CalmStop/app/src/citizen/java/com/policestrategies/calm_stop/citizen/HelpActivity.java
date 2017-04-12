@@ -23,19 +23,19 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
-        actionBar.setTitle("Help");
         setContentView(R.layout.activity_help);
 
-        findViewById(R.id.backbutton).setOnClickListener(this);
+       // findViewById(R.id.backbutton).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.backbutton:
-                toHomepage();
-                break;
+//            case R.id.backbutton:
+//                toHomepage();
+//                break;
 
         }
 

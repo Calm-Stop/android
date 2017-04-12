@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -32,7 +33,6 @@ import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionAc
 public class HomepageActivity extends AppCompatActivity implements View.OnClickListener {
 
     //welcome citizen
-    private TextView mHomeText;
     private ListView mDrawerList;
     private ArrayAdapter<String> mAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -49,20 +49,11 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
        // getSupportActionBar().hide();
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_dehaze_black_24dp);
-        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.hide();
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffffff"))); //white
         setContentView(R.layout.activity_homepage);
 
-
-
-        mHomeText = (TextView) findViewById(R.id.AboutUsTitle);
-
-        mHomeText.setText("Hello " + "Citizen" + "!\n\nSwipe from Left to Right -> to see menu!");
-
+        findViewById(R.id.menu_main).setOnClickListener(this);
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mDrawerList = (ListView)findViewById(R.id.navList);
@@ -74,7 +65,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         addDrawerItems();
         setupDrawer();
 
-        Toast.makeText(HomepageActivity.this, "Swipe Right for Menu", Toast.LENGTH_LONG).show();
     }
 
     private void addDrawerItems() {
@@ -151,6 +141,9 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
 
         switch(v.getId()) {
+            case R.id.menu_main:
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+                break;
 
         }
     }

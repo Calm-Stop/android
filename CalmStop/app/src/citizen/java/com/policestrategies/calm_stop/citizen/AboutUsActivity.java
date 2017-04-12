@@ -21,18 +21,19 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("About Us");
+        //actionBar.hide();
 
         setContentView(R.layout.activity_about_us);
 
-        findViewById(R.id.backbutton).setOnClickListener(this);
+//        findViewById(R.id.backbutton).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.backbutton:
-                toHomepage();
-                break;
+//            case R.id.backbutton:
+//                toHomepage();
+//                break;
 
         }
 
