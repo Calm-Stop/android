@@ -197,15 +197,13 @@ public class RegexChecksTest {
     }
 
     @Test
-<<<<<<< HEAD:CalmStop/app/src/test/java/com/policestrategies/calm_stop/SignupVerificationTest.java
     public void testLessThanNineteenTenDateOfBirth() {
         String testDateOfBirth = "1-20-1909";
         Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
-=======
+
     public void testLessThanNineteenThirtyDateOfBirth() {
         String testDateOfBirth = "1-20-1929";
         Assert.assertFalse(RegexChecks.validDateOfBirth(testDateOfBirth));
->>>>>>> NewBranch:CalmStop/app/src/test/java/com/policestrategies/calm_stop/RegexChecksTest.java
     }
 //RECHECK
     @Test

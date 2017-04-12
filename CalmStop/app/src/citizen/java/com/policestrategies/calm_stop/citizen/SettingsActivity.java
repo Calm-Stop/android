@@ -2,6 +2,7 @@ package com.policestrategies.calm_stop.citizen;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
@@ -17,6 +18,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setTitle("Settings");
         setContentView(R.layout.activity_settings);
 
         findViewById(R.id.backbutton).setOnClickListener(this);
