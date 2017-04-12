@@ -134,11 +134,12 @@ public class ChatActivity extends Activity {
         }
 //END FIREBASE CODE
 
-        //ON KEY PRESS? WHY?
+        //ON KEY PRESS may not be necessary
         chatText.setOnKeyListener(new OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    return sendChatMessage();
+                    //return sendChatMessage();
+                    return true;
                 }
                 return false;
             }
@@ -155,7 +156,11 @@ public class ChatActivity extends Activity {
                 ChatMessage newMessage = new ChatMessage(side, chatText.getText().toString(),
                         timestamp, threadID, authorID, name);
                 //sendToFirebase(newMessage);
-                sendChatMessage();
+                if (user != null) {
+                    sendToFirebase(newMessage);
+                } else {
+                    sendChatMessage();
+                }
                 //SEND MESSAGE TO FIREBASE INSTEAD
             }
         });
