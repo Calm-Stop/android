@@ -1,5 +1,6 @@
 package com.policestrategies.calm_stop.officer;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,7 +15,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.SharedUtil;
 
 /**
  * Allows the officer to log in or create an account.
@@ -36,9 +37,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText mPasswordField;
 
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
 
-    private static final String TAG = "Login";
+    private static final String TAG = "LoginActivity";
+
+    private ProgressDialog mProgressDialog;
 
     /**
      * onCreate is called immediately following the creation of an Activity.
@@ -51,9 +53,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // hide the titlebar
-        getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
 
         mDepartmentField = (EditText) findViewById(R.id.login_input_department);
         mEmailField = (EditText) findViewById(R.id.login_input_email);
@@ -62,45 +66,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
 
-        // START initialize_auth so you can track when user signs in and signs out
         mAuth = FirebaseAuth.getInstance();
-        // END initialize_auth
-
-        // START auth_state_listener
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
-            }
-        };
-        // END auth_state_listener
 
     }
 
-    // START on_start_add_listener
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
     }
 
-    // Remove FirebaseAuth instance on onStop()
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
+        SharedUtil.dismissProgressDialog(mProgressDialog);
     }
-
 
     /**
      * Any onClicks that we register will be handled in here
@@ -110,25 +89,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         switch(v.getId()) {
 
-            case R.id.button_login: // The login button was pressed - let's run the login function
-                login(mDepartmentField.getText().toString(), mEmailField.getText().toString(),
-                        mPasswordField.getText().toString());
+            case R.id.button_login:
+                mProgressDialog = ProgressDialog.show(this, "", "Logging in", true, false);
+                login();
                 break;
 
-            case R.id.button_signup: // Signup was pressed, begin the SignupActivity
-                Intent i = new Intent(getBaseContext(), SignupActivity.class);
-                startActivity(i);
+            case R.id.button_signup:
+                navigateToSignupActivity();
                 break;
 
         }
     }
 
+    private void navigateToSignupActivity() {
+        Intent i = new Intent(getBaseContext(), SignupActivity.class);
+        startActivity(i);
+        finish();
+    }
+
     /**
      * Begins the login process. Validates the input and - if input is valid - attempts to log in.
      */
-    private void login(final String departmentNumber, String email, String password) {
+    private void login() {
+        final String departmentNumber = mDepartmentField.getText().toString();
+        final String email = mEmailField.getText().toString();
+        final String password = mPasswordField.getText().toString();
+
         Log.d(TAG, "Signing in with email: " + email);
         if (!validateInput()) {
+            SharedUtil.dismissProgressDialog(mProgressDialog);
             Toast.makeText(LoginActivity.this, "Validation Failed", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -145,9 +134,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Log.w(TAG, "signInWithEmail:failed", task.getException());
                             Toast.makeText(LoginActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
-                            Toast.makeText(LoginActivity.this, "Validation failed.", Toast.LENGTH_SHORT).show();
-                        }
-                        if (task.isSuccessful()) {
+                            SharedUtil.dismissProgressDialog(mProgressDialog);
+                        } else {
 
                             final String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                             DatabaseReference acctypeRef = FirebaseDatabase.getInstance().getReference("officer");
@@ -161,16 +149,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE)
                                                     .edit().putString(getString(R.string.shared_preferences_department_number),
                                                     departmentNumber).commit();
+                                            SharedUtil.dismissProgressDialog(mProgressDialog);
                                             Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                                             startActivity(i);
+                                            finish();
                                         } else {
                                             FirebaseAuth.getInstance().signOut();
-                                            Toast.makeText(LoginActivity.this, "This is not an officer account.", Toast.LENGTH_SHORT).show();
+                                            SharedUtil.dismissProgressDialog(mProgressDialog);
+                                            Toast.makeText(LoginActivity.this,
+                                                    "This is not an officer account.",
+                                                    Toast.LENGTH_SHORT).show();
                                         }
 
                                     } else {
                                         FirebaseAuth.getInstance().signOut();
+                                        SharedUtil.dismissProgressDialog(mProgressDialog);
                                         mDepartmentField.setError("Invalid department number");
                                         mDepartmentField.requestFocus();
                                     }
@@ -178,6 +172,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
+                                    SharedUtil.dismissProgressDialog(mProgressDialog);
                                 }
                             });
                         }

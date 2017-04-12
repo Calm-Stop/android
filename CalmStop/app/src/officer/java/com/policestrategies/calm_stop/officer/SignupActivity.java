@@ -1,5 +1,6 @@
 package com.policestrategies.calm_stop.officer;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.RegexChecks;
+import com.policestrategies.calm_stop.SharedUtil;
 
 /**
  * Allows the user to sign up or return to the log in page.
@@ -41,11 +43,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private static final String TAG = "Signup";
 
     private FirebaseAuth mAuth;
-
-    private FirebaseAuth.AuthStateListener mAuthListener;
-
     private DatabaseReference databaseRef;
-    private FirebaseDatabase database;
+
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,44 +66,25 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
 
-        database = FirebaseDatabase.getInstance();
-        databaseRef = database.getReference();
-        // START initialize_auth so you can track when user signs in and signs out
+        databaseRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-        // END initialize_auth
 
-        // START auth_state_listener
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
-            }
-        };
-        // END auth_state_listener
     }
 
-    // START on_start_add_listener
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
     }
 
-    // Remove FirebaseAuth instance on onStop()
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
+        SharedUtil.dismissProgressDialog(mProgressDialog);
+    }
+
+    @Override
+    public void onBackPressed() {
+        navigateToLoginActivity();
     }
 
     /**
@@ -114,15 +95,21 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         switch(v.getId()) {
             case R.id.button_login:
-                Intent i = new Intent(getBaseContext(), LoginActivity.class);
-                startActivity(i);
+                navigateToLoginActivity();
                 break;
 
-            case R.id.button_signup: // Signup was pressed, begin the SignupActivity
+            case R.id.button_signup:
+                mProgressDialog = ProgressDialog.show(this, "", "Signing up", true, false);
                 signup();
                 break;
 
         }
+    }
+
+    private void navigateToLoginActivity() {
+        Intent i = new Intent(getBaseContext(), LoginActivity.class);
+        startActivity(i);
+        finish();
     }
 
     /**
@@ -141,10 +128,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
 
         if (!validateInput(email, password, firstname, lastname, department, badge)) {
+            SharedUtil.dismissProgressDialog(mProgressDialog);
             return;
         }
-                // Now we need to attempt to signup - we'll add code for this later (once Firebase is integrated)
-        // [START create_user_with_email]
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -156,12 +142,18 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
+                            SharedUtil.dismissProgressDialog(mProgressDialog);
                             Toast.makeText(SignupActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         } else {
 
-                            Toast.makeText(SignupActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
+                            if (user == null) {
+                                SharedUtil.dismissProgressDialog(mProgressDialog);
+                                Toast.makeText(SignupActivity.this, R.string.auth_failed,
+                                        Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             String uuid = user.getUid();
 
                             //Set up officer profile
@@ -171,9 +163,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             officerDatabaseRef.child("email").setValue(email);
                             officerDatabaseRef.child("first_name").setValue(firstname);
                             officerDatabaseRef.child("last_name").setValue(lastname);
-
                             officerDatabaseRef.child("gender").setValue(i_gender);
-
                             officerDatabaseRef.child("department").setValue(department);
                             officerDatabaseRef.child("badge").setValue(badge);
 
@@ -194,14 +184,16 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             officerRatingDatabaseRef.child("number_of_ratings").setValue(0);
 
                             //Set up empty comments section
-                            DatabaseReference officerCommentsDatabaseRef = databaseRef.child("officer")
-                                    .child(department).child(uuid).child("comments").getRef();
+//                            DatabaseReference officerCommentsDatabaseRef = databaseRef.child("officer")
+//                                    .child(department).child(uuid).child("comments").getRef();
 
                             getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE)
                                     .edit().putString(getString(R.string.shared_preferences_department_number),
                                     department).commit();
 
-
+                            Toast.makeText(SignupActivity.this, "Validation success!",
+                                    Toast.LENGTH_SHORT).show();
+                            SharedUtil.dismissProgressDialog(mProgressDialog);
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
                             finish();
@@ -209,11 +201,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
                     }
                 });
-        // [END create_user_with_email]
-        //you signed up, CONGRATS
 
-
-    }
+    } // end signup()
 
     private void setUpGenderSetter() {
 
@@ -228,9 +217,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 i_gender = position;
             }
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-            }
+            public void onNothingSelected(AdapterView<?> arg0) {}
         });
     }
 

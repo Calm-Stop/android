@@ -1,6 +1,7 @@
 package com.policestrategies.calm_stop.citizen;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.RegexChecks;
+import com.policestrategies.calm_stop.SharedUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -51,8 +53,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private static final String TAG = "SignupActivity";
 
     private FirebaseAuth mAuth;
-
     private DatabaseReference databaseRef;
+
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +91,17 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     } // end onCreate
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        SharedUtil.dismissProgressDialog(mProgressDialog);
+    }
+
+    @Override
+    public void onBackPressed() {
+        navigateToLoginActivity();
+    }
+
     /**
      * Any onClicks that we register will be handled in here
      */
@@ -96,15 +110,20 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         switch(v.getId()) {
             case R.id.signup_button_login:
-                Intent i = new Intent(getBaseContext(), LoginActivity.class);
-                startActivity(i);
-                finish();
+                navigateToLoginActivity();
                 break;
 
             case R.id.signup_button_signup: // Signup was pressed, begin the SignupActivity
+                mProgressDialog = ProgressDialog.show(this, "", "Signing up", true, false);
                 signup();
                 break;
         }
+    }
+
+    private void navigateToLoginActivity() {
+        Intent i = new Intent(getBaseContext(), LoginActivity.class);
+        startActivity(i);
+        finish();
     }
 
     /**
@@ -124,6 +143,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         Log.d(TAG, "Creating account: " + email);
 
         if (!validateInput(email, password, licensenum, firstname, lastname, phone, zip, dateOfBirth)) {
+            SharedUtil.dismissProgressDialog(mProgressDialog);
             return;
         }
 
@@ -134,6 +154,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
                         if (!task.isSuccessful() || mAuth.getCurrentUser() == null)  {
+                            SharedUtil.dismissProgressDialog(mProgressDialog);
                             Toast.makeText(SignupActivity.this, "Error signing up",
                                     Toast.LENGTH_LONG).show();
                         } else {
@@ -152,6 +173,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             citizenDatabaseRef.child("language").setValue(i_language);
                             citizenDatabaseRef.child("ethnicity").setValue(i_ethnicity);
                             citizenDatabaseRef.child("dob").setValue(dateOfBirth);
+
+                            SharedUtil.dismissProgressDialog(mProgressDialog);
 
                             Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                             startActivity(i);
@@ -252,9 +275,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 i_gender = position;
             }
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-            }
+            public void onNothingSelected(AdapterView<?> arg0) {}
         });
     }
 
@@ -271,9 +292,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 i_ethnicity = position;
             }
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-            }
+            public void onNothingSelected(AdapterView<?> arg0) {}
         });
     }
 
@@ -290,9 +309,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 i_language = position;
             }
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-            }
+            public void onNothingSelected(AdapterView<?> arg0) {}
         });
     }
 
