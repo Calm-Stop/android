@@ -76,11 +76,15 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         super.onStart();
     }
 
-    // Remove FirebaseAuth instance on onStop()
     @Override
     public void onStop() {
         super.onStop();
         SharedUtil.dismissProgressDialog(mProgressDialog);
+    }
+
+    @Override
+    public void onBackPressed() {
+        navigateToLoginActivity();
     }
 
     /**
@@ -91,8 +95,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         switch(v.getId()) {
             case R.id.button_login:
-                Intent i = new Intent(getBaseContext(), LoginActivity.class);
-                startActivity(i);
+                navigateToLoginActivity();
                 break;
 
             case R.id.button_signup:
@@ -101,6 +104,12 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
         }
+    }
+
+    private void navigateToLoginActivity() {
+        Intent i = new Intent(getBaseContext(), LoginActivity.class);
+        startActivity(i);
+        finish();
     }
 
     /**
@@ -192,11 +201,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
                     }
                 });
-        // [END create_user_with_email]
-        //you signed up, CONGRATS
 
-
-    }
+    } // end signup()
 
     private void setUpGenderSetter() {
 

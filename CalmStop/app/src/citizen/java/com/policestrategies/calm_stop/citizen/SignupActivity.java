@@ -97,6 +97,11 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         SharedUtil.dismissProgressDialog(mProgressDialog);
     }
 
+    @Override
+    public void onBackPressed() {
+        navigateToLoginActivity();
+    }
+
     /**
      * Any onClicks that we register will be handled in here
      */
@@ -105,9 +110,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         switch(v.getId()) {
             case R.id.signup_button_login:
-                Intent i = new Intent(getBaseContext(), LoginActivity.class);
-                startActivity(i);
-                finish();
+                navigateToLoginActivity();
                 break;
 
             case R.id.signup_button_signup: // Signup was pressed, begin the SignupActivity
@@ -115,6 +118,12 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 signup();
                 break;
         }
+    }
+
+    private void navigateToLoginActivity() {
+        Intent i = new Intent(getBaseContext(), LoginActivity.class);
+        startActivity(i);
+        finish();
     }
 
     /**
