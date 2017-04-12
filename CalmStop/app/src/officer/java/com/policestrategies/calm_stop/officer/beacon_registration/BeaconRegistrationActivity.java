@@ -1,5 +1,6 @@
 package com.policestrategies.calm_stop.officer.beacon_registration;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,13 +9,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.BeaconSimulator;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.SharedUtil;
 import com.policestrategies.calm_stop.officer.LoginActivity;
 
 import org.altbeacon.beacon.Beacon;
@@ -39,13 +46,13 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
     private BeaconManager mBeaconManager;
 
     private DatabaseReference mDatabase;
-    private FirebaseAuth mAuth;
 
     private RecyclerView mRecyclerView;
+    private ProgressDialog mProgressDialog;
     private String mUid;
 
     private String mDepartmentNumber;
-
+    private String mCurrentlyRegisteredBeaconId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +60,11 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         setContentView(R.layout.activity_beacon_registration);
 
         verifyBluetooth();
+        mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
 
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         mDepartmentNumber = getSharedPreferences(getString(R.string.shared_preferences),
                 MODE_PRIVATE).getString(getString(R.string.shared_preferences_department_number),
@@ -70,6 +78,8 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
+
+        obtainCurrentBeaconInfo();
 
         mBeaconManager.getBeaconParsers().add(new BeaconParser().
                 setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
@@ -90,18 +100,11 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
-
             case R.id.button_scan_beacon_registration:
                 scanForBeacons();
                 break;
-
-            case R.id.beacon_recycler_view:
-                System.out.println("Click!!!!!");
-                break;
         }
-
     } // end onClick
 
     @Override
@@ -131,19 +134,22 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
     private void synchronize_beacon(BeaconObject beacon) {
 
         String[] beaconInstanceId = beacon.getInstance().split(" ");
-        String beaconId = beaconInstanceId[beaconInstanceId.length - 1];
+        mCurrentlyRegisteredBeaconId = beaconInstanceId[beaconInstanceId.length - 1];
 
         System.out.println(mDatabase.toString());
         DatabaseReference beaconDatabaseReference = mDatabase.child("beacons")
-                .child(beaconId).child("officer").getRef();
+                .child(mCurrentlyRegisteredBeaconId).child("officer").getRef();
         DatabaseReference officerDatabaseReference = mDatabase.child("officer")
                 .child(mDepartmentNumber).child(mUid).child("profile").getRef();
 
         beaconDatabaseReference.child("department").setValue(mDepartmentNumber);
         beaconDatabaseReference.child("uid").setValue(mUid);
-        officerDatabaseReference.child("beacon").setValue(beaconId);
+        officerDatabaseReference.child("beacon").setValue(mCurrentlyRegisteredBeaconId);
 
+        updateCurrentBeaconInfo();
         Toast.makeText(this, "Beacon registration successful", Toast.LENGTH_SHORT).show();
+        mRecyclerView.setVisibility(View.GONE);
+        findViewById(R.id.button_scan_beacon_registration).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -192,6 +198,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
                                     Toast.LENGTH_SHORT).show();
                         }
 
+                        mRecyclerView.setVisibility(View.VISIBLE);
                         findViewById(R.id.button_scan_beacon_registration).setVisibility(View.GONE);
                     }
                 });
@@ -201,10 +208,46 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
 
     } // end onBeaconServiceConnect
 
+    private void obtainCurrentBeaconInfo() {
+
+        DatabaseReference officerProfileReference = mDatabase.child("officer")
+                .child(mDepartmentNumber).child(mUid).child("profile").getRef();
+
+        officerProfileReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild("beacon")) {
+                    mCurrentlyRegisteredBeaconId = dataSnapshot.child("beacon").getValue().toString();
+                }
+                updateCurrentBeaconInfo();
+                SharedUtil.dismissProgressDialog(mProgressDialog);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+
+    } // end obtainCurrentBeaconInfo
+
+    private void updateCurrentBeaconInfo() {
+        String beaconStatus;
+        if (mCurrentlyRegisteredBeaconId != null && !mCurrentlyRegisteredBeaconId.isEmpty()) {
+            beaconStatus = "Connected to beacon #" + mCurrentlyRegisteredBeaconId;
+            ((ImageView) findViewById(R.id.beacon_icon))
+                    .setImageResource(R.mipmap.ic_done_all_black_48dp);
+        } else {
+            beaconStatus = "No currently registered beacons";
+            ((ImageView) findViewById(R.id.beacon_icon))
+                    .setImageResource(R.mipmap.ic_warning_black_48dp);
+        }
+        ((TextView) findViewById(R.id.text_cardview_beacon_status)).setText(beaconStatus);
+    }
+
     private void verifyBluetooth() {
 
         try {
             if (!BeaconManager.getInstanceForApplication(this).checkAvailability()) {
+                SharedUtil.dismissProgressDialog(mProgressDialog);
                 final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Bluetooth not enabled");
                 builder.setMessage("Please enable bluetooth in settings and restart this " +
