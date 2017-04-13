@@ -10,16 +10,13 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".citizen.ChatActivity"
+            android:name=".citizen.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name="citizen.ChatActivity" />
 
         <activity
             android:name=".citizen.LoginActivity"
@@ -60,6 +57,10 @@
 
         <activity
             android:name=".citizen.beacon_detection.BeaconDetectionActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".citizen.ChatActivity"
             android:screenOrientation="portrait" />
 
     </application>

@@ -126,11 +126,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-<<<<<<< HEAD
-    public void onClick(View v) {
-
-        switch(v.getId()) {
-=======
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId(); // TODO: This should be a switch statement
@@ -153,7 +148,9 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         } else if (id == R.id.detect_beacon_debug) {
             Intent i = new Intent(this, BeaconDetectionActivity.class);
             startActivity(i);
->>>>>>> d2789f9f55e862ad9aac5466f76d560771791a71
+        } else if (id == R.id.chat_activity_debug) {
+            Intent i = new Intent(this, ChatActivity.class);
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -162,9 +159,9 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
     }
 
     private void profile() {
-        Intent i = new Intent(getBaseContext(), ChatActivity.class);
+        Intent i = new Intent(this, ProfileActivity.class);
         startActivity(i);
-//        finish();
+        finish();
     }
 
     private void previousStops() {
