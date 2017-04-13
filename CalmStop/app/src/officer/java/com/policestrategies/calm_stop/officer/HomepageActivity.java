@@ -27,6 +27,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
         findViewById(R.id.button_manage_beacon).setOnClickListener(this);
+        findViewById(R.id.button_make_stop).setOnClickListener(this);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -70,9 +71,12 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         switch(v.getId()) {
 
             case R.id.button_manage_beacon:
-                System.out.println("Beacon button pressed");
                 Intent i = new Intent(getBaseContext(), BeaconRegistrationActivity.class);
                 startActivity(i);
+                break;
+
+            case R.id.button_make_stop:
+                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
                 break;
 
         }

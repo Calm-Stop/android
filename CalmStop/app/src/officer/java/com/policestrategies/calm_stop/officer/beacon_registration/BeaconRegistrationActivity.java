@@ -136,7 +136,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         String[] beaconInstanceId = beacon.getInstance().split(" ");
         final String beaconRegistrationId = beaconInstanceId[beaconInstanceId.length - 1];
 
-        if (!mCurrentlyRegisteredBeaconId.isEmpty() &&
+        if (mCurrentlyRegisteredBeaconId != null && !mCurrentlyRegisteredBeaconId.isEmpty() &&
                 !mCurrentlyRegisteredBeaconId.equals(beaconRegistrationId)) {
             // Override beacon
             new AlertDialog.Builder(this)
@@ -158,8 +158,9 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
                     })
                     .setCancelable(true)
                     .show();
+        } else {
+            registerBeacon(beaconRegistrationId);
         }
-
     }
 
     @Override
@@ -257,12 +258,13 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         mCurrentlyRegisteredBeaconId = beaconId;
 
         DatabaseReference beaconDatabaseReference = mDatabase.child("beacons")
-                .child(beaconId).child("officer").getRef();
+                .child(beaconId).getRef();
         DatabaseReference officerDatabaseReference = mDatabase.child("officer")
                 .child(mDepartmentNumber).child(mUid).child("profile").getRef();
 
-        beaconDatabaseReference.child("department").setValue(mDepartmentNumber);
-        beaconDatabaseReference.child("uid").setValue(mUid);
+        beaconDatabaseReference.child("active").setValue(false);
+        beaconDatabaseReference.child("officer").child("department").setValue(mDepartmentNumber);
+        beaconDatabaseReference.child("officer").child("uid").setValue(mUid);
         officerDatabaseReference.child("beacon").setValue(beaconId);
 
         updateCurrentBeaconInfo();
