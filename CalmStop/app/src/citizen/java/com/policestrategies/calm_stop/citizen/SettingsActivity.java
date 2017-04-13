@@ -24,18 +24,19 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         setContentView(R.layout.activity_settings);
 
-//        findViewById(R.id.backbutton).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-//            case R.id.backbutton:
-//                toHomepage();
-//                break;
 
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        toHomepage();
     }
 
     private void toHomepage() {

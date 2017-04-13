@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/profile"
+            android:title="Profile" />
+        <item
+            android:id="@+id/previous_stops"
+            android:title="Previous Stops" />
+        <item
+            android:id="@+id/help"
+            android:title="Help" />
+        <item
+            android:id="@+id/about_us"
+            android:title="About Us" />
+        <item
+            android:id="@+id/settings"
+            android:title="Settings" />
+
+        <item android:enabled="false"/>
+
+        <item
+            android:id="@+id/logout"
+            android:title="Logout" />
+    </group>
+
+</menu>

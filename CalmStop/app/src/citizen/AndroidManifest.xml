@@ -8,7 +8,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-
         <activity android:name=".citizen.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,38 +15,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".citizen.LoginActivity" />
-
-        <activity
-            android:name=".citizen.SignupActivity" />
-
-        <activity
-            android:name=".citizen.DocumentsActivity" />
-
-        <activity
-            android:name=".citizen.HomepageActivity" />
-
+        <activity android:name=".citizen.LoginActivity" />
+        <activity android:name=".citizen.SignupActivity" />
+        <activity android:name=".citizen.DocumentsActivity" />
+        <activity android:name=".citizen.HomepageActivity" />
         <activity
             android:name=".citizen.ProfileActivity"
             android:windowSoftInputMode="stateHidden" />
-
+        <activity android:name=".citizen.PreviousStopsActivity" />
+        <activity android:name=".citizen.HelpActivity" />
+        <activity android:name=".citizen.AboutUsActivity" />
+        <activity android:name=".citizen.SettingsActivity" />
+        <activity android:name=".citizen.beacon_detection.BeaconDetectionActivity" />
         <activity
-            android:name=".citizen.PreviousStopsActivity" />
-
-        <activity
-            android:name=".citizen.HelpActivity" />
-
-        <activity
-            android:name=".citizen.AboutUsActivity" />
-
-        <activity
-            android:name=".citizen.SettingsActivity" />
-
-        <activity
-            android:name=".citizen.beacon_detection.BeaconDetectionActivity" />
-
+            android:name=".citizen.MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

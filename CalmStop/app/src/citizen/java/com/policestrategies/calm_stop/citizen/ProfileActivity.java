@@ -175,12 +175,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    public void onBackPressed() {
+        toHomepage();
+    }
+
+    @Override
     public void onClick(View v) {
         switch(v.getId()) {
-
-//            case R.id.backbutton:
-//                toHomepage();
-//                break;
 
             case R.id.viewDocs:
                 toDocuments();
