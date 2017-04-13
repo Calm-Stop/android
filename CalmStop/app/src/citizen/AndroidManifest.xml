@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".citizen.ChatActivity">
+        <activity android:name=".citizen.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,7 +18,7 @@
         </activity>
 
         <activity
-            android:name="citizen.SplashActivity" />
+            android:name="citizen.ChatActivity" />
 
         <activity
             android:name=".citizen.LoginActivity" />

@@ -151,14 +151,13 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
 
         switch(v.getId()) {
-
         }
     }
 
     private void profile() {
-        Intent i = new Intent(getBaseContext(), ProfileActivity.class);
+        Intent i = new Intent(getBaseContext(), ChatActivity.class);
         startActivity(i);
-        finish();
+//        finish();
     }
 
     private void previousStops() {

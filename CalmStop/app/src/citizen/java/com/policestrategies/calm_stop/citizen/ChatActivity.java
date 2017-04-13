@@ -56,7 +56,6 @@ public class ChatActivity extends Activity {
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
         setContentView(R.layout.activity_chat);
-
         buttonSend = (Button) findViewById(R.id.button_send);
         listView = (ListView) findViewById(R.id.listView1);
 
@@ -65,15 +64,17 @@ public class ChatActivity extends Activity {
 //Default ChatMessage object values to be passed to ChatMessage constructor
         chatText = (EditText) findViewById(R.id.chat_text);
         name = "[Default_Name]:";
+        Log.d(TAG, "Timestamp.");
         timestamp = System.currentTimeMillis();
         authorID = threadID = "000000000000";
         side = false;
 
         mAuth = FirebaseAuth.getInstance();
+        Log.d(TAG, "Get user.");
         final FirebaseUser user = mAuth.getCurrentUser();
-
+        Log.d(TAG, "Finished getting user.");
 //FIREBASE CODE
-        if (user != null) {
+        if (user == null) {
 //IF DATABASE ACCESSIBLE:
             //Set References to thread and user
             authorID = user.getUid();
@@ -83,19 +84,12 @@ public class ChatActivity extends Activity {
             userProfileReference = databaseRef.child("citizen")
                     .child(authorID).child("profile").getRef();
             messagesReference = threadReference.child("messages").getRef();
-            name = userProfileReference.child("first_name").toString();
+            name = "Driver:";
             //Listen for changes to chat
             ChildEventListener childEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                     Log.d(TAG, "In Citizen/ChatActivity, onChildAdded");
-                    ChatMessage cmessage = dataSnapshot.getValue(ChatMessage.class);
-                    if (cmessage.getAuthorID().equals(authorID)) {
-                        cmessage.left = false;
-                    } else {
-                        cmessage.left = true;
-                    }
-                    chatArrayAdapter.add(cmessage);
                     chatText.setText("");
                     // ...
                 }
@@ -128,7 +122,6 @@ public class ChatActivity extends Activity {
                             Toast.LENGTH_SHORT).show();
                 }
             };
-
             messagesReference.addChildEventListener(childEventListener);
 //END DATABASE CODE
         }
@@ -156,7 +149,7 @@ public class ChatActivity extends Activity {
                 ChatMessage newMessage = new ChatMessage(side, chatText.getText().toString(),
                         timestamp, threadID, authorID, name);
                 //sendToFirebase(newMessage);
-                if (user != null) {
+                if (user == null) {
                     sendToFirebase(newMessage);
                 } else {
                     sendChatMessage();
@@ -180,6 +173,7 @@ public class ChatActivity extends Activity {
 
     private boolean sendChatMessage(){
         //if user_ID == authorID, set side = false; else set side equal true
+        Log.v(TAG, "Sending message.");
         ChatMessage newMessage = new ChatMessage(side,
                 chatText.getText().toString(), 0, threadID, authorID, name);
         side = false; //output on the right side
@@ -197,7 +191,7 @@ public class ChatActivity extends Activity {
     private void sendToFirebase(ChatMessage newMessage){
         //if user_ID == authorID, set side = false; else set side equal true
         FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
+        if (user == null) {
             //push a new message onto message tree:
             DatabaseReference newMessagesRef = messagesReference.push(); //push a unique message ID string
             newMessagesRef.setValue(newMessage); //store corresponding message content under the key
