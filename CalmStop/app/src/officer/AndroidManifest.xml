@@ -8,7 +8,9 @@
         android:label="@string/app_name_officer"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".officer.SplashActivity">
+        <activity
+            android:name=".officer.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -16,38 +18,52 @@
         </activity>
 
         <activity
-            android:name=".officer.LoginActivity" />
+            android:name=".officer.LoginActivity"
+            android:screenOrientation="portrait" />
 
         <activity
-            android:name=".officer.SignupActivity" />
+            android:name=".officer.SignupActivity"
+            android:screenOrientation="portrait" />
 
         <activity
-            android:name=".officer.HomepageActivity" />
+            android:name=".officer.HomepageActivity"
+            android:screenOrientation="portrait" />
 
         <activity
-            android:name=".officer.AccountActivity" />
+            android:name=".officer.AccountActivity"
+            android:screenOrientation="portrait" />
+
 
         <activity
-            android:name=".officer.RatingActivity" />
+            android:name=".officer.RatingActivity"
+            android:screenOrientation="portrait" />
 
         <activity
-            android:name=".officer.HistoryActivity" />
+            android:name=".officer.HistoryActivity"
+            android:screenOrientation="portrait" />
 
         <activity
-            android:name=".officer.AboutUsActivity" />
+            android:name=".officer.AboutUsActivity"
+            android:screenOrientation="portrait" />
 
         <activity
-            android:name=".officer.HelpActivity" />
+            android:name=".officer.HelpActivity"
+            android:screenOrientation="portrait" />
+
 
         <activity
             android:name=".officer.profile.ProfileActivity"
-            android:windowSoftInputMode="stateHidden" />/>
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" />
+
 
         <activity
-            android:name=".officer.SettingsActivity" />
+            android:name=".officer.SettingsActivity"
+            android:screenOrientation="portrait" />
 
         <activity
-            android:name=".officer.beacon_registration.BeaconRegistrationActivity" />
+            android:name=".officer.beacon_registration.BeaconRegistrationActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 

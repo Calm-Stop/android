@@ -92,7 +92,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_profile);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Profile");
+        actionBar.hide();
 
         mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
 
@@ -175,12 +175,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    public void onBackPressed() {
+        toHomepage();
+    }
+
+    @Override
     public void onClick(View v) {
         switch(v.getId()) {
-
-            case R.id.backbutton:
-                toHomepage();
-                break;
 
             case R.id.viewDocs:
                 toDocuments();
@@ -213,6 +214,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 updateGender();
                 updateEthnicity();
 
+                recreate();
                 break;
 
             case R.id.profilePicture:
