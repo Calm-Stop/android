@@ -1,5 +1,6 @@
 package com.policestrategies.calm_stop.citizen;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,6 +35,8 @@ import static android.R.attr.phoneNumber;
 import static android.R.id.toggle;
 import static com.policestrategies.calm_stop.R.id.license;
 import static com.policestrategies.calm_stop.R.id.nameDisplay;
+import static com.policestrategies.calm_stop.R.layout.nav_header_main;
+
 import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
 
 public class HomepageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -58,7 +61,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        mProfileName = (TextView) findViewById(R.id.nameDisplay);
+        //mProfileName = (TextView) ((nav_header_main)context).findViewById(R.id.nameDisplay);
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
