@@ -138,7 +138,7 @@ public class BeaconDetectionActivity extends AppCompatActivity {
 
         final List<BeaconObject> scannedBeacons = new ArrayList<>();
 
-        DatabaseReference databaseReference = mDatabase.getRef();
+        final DatabaseReference databaseReference = mDatabase.getRef();
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -150,6 +150,11 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                     String officerProfilePicturePath;
 
                     if(!dataSnapshot.child("beacons").hasChild(instance.first)) {
+                        continue;
+                    }
+
+                    if(!((boolean) dataSnapshot.child("beacons").child(instance.first)
+                            .child("active").getValue())) {
                         continue;
                     }
 
