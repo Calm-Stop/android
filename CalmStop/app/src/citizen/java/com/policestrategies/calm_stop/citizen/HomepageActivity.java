@@ -128,7 +128,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        int id = item.getItemId(); // TODO: This should be a switch statement
 
         if (id == R.id.profile) {
             profile();
@@ -145,6 +145,9 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         } else if (id == R.id.logout) {
             logout();
+        } else if (id == R.id.detect_beacon_debug) {
+            Intent i = new Intent(this, BeaconDetectionActivity.class);
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

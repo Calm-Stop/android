@@ -18,11 +18,16 @@
             android:id="@+id/settings"
             android:title="Settings" />
 
-        <item android:enabled="false"/>
+        <item android:enabled="false" />
 
         <item
             android:id="@+id/logout"
             android:title="Logout" />
+
+        <item
+            android:id="@+id/detect_beacon_debug"
+            android:title="DEBUG - Beacon Detection" />
+
     </group>
 
 </menu>
