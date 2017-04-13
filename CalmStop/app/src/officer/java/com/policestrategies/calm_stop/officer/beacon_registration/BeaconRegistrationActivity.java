@@ -85,6 +85,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
                 setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
 
         findViewById(R.id.button_scan_beacon_registration).setOnClickListener(this);
+        findViewById(R.id.beacon_status_card_view).setOnClickListener(this);
 
         mRecyclerView = (RecyclerView)findViewById(R.id.beacon_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -104,6 +105,9 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
             case R.id.button_scan_beacon_registration:
                 scanForBeacons();
                 break;
+            case R.id.beacon_status_card_view:
+                promptBeaconStatus();
+                break;
         }
     } // end onClick
 
@@ -111,6 +115,30 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
     public void onDestroy() {
         super.onDestroy();
         mBeaconManager.unbind(this);
+    }
+
+    private void promptBeaconStatus() {
+        if (mCurrentlyRegisteredBeaconId != null && !mCurrentlyRegisteredBeaconId.isEmpty()) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Unregister beacon")
+                    .setMessage("Would you like to unregister beacon #" +
+                            mCurrentlyRegisteredBeaconId + "?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            deregisterBeacon(mCurrentlyRegisteredBeaconId);
+                            updateCurrentBeaconInfo();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // Do nothing
+                        }
+                    })
+                    .setCancelable(true)
+                    .show();
+        }
     }
 
     private void scanForBeacons() {
@@ -274,6 +302,8 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
     }
 
     private void deregisterBeacon(String beaconId) {
+        mCurrentlyRegisteredBeaconId = "";
+
         DatabaseReference beaconDatabaseReference = mDatabase.child("beacons").getRef();
         DatabaseReference officerDatabaseReference = mDatabase.child("officer")
                 .child(mDepartmentNumber).child(mUid).child("profile").getRef();
