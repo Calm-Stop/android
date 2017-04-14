@@ -17,6 +17,9 @@
         <item
             android:id="@+id/settings"
             android:title="Settings" />
+        <item
+            android:id="@+id/chat_test"
+            android:title="Chat Testing"/>
 
         <item android:enabled="false" />
 
