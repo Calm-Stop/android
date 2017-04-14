@@ -291,7 +291,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
-
     private void authentication() {
         AlertDialog.Builder authen = new AlertDialog.Builder(this);
         authen.setTitle("Reauthentication");

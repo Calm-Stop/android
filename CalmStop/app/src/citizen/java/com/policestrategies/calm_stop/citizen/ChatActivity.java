@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -42,6 +43,12 @@ public class ChatActivity extends Activity {
     private DatabaseReference threadReference;
     private DatabaseReference messagesReference;
     private DatabaseReference userProfileReference;
+    private DatabaseReference SingleMessageReference;
+
+    private String CurrentUserID;
+
+    private String key;
+    private String content;
     private String authorID;
     private String threadID;
     private long timestamp;
@@ -64,7 +71,7 @@ public class ChatActivity extends Activity {
         chatText = (EditText) findViewById(R.id.chat_text);
         Log.d(TAG, "Timestamp.");
         timestamp = System.currentTimeMillis();
-        authorID = threadID = "000000000000";
+        CurrentUserID = authorID = threadID = "000000000000";
         side = false;
 
         mAuth = FirebaseAuth.getInstance();
@@ -72,21 +79,25 @@ public class ChatActivity extends Activity {
         final FirebaseUser user = mAuth.getCurrentUser();
         Log.d(TAG, "Finished getting user.");
 //FIREBASE CODE
-        if (user == null) {
+        if (user != null) {
 //IF DATABASE ACCESSIBLE:
             //Set References to thread and user
-            authorID = user.getUid();
+            CurrentUserID = user.getUid();
             databaseRef = FirebaseDatabase.getInstance().getReference();
             threadReference = databaseRef.child("stops").child("temp_stop_id")
                     .child("thread").getRef();
             userProfileReference = databaseRef.child("citizen")
-                    .child(authorID).child("profile").getRef();
+                    .child(CurrentUserID).child("profile").getRef();
             messagesReference = threadReference.child("messages").getRef();
-            //Listen for changes to chat
+//ChildEventListener listens for changes to chat
             ChildEventListener childEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                     Log.d(TAG, "In Citizen/ChatActivity, onChildAdded");
+                    key = dataSnapshot.getKey();
+                    messagesReference.addValueEventListener(AttachListener());
+                    sendChatMessage();
+                    //String value = dataSnapshot.getValue(String.class);
                     chatText.setText("");
                     // ...
                 }
@@ -96,6 +107,7 @@ public class ChatActivity extends Activity {
                     Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
                     //Comment newComment = dataSnapshot.getValue(Comment.class);
                     String Key = dataSnapshot.getKey();
+
                 }
 
                 @Override
@@ -146,7 +158,7 @@ public class ChatActivity extends Activity {
                 ChatMessage newMessage = new ChatMessage(side, chatText.getText().toString(),
                         timestamp, threadID, authorID);
                 //sendToFirebase(newMessage);
-                if (user == null) {
+                if (user != null) {
                     sendToFirebase(newMessage);
                 } else {
                     sendChatMessage();
@@ -168,17 +180,40 @@ public class ChatActivity extends Activity {
         });
     }
 
+
+    private ValueEventListener AttachListener() {
+        //VALUE EVENT LISTENER:
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                authorID = dataSnapshot.child(key).child("authorID").toString();
+                content = dataSnapshot.child(key).child("content").getValue().toString();
+                side = (authorID.equalsIgnoreCase(CurrentUserID)) ? false : true;
+                threadID = dataSnapshot.child(key).child("threadID").toString();
+                timestamp = System.currentTimeMillis();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        return valueEventListener;
+    }
+
+//SEND MESSAGE TO ADAPTER
     private boolean sendChatMessage(){
         //if user_ID == authorID, set side = false; else set side equal true
         Log.v(TAG, "Sending message.");
+
         ChatMessage newMessage = new ChatMessage(side,
-                chatText.getText().toString(), 0, threadID, authorID);
-        side = false; //output on the right side
+                content, timestamp, threadID, authorID);
         chatArrayAdapter.add(newMessage);
         chatText.setText("");
         return true;
     }
 
+//SEND MESSAGE TO FIREBASE:
     //A message is sent to firebase, triggering onChildEvent.
     //chatArrayAdapter will update only on firebase change.
     //This change will only occur on the following:
@@ -188,7 +223,7 @@ public class ChatActivity extends Activity {
     private void sendToFirebase(ChatMessage newMessage){
         //if user_ID == authorID, set side = false; else set side equal true
         FirebaseUser user = mAuth.getCurrentUser();
-        if (user == null) {
+        if (user != null) {
             //push a new message onto message tree:
             DatabaseReference newMessagesRef = messagesReference.push(); //push a unique message ID string
             newMessagesRef.setValue(newMessage); //store corresponding message content under the key
