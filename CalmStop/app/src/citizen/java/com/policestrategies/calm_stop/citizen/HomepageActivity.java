@@ -190,7 +190,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         finish();
     }
 
-    private void chatTest() 
+    private void chatTest() {
         Intent i = new Intent(this, ChatActivity.class);
         startActivity(i);
         finish();
