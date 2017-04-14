@@ -143,8 +143,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         } else if (id == R.id.settings) {
             settings();
 
-        } else if (id == R.id.chat_test) {
-            chatTest();
         } else if (id == R.id.logout) {
             logout();
         } else if (id == R.id.detect_beacon_debug) {
@@ -186,12 +184,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
     private void settings() {
         Intent i = new Intent(getBaseContext(), SettingsActivity.class);
-        startActivity(i);
-        finish();
-    }
-
-    private void chatTest() {
-        Intent i = new Intent(this, ChatActivity.class);
         startActivity(i);
         finish();
     }

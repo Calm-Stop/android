@@ -7,20 +7,18 @@ public class ChatMessage {
     private String threadID;
     private String authorID;
     private String recipientID;
-    private String authorName;
     public boolean left;
 
 //CONSTRUCTOR
 
     public ChatMessage(boolean left, String content, long timestamp,
-                       String threadID, String authorID, String authorName) {
+                       String threadID, String authorID) {
         super();
         this.left = left;
         this.content = content;
         this.timestamp = timestamp;
         this.threadID = threadID;
         this.authorID = authorID;
-        this.authorName = authorName;
     }
 
     public ChatMessage(boolean left, String content) {
@@ -33,8 +31,6 @@ public class ChatMessage {
     public String getContent() { return content; }
 
     public String getAuthorID() { return authorID; }
-
-    public String getAuthorName() { return authorName; }
 
     public String getThreadID() { return threadID; }
 } // end class ChatMessage

@@ -44,7 +44,6 @@ public class ChatActivity extends Activity {
     private DatabaseReference userProfileReference;
     private String authorID;
     private String threadID;
-    private String name;
     private long timestamp;
 
     Intent intent;
@@ -63,7 +62,6 @@ public class ChatActivity extends Activity {
         listView.setAdapter(chatArrayAdapter);
 //Default ChatMessage object values to be passed to ChatMessage constructor
         chatText = (EditText) findViewById(R.id.chat_text);
-        name = "[Default_Name]:";
         Log.d(TAG, "Timestamp.");
         timestamp = System.currentTimeMillis();
         authorID = threadID = "000000000000";
@@ -84,7 +82,6 @@ public class ChatActivity extends Activity {
             userProfileReference = databaseRef.child("citizen")
                     .child(authorID).child("profile").getRef();
             messagesReference = threadReference.child("messages").getRef();
-            name = "Driver:";
             //Listen for changes to chat
             ChildEventListener childEventListener = new ChildEventListener() {
                 @Override
@@ -147,7 +144,7 @@ public class ChatActivity extends Activity {
                 //The context for generating threadID has yet to be designed or implemented
                 //creating new message from set fields
                 ChatMessage newMessage = new ChatMessage(side, chatText.getText().toString(),
-                        timestamp, threadID, authorID, name);
+                        timestamp, threadID, authorID);
                 //sendToFirebase(newMessage);
                 if (user == null) {
                     sendToFirebase(newMessage);
@@ -175,7 +172,7 @@ public class ChatActivity extends Activity {
         //if user_ID == authorID, set side = false; else set side equal true
         Log.v(TAG, "Sending message.");
         ChatMessage newMessage = new ChatMessage(side,
-                chatText.getText().toString(), 0, threadID, authorID, name);
+                chatText.getText().toString(), 0, threadID, authorID);
         side = false; //output on the right side
         chatArrayAdapter.add(newMessage);
         chatText.setText("");
