@@ -3,15 +3,14 @@ package com.policestrategies.calm_stop;
 public class ChatMessage {
 //FIELDS
     private String content;
-    private long timestamp;
+    private String timestamp;
     private String threadID;
     private String authorID;
-    private String recipientID;
-    public boolean left;
+    public String left;
 
 //CONSTRUCTOR
 
-    public ChatMessage(boolean left, String content, long timestamp,
+    public ChatMessage(String left, String content, String timestamp,
                        String threadID, String authorID) {
         super();
         this.left = left;
@@ -21,7 +20,7 @@ public class ChatMessage {
         this.authorID = authorID;
     }
 
-    public ChatMessage(boolean left, String content) {
+    public ChatMessage(String left, String content) {
         super();
         this.left = left;
         this.content = content;
@@ -33,4 +32,6 @@ public class ChatMessage {
     public String getAuthorID() { return authorID; }
 
     public String getThreadID() { return threadID; }
+
+    public String getTimestamp() { return timestamp; }
 } // end class ChatMessage
