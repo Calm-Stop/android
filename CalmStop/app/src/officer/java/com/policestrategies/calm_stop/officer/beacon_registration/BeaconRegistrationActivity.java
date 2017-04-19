@@ -291,6 +291,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
                 .child(mDepartmentNumber).child(mUid).child("profile").getRef();
 
         beaconDatabaseReference.child("active").setValue(false);
+        beaconDatabaseReference.child("stop_id").setValue("");
         beaconDatabaseReference.child("officer").child("department").setValue(mDepartmentNumber);
         beaconDatabaseReference.child("officer").child("uid").setValue(mUid);
         officerDatabaseReference.child("beacon").setValue(beaconId);
