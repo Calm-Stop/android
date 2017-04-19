@@ -12,6 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +44,9 @@ public class ChatArrayAdapter extends ArrayAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        final FirebaseUser user = mAuth.getCurrentUser();
+        String currentUserID = user.getUid();
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -48,10 +54,11 @@ public class ChatArrayAdapter extends ArrayAdapter {
         }
         singleMessageContainer = (LinearLayout) row.findViewById(R.id.singleMessageContainer);
         ChatMessage chatMessageObj = getItem(position);
+        boolean right = chatMessageObj.getAuthorID().equalsIgnoreCase(currentUserID);
         chatText = (TextView) row.findViewById(R.id.singleMessage);
         chatText.setText(chatMessageObj.getContent());
-        chatText.setBackgroundResource(chatMessageObj.left.equalsIgnoreCase("left") ? R.drawable.rect_fgreen : R.drawable.rect_fyellow);
-        singleMessageContainer.setGravity(chatMessageObj.left.equalsIgnoreCase("left") ? Gravity.LEFT : Gravity.RIGHT);
+        chatText.setBackgroundResource(right ? R.drawable.rect_fgreen : R.drawable.rect_fyellow);
+        singleMessageContainer.setGravity(right ? Gravity.LEFT : Gravity.RIGHT);
         return row;
     }
 

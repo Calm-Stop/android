@@ -6,24 +6,16 @@ public class ChatMessage {
     private String timestamp;
     private String threadID;
     private String authorID;
-    public String left;
 
 //CONSTRUCTOR
 
-    public ChatMessage(String left, String content, String timestamp,
+    public ChatMessage(String content, String timestamp,
                        String threadID, String authorID) {
         super();
-        this.left = left;
         this.content = content;
         this.timestamp = timestamp;
         this.threadID = threadID;
         this.authorID = authorID;
-    }
-
-    public ChatMessage(String left, String content) {
-        super();
-        this.left = left;
-        this.content = content;
     }
 
     //GETTERS for private functions (no setters)
