@@ -128,7 +128,6 @@
                 android:layout_marginTop="10dp"
                 android:typeface="monospace" />
 
-
             <TextView
                 android:id="@+id/DOB"
                 android:layout_width="match_parent"
