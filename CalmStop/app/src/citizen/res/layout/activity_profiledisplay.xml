@@ -70,7 +70,7 @@
                 android:layout_alignParentStart="true"
                 android:fontFamily="monospace"
                 android:text="Name:"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:textSize="@dimen/textSize"
                 android:typeface="monospace" />
 

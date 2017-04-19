@@ -104,8 +104,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mImageView = (ImageView)findViewById(R.id.profilePicture);
         mImageView.setOnClickListener(this);
 
-       // findViewById(R.id.backbutton).setOnClickListener(this);
-        findViewById(R.id.viewDocs).setOnClickListener(this);
         findViewById(R.id.savebutton).setOnClickListener(this);
 
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
@@ -177,10 +175,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-
-            case R.id.viewDocs:
-                toDocuments();
-                break;
 
             case R.id.savebutton:
 
