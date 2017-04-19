@@ -159,7 +159,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
     }
 
     private void profile() {
-        Intent i = new Intent(getBaseContext(), ProfileActivity.class);
+        Intent i = new Intent(getBaseContext(), ProfileDisplayActivity.class);
         startActivity(i);
         finish();
     }
