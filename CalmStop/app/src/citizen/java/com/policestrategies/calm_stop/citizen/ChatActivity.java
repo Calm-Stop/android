@@ -1,14 +1,10 @@
 package com.policestrategies.calm_stop.citizen;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.renderscript.Sampler;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnKeyListener;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,13 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.ChatArrayAdapter;
 import com.policestrategies.calm_stop.ChatMessage;
 import com.policestrategies.calm_stop.R;
-
-import java.util.Iterator;
 
 import static java.lang.System.currentTimeMillis;
 
@@ -77,7 +69,7 @@ public class ChatActivity extends Activity {
         final FirebaseUser user = mAuth.getCurrentUser();
 
 //FIREBASE CODE WORKS ONLY IF SUCCESSFULLY RETRIEVED USER
-//PROGRAM ENDS MESSAGES TO ADAPTER WITHOUT STORING IT OTHERWISE
+//PROGRAM SENDS MESSAGES TO ADAPTER WITHOUT STORING IT OTHERWISE
         if (user != null) {
 //IF DATABASE ACCESSIBLE:
             //Set References to thread and user
@@ -107,14 +99,12 @@ public class ChatActivity extends Activity {
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                     Log.d(TAG, "In Citizen/ChatActivity, onChildAdded");
 
-
                     content = dataSnapshot.child("content").getValue().toString();
                     authorID = dataSnapshot.child("authorID").getValue().toString();
                     timestamp = dataSnapshot.child("timestamp").getValue().toString();
                     threadID = dataSnapshot.child("threadID").getValue().toString();
                     sendChatMessage();
                     chatText.setText("");
-                    // ...
                 }
 
                 @Override
@@ -130,9 +120,6 @@ public class ChatActivity extends Activity {
                 @Override
                 public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
                     Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-                    //Comment movedComment = dataSnapshot.getValue(Comment.class);
-                    //String commentKey = dataSnapshot.getKey();
-
                 }
 
                 @Override
@@ -143,23 +130,10 @@ public class ChatActivity extends Activity {
                 }
             };
             messagesReference.addChildEventListener(childEventListener);
-//            messagesReference.addValueEventListener(AttachListener());
 //END DATABASE CODE
         }
 //END FIREBASE CODE
-/*
-        //ON KEY PRESS may not be necessary
-        chatText.setOnKeyListener(new OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    //return sendChatMessage();
-                    return true;
-                }
-                return false;
-            }
-        });
-        */
-        //ALSO SEND TO FIREBASE
+
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -172,13 +146,11 @@ public class ChatActivity extends Activity {
                 //creating new message from set fields
                 ChatMessage newMessage = new ChatMessage(content,
                         timestamp, threadID, authorID);
-                //sendToFirebase(newMessage);
                 if (user != null) {
                     sendToFirebase(newMessage);
                 } else {
                     sendChatMessage();
                 }
-                //SEND MESSAGE TO FIREBASE INSTEAD
             }
         });
         listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
