@@ -117,15 +117,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
-//
-//    @Override
-//    public void setContentView(int layoutResID)
-//    {
-//        mDrawerLayout = (DrawerLayout) getLayoutInflater().inflate(R.layout.drawer_layout, null);
-//        FrameLayout activityContainer = (FrameLayout) fullView.findViewById(R.id.activity_content);
-//        getLayoutInflater().inflate(layoutResID, activityContainer, true);
-//        super.setContentView(fullView);
-//    }
 
     @Override
     public void onBackPressed() {
@@ -141,26 +132,33 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId(); // TODO: This should be a switch statement
+        int id = item.getItemId();
+        switch(id) {
+            case R.id.profile:
+                profile();
+                break;
+            case R.id.previous_stops:
+                previousStops();
+                break;
+            case R.id.help:
+                help();
+                break;
+            case R.id.about_us:
+                aboutUs();
+                break;
+            case R.id.settings:
+                settings();
+                break;
+            case R.id.logout:
+                logout();
+                break;
+            case R.id.documents:
+                documents();
+                break;
 
-        if (id == R.id.profile) {
-            profile();
-        } else if (id == R.id.previous_stops) {
-            previousStops();
-        } else if (id == R.id.help) {
-            help();
-
-        } else if (id == R.id.about_us) {
-            aboutUs();
-
-        } else if (id == R.id.settings) {
-            settings();
-
-        } else if (id == R.id.logout) {
-            logout();
-        } else if (id == R.id.detect_beacon_debug) {
-            Intent i = new Intent(this, BeaconDetectionActivity.class);
-            startActivity(i);
+            case R.id.detect_beacon_debug:
+                detectBecon();
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -198,6 +196,12 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         finish();
     }
 
+    private void documents() {
+        Intent i = new Intent(getBaseContext(), DocumentsActivity.class);
+        startActivity(i);
+        finish();
+    }
+
     private void logout() {
         //You want to logout -> login page
         FirebaseAuth.getInstance().signOut();
@@ -205,5 +209,12 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         startActivity(i);
         finish();
     }
+
+    private void detectBecon(){
+        Intent i = new Intent(this, BeaconDetectionActivity.class);
+        startActivity(i);
+        finish();
+    }
+
 
 }
