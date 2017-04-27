@@ -57,8 +57,8 @@ public class ChatArrayAdapter extends ArrayAdapter {
         boolean right = chatMessageObj.getAuthorID().equalsIgnoreCase(currentUserID);
         chatText = (TextView) row.findViewById(R.id.singleMessage);
         chatText.setText(chatMessageObj.getContent());
-        chatText.setBackgroundResource(right ? R.drawable.rect_fgreen : R.drawable.rect_fyellow);
-        singleMessageContainer.setGravity(right ? Gravity.LEFT : Gravity.RIGHT);
+        chatText.setBackgroundResource(!right ? R.drawable.rect_fgreen : R.drawable.rect_fyellow);
+        singleMessageContainer.setGravity(!right ? Gravity.LEFT : Gravity.RIGHT);
         return row;
     }
 

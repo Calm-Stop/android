@@ -61,7 +61,7 @@ public class ChatActivity extends Activity {
 //Default ChatMessage object values to be passed to ChatMessage constructor
         chatText = (EditText) findViewById(R.id.chat_text);
         timestamp = Long.toString(System.currentTimeMillis());
-        CurrentUserID = authorID = threadID = "000000000000";
+        CurrentUserID = authorID = threadID = "01";
         side = "right";
 
 //Obtaining the user's data from firebase
@@ -145,7 +145,7 @@ public class ChatActivity extends Activity {
                 //The context for generating threadID has yet to be designed or implemented
                 //creating new message from set fields
                 ChatMessage newMessage = new ChatMessage(content,
-                        timestamp, threadID, authorID);
+                        timestamp, threadID, CurrentUserID);
                 if (user != null) {
                     sendToFirebase(newMessage);
                 } else {
