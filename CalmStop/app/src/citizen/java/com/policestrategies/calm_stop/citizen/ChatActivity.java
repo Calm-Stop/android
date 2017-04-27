@@ -45,8 +45,6 @@ public class ChatActivity extends Activity {
     private String threadID;
     private String timestamp;
 
-    private String side = "right";
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -62,7 +60,6 @@ public class ChatActivity extends Activity {
         chatText = (EditText) findViewById(R.id.chat_text);
         timestamp = Long.toString(System.currentTimeMillis());
         CurrentUserID = authorID = threadID = "01";
-        side = "right";
 
 //Obtaining the user's data from firebase
         mAuth = FirebaseAuth.getInstance();
@@ -140,7 +137,6 @@ public class ChatActivity extends Activity {
                 //setting newMessage fields
 
                 timestamp = Long.toString(currentTimeMillis());
-                //side = "right";
                 content = chatText.getText().toString();
                 //The context for generating threadID has yet to be designed or implemented
                 //creating new message from set fields
