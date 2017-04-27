@@ -82,31 +82,31 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
 
         }
 
-        Name.setTextColor(getColorStateList(R.color.black));
+        Name.setTextColor(getResources().getColor(R.color.black));
         Name.setTextSize(14);
 
-        Email.setTextColor(getColorStateList(R.color.black));
+        Email.setTextColor(getResources().getColor(R.color.black));
         Email.setTextSize(14);
 
-        Phone.setTextColor(getColorStateList(R.color.black));
+        Phone.setTextColor(getResources().getColor(R.color.black));
         Phone.setTextSize(14);
 
-        DOB.setTextColor(getColorStateList(R.color.black));
+        DOB.setTextColor(getResources().getColor(R.color.black));
         DOB.setTextSize(14);
 
-        DriverLis.setTextColor(getColorStateList(R.color.black));
+        DriverLis.setTextColor(getResources().getColor(R.color.black));
         DriverLis.setTextSize(14);
 
-        Zipcode.setTextColor(getColorStateList(R.color.black));
+        Zipcode.setTextColor(getResources().getColor(R.color.black));
         Zipcode.setTextSize(14);
 
-        Lang.setTextColor(getColorStateList(R.color.black));
+        Lang.setTextColor(getResources().getColor(R.color.black));
         Lang.setTextSize(14);
 
-        Gender.setTextColor(getColorStateList(R.color.black));
+        Gender.setTextColor(getResources().getColor(R.color.black));
         Gender.setTextSize(14);
 
-        Ethn.setTextColor(getColorStateList(R.color.black));
+        Ethn.setTextColor(getResources().getColor(R.color.black));
         Ethn.setTextSize(14);
 
         mProfileReference.addListenerForSingleValueEvent(new ValueEventListener() {
