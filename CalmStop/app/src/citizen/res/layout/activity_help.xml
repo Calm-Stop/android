@@ -1,28 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:background="@drawable/title_backgrnd"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:orientation="vertical"
+    android:background="@drawable/bkgrd_cover"
+    android:weightSum="1">
 
     <TextView
         android:id="@+id/HelpTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
         android:fontFamily="monospace"
         android:gravity="center"
+        android:layout_marginTop="35dp"
         android:text="Help"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:textColor="@color/white"
         android:textSize="30sp"
+        android:typeface="monospace"
+        android:layout_weight="0.02" />
+
+    <Button
+        android:id="@+id/TechSupport"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:gravity="left|center_vertical"
+        android:fontFamily="monospace"
+        android:text="Technical Support"
+        android:textColor="@android:color/black"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:textSize="14sp"
         android:typeface="monospace" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/ProblemTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:fontFamily="monospace"
+        android:layout_marginTop="40dp"
+        android:text="Report A Problem"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_weight="0.05" />
+
+
+    <Button
+        android:id="@+id/FileAReport"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:gravity="left|center_vertical"
+        android:fontFamily="monospace"
+        android:text="I want to file a complaint"
+        android:textColor="@android:color/black"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:textSize="14sp"
+        android:typeface="monospace" />
+
+    <Button
+        android:id="@+id/Question"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:gravity="left|center_vertical"
+        android:fontFamily="monospace"
+        android:text="I have a question"
+        android:textColor="@android:color/black"
+        android:backgroundTint="@color/cardview_shadow_end_color"
+        android:textSize="14sp"
+        android:typeface="monospace" />
+
+</LinearLayout>

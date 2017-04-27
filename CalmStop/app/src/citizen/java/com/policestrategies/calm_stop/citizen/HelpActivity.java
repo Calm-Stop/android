@@ -16,7 +16,7 @@ import com.policestrategies.calm_stop.R;
  * Created by mariavizcaino on 2/19/17.
  */
 
-public class HelpActivity extends AppCompatActivity implements View.OnClickListener {
+public class HelpActivity extends HomepageActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +30,13 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
        // findViewById(R.id.backbutton).setOnClickListener(this);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()) {
-
-        }
-
-    }
+//    @Override
+//    public void onClick(View v) {
+//        switch(v.getId()) {
+//
+//        }
+//
+//    }
 
     @Override
     public void onBackPressed() {

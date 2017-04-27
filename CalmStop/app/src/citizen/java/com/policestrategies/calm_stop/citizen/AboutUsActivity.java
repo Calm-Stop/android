@@ -25,8 +25,6 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
         actionBar.hide();
 
         setContentView(R.layout.activity_about_us);
-
-//        findViewById(R.id.backbutton).setOnClickListener(this);
     }
 
     @Override

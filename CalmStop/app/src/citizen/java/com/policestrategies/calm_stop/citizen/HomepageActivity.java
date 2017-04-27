@@ -1,5 +1,6 @@
 package com.policestrategies.calm_stop.citizen;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -34,6 +36,8 @@ import static android.R.attr.phoneNumber;
 import static android.R.id.toggle;
 import static com.policestrategies.calm_stop.R.id.license;
 import static com.policestrategies.calm_stop.R.id.nameDisplay;
+import static com.policestrategies.calm_stop.R.layout.nav_header_main;
+
 import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
 
 public class HomepageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -58,7 +62,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        mProfileName = (TextView) findViewById(R.id.nameDisplay);
+        //mProfileName = (TextView) ((nav_header_main)context).findViewById(R.id.nameDisplay);
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -113,6 +117,15 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+//
+//    @Override
+//    public void setContentView(int layoutResID)
+//    {
+//        mDrawerLayout = (DrawerLayout) getLayoutInflater().inflate(R.layout.drawer_layout, null);
+//        FrameLayout activityContainer = (FrameLayout) fullView.findViewById(R.id.activity_content);
+//        getLayoutInflater().inflate(layoutResID, activityContainer, true);
+//        super.setContentView(fullView);
+//    }
 
     @Override
     public void onBackPressed() {
@@ -159,7 +172,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
     }
 
     private void profile() {
-        Intent i = new Intent(this, ProfileActivity.class);
+        Intent i = new Intent(getBaseContext(), ProfileDisplayActivity.class);
         startActivity(i);
         finish();
     }

@@ -39,6 +39,9 @@
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".citizen.ProfileDisplayActivity"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".citizen.PreviousStopsActivity"
             android:screenOrientation="portrait" />

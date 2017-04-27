@@ -4,18 +4,15 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,8 +44,6 @@ import com.policestrategies.calm_stop.SharedUtil;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-
-import static com.policestrategies.calm_stop.R.drawable.ic_keyboard_arrow_left_white_36dp;
 
 
 /**
@@ -109,8 +104,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mImageView = (ImageView)findViewById(R.id.profilePicture);
         mImageView.setOnClickListener(this);
 
-       // findViewById(R.id.backbutton).setOnClickListener(this);
-        findViewById(R.id.viewDocs).setOnClickListener(this);
         findViewById(R.id.savebutton).setOnClickListener(this);
 
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
@@ -176,16 +169,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onBackPressed() {
-        toHomepage();
+        toProfileDisplay();
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-
-            case R.id.viewDocs:
-                toDocuments();
-                break;
 
             case R.id.savebutton:
 
@@ -419,6 +408,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private void toDocuments() {
         Intent i = new Intent(getBaseContext(), DocumentsActivity.class);
+        startActivity(i);
+    }
+
+    private void toProfileDisplay() {
+        Intent i = new Intent(getBaseContext(), ProfileDisplayActivity.class);
         startActivity(i);
     }
 
