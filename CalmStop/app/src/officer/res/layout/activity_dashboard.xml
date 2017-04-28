@@ -6,15 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".officer.DashboardActivity">
 
-
     <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/dashboard_officer_profile_picture"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
         android:layout_width="128dp"
         android:layout_height="128dp"
         android:layout_centerHorizontal="true"
+        android:paddingBottom="5dp"
+        android:paddingTop="15dp"
         app:civ_border_color="@color/colorPrimary"
         app:civ_border_width="1.5dp" />
 
@@ -26,11 +24,43 @@
         android:gravity="center"
         android:textSize="36sp" />
 
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/dashboard_officer_welcome"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="15dp" />
+
+    <RelativeLayout
+        android:id="@+id/dashboard_beacon_status"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_below="@id/separator"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:id="@+id/dashboard_beacon_image"
+            android:layout_width="56dp"
+            android:layout_height="56dp" />
+
+        <TextView
+            android:id="@+id/dashboard_beacon_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/dashboard_beacon_image"
+            android:gravity="center_vertical"
+            android:paddingTop="14dp"
+            android:paddingLeft="15dp"
+            android:textSize="24sp" />
+
+    </RelativeLayout>
+
     <Button
         android:id="@+id/button_manage_beacon"
         android:layout_width="match_parent"
         android:layout_height="61dp"
-        android:layout_below="@id/dashboard_officer_welcome"
+        android:layout_below="@id/dashboard_beacon_status"
         android:text="Manage Beacon"
         android:visibility="visible" />
 

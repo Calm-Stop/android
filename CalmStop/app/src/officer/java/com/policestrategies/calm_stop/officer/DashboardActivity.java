@@ -74,6 +74,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         }
 
         loadCurrentProfile();
+        obtainCurrentBeaconInfo();
 
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         setBottomNavigationView();
@@ -163,14 +164,14 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         String beaconStatus;
         if (mCurrentlyRegisteredBeaconId != null && !mCurrentlyRegisteredBeaconId.isEmpty()) {
             beaconStatus = "Connected to beacon #" + mCurrentlyRegisteredBeaconId;
-            ((ImageView) findViewById(R.id.beacon_icon))
+            ((ImageView) findViewById(R.id.dashboard_beacon_image))
                     .setImageResource(R.mipmap.ic_done_all_black_48dp);
         } else {
             beaconStatus = "No currently registered beacons";
-            ((ImageView) findViewById(R.id.beacon_icon))
+            ((ImageView) findViewById(R.id.dashboard_beacon_image))
                     .setImageResource(R.mipmap.ic_warning_black_48dp);
         }
-        ((TextView) findViewById(R.id.text_cardview_beacon_status)).setText(beaconStatus);
+        ((TextView) findViewById(R.id.dashboard_beacon_textview)).setText(beaconStatus);
     }
 
     private void setBottomNavigationView() {
