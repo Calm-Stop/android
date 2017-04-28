@@ -18,6 +18,10 @@
         </activity>
 
         <activity
+            android:name=".officer.DocviewActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".officer.LoginActivity"
             android:screenOrientation="portrait" />
 

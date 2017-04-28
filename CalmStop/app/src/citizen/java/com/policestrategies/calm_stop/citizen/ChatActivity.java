@@ -63,7 +63,6 @@ public class ChatActivity extends Activity {
 //Obtaining the user's data from firebase
         mAuth = FirebaseAuth.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
-
 //FIREBASE CODE WORKS ONLY IF SUCCESSFULLY RETRIEVED USER
 //PROGRAM SENDS MESSAGES TO ADAPTER WITHOUT STORING IT OTHERWISE
         if (user != null) {
