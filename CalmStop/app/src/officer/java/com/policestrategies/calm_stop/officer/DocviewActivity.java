@@ -1,10 +1,14 @@
 package com.policestrategies.calm_stop.officer;
 
-import android.app.Activity;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-/**
- * Created by jting on 4/28/2017.
- */
 
-public class DocviewActivity extends Activity {
+import com.policestrategies.calm_stop.R;
+
+public class DocviewActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 }

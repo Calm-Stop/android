@@ -67,16 +67,21 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-
+        Intent i;
         switch(v.getId()) {
 
             case R.id.button_manage_beacon:
-                Intent i = new Intent(getBaseContext(), BeaconRegistrationActivity.class);
+                i = new Intent(getBaseContext(), BeaconRegistrationActivity.class);
                 startActivity(i);
                 break;
 
             case R.id.button_make_stop:
                 Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.button_image_dock:
+                i = new Intent(getBaseContext(), DocviewActivity.class);
+                startActivity(i);
                 break;
 
         }
