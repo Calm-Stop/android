@@ -28,6 +28,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
         findViewById(R.id.button_manage_beacon).setOnClickListener(this);
         findViewById(R.id.button_make_stop).setOnClickListener(this);
+        findViewById(R.id.button_image_dock).setOnClickListener(this);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
