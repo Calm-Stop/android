@@ -23,6 +23,7 @@ import com.policestrategies.calm_stop.BeaconSimulator;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
 import com.policestrategies.calm_stop.officer.LoginActivity;
+import com.policestrategies.calm_stop.officer.Utility;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -66,9 +67,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         mDatabase = FirebaseDatabase.getInstance().getReference();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-        mDepartmentNumber = getSharedPreferences(getString(R.string.shared_preferences),
-                MODE_PRIVATE).getString(getString(R.string.shared_preferences_department_number),
-                "");
+        mDepartmentNumber = Utility.getCurrentDepartmentNumber(this);
 
         if (mAuth.getCurrentUser() != null && !mDepartmentNumber.isEmpty()) {
             mUid = mAuth.getCurrentUser().getUid();

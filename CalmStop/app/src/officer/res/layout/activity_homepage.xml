@@ -6,11 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".officer.HomepageActivity">
 
+    <include
+        android:id="@+id/beacon_status"
+        layout="@layout/card_view_beacon_status" />
+
+    <TextView
+        android:id="@+id/text_welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/beacon_status"
+        android:layout_gravity="center"
+        android:text="Welcome back,"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/text_officer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_welcome"
+        android:layout_gravity="center"
+        android:text="Officer Jones"
+        android:textSize="24sp" />
+
     <Button
         android:id="@+id/button_manage_beacon"
         android:layout_width="match_parent"
         android:layout_height="61dp"
-        android:layout_gravity="center"
+        android:layout_below="@id/text_officer"
         android:text="Manage Beacon"
         android:visibility="visible" />
 
