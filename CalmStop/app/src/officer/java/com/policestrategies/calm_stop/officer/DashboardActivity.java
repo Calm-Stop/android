@@ -1,10 +1,12 @@
 package com.policestrategies.calm_stop.officer;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -93,14 +95,48 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         switch(v.getId()) {
 
             case R.id.button_manage_beacon:
-                Intent i = new Intent(getBaseContext(), BeaconRegistrationActivity.class);
-                startActivity(i);
+                manageBeacon();
                 break;
 
             case R.id.button_make_stop:
-                Intent j = new Intent(getBaseContext(), StopActivity.class);
-                startActivity(j);
+                beginStop();
                 break;
+
+        }
+    }
+
+    private void manageBeacon() {
+        Intent i = new Intent(getBaseContext(), BeaconRegistrationActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void beginStop() {
+
+        if (mCurrentlyRegisteredBeaconId != null && !mCurrentlyRegisteredBeaconId.isEmpty()) {
+
+            // Beacon is attached and active
+
+        } else {
+
+            new AlertDialog.Builder(this)
+                    .setTitle("No active beacon")
+                    .setMessage("You are not currently registered to any beacons. Would you like " +
+                            "to register to a beacon now?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            manageBeacon();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // Do nothing
+                        }
+                    })
+                    .setCancelable(true)
+                    .show();
 
         }
     }

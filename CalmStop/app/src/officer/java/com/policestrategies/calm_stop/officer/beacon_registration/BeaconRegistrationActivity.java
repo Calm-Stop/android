@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.BeaconSimulator;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
+import com.policestrategies.calm_stop.officer.DashboardActivity;
 import com.policestrategies.calm_stop.officer.LoginActivity;
 import com.policestrategies.calm_stop.officer.Utility;
 
@@ -116,6 +117,17 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         mBeaconManager.unbind(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        returnToDashboard();
+    }
+
+    private void returnToDashboard() {
+        Intent i = new Intent(this, DashboardActivity.class);
+        startActivity(i);
+        finish();
+    }
+
     private void promptBeaconStatus() {
         if (mCurrentlyRegisteredBeaconId != null && !mCurrentlyRegisteredBeaconId.isEmpty()) {
             new AlertDialog.Builder(this)
@@ -175,6 +187,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
                         public void onClick(DialogInterface dialogInterface, int i) {
                             deregisterBeacon(mCurrentlyRegisteredBeaconId);
                             registerBeacon(beaconRegistrationId);
+                            returnToDashboard();
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -187,6 +200,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
                     .show();
         } else {
             registerBeacon(beaconRegistrationId);
+            returnToDashboard();
         }
     }
 
