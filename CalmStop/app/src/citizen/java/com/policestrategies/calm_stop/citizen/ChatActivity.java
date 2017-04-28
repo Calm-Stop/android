@@ -35,7 +35,6 @@ public class ChatActivity extends Activity {
 
     private DatabaseReference mDatabaseRef;
     private FirebaseAuth mAuth;
-    private DatabaseReference mStop_reference;
     private DatabaseReference mMessagesReference;
 
 
@@ -76,22 +75,10 @@ public class ChatActivity extends Activity {
             //Store messageID's under messageReference (messages)
             mMessagesReference = mDatabaseRef.child("threads").
                     child(mThreadID).child("messages").getRef();
-
-            //Obtaining & storing via reference to stops -> stopID
-            //DEBUGF: stopID is currently arbitrarily assigned; not retrieved from anywhere
-            mStop_reference = mDatabaseRef.child("stops")
-                    .child("temp_stop_id").getRef();
-            //stopID -> threadID, officerID, citizenID, time_of_stop, date_of_stop
-            mStop_reference.child("threadID").setValue(mThreadID);
-            mStop_reference.child("officerID").setValue(""); //DEBUGF: We currently do not retrieve this value from anywhere
-            mStop_reference.child("citizenID").setValue(mCurrentUserID);
-            mStop_reference.child("date_of_stop").setValue("");
-            mStop_reference.child("time_of_stop").setValue("");
-
 //ChildEventListener listens for changes to chat
 //When a ChatMessage is pushed to firebase, the onChildAdded method of childEventListener activates
 //ChildEventListener is also used for initialization of arrayadapter
-            ChildEventListener childEventListener = new ChildEventListener() {
+            mMessagesReference.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                     Log.d(TAG, "In Citizen/ChatActivity, onChildAdded");
@@ -99,7 +86,6 @@ public class ChatActivity extends Activity {
                     mContent = dataSnapshot.child("content").getValue().toString();
                     mAuthorID = dataSnapshot.child("authorID").getValue().toString();
                     mTimestamp = dataSnapshot.child("timestamp").getValue().toString();
-                    mThreadID = dataSnapshot.child("threadID").getValue().toString();
                     sendChatMessage();
                     mChatText.setText("");
                 }
@@ -125,8 +111,7 @@ public class ChatActivity extends Activity {
                     Toast.makeText(getBaseContext(), "Failed to load comments.",
                             Toast.LENGTH_SHORT).show();
                 }
-            };
-            mMessagesReference.addChildEventListener(childEventListener);
+            });
 //END DATABASE CODE
         }
 //END FIREBASE CODE
