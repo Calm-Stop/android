@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -26,7 +25,7 @@ import com.policestrategies.calm_stop.officer.beacon_registration.BeaconRegistra
  * @author Talal Abou Haiba
  */
 
-public class HomepageActivity extends AppCompatActivity implements View.OnClickListener {
+public class DashboardActivity extends AppCompatActivity implements View.OnClickListener {
 
     private BottomNavigationView mBottomNavigationView;
     private ProgressDialog mProgressDialog;
@@ -40,7 +39,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_homepage);
+        setContentView(R.layout.activity_dashboard);
 
         mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
 
@@ -168,5 +167,5 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-} // end HomepageActivity
+} // end DashboardActivity
 

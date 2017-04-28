@@ -194,7 +194,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             Toast.makeText(SignupActivity.this, "Validation success!",
                                     Toast.LENGTH_SHORT).show();
                             SharedUtil.dismissProgressDialog(mProgressDialog);
-                            Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+                            Intent i = new Intent(getBaseContext(), DashboardActivity.class);
                             startActivity(i);
                             finish();
                         }

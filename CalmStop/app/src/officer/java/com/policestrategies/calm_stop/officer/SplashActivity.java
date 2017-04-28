@@ -8,7 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * First activity loaded when cold-booting the app. Determines whether the user should be sent to
- * {@link LoginActivity}, or {@link HomepageActivity}.
+ * {@link LoginActivity}, or {@link DashboardActivity}.
  * @author Talal Abou Haiba
  */
 
@@ -30,7 +30,7 @@ public class SplashActivity extends AppCompatActivity {
             //intent = new Intent(this, DemoActivity.class);
             intent = new Intent(this, LoginActivity.class);
         } else {
-            intent = new Intent(this, HomepageActivity.class);
+            intent = new Intent(this, DashboardActivity.class);
         }
 
         startActivity(intent);

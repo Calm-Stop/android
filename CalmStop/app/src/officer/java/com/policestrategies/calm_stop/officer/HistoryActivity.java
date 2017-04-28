@@ -62,7 +62,7 @@ public class HistoryActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void home() {
-        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        Intent i = new Intent(getBaseContext(), DashboardActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NEW_TASK |
                 Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);

@@ -151,7 +151,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                     departmentNumber).commit();
                                             SharedUtil.dismissProgressDialog(mProgressDialog);
                                             Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
-                                            Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+                                            Intent i = new Intent(getBaseContext(), DashboardActivity.class);
                                             startActivity(i);
                                             finish();
                                         } else {
