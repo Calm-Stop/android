@@ -7,13 +7,13 @@
 
     <string name="auth_failed">Authentication failed</string>
 
-    <string-array name = "Gender">
+    <string-array name="Gender">
         <item>Female</item>
         <item>Male</item>
         <item>Prefer Not to Answer</item>
     </string-array>
 
-    <string-array name = "Ethnicity">
+    <string-array name="Ethnicity">
         <item>Prefer Not to Answer</item>
         <item>African American</item>
         <item>American Indian</item>
@@ -23,7 +23,7 @@
         <item>White</item>
     </string-array>
 
-    <string-array name = "Language">
+    <string-array name="Language">
         <item>Arabic</item>
         <item>Chinese (Mandarin)</item>
         <item>English</item>
@@ -39,4 +39,8 @@
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+
+    <!-- DashboardActivity -->
+    <string name="officer_welcome">Welcome back, Officer %s!</string>
+
 </resources>

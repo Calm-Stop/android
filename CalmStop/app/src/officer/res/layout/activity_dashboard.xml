@@ -6,33 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".officer.DashboardActivity">
 
-    <include
-        android:id="@+id/beacon_status"
-        layout="@layout/card_view_beacon_status" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/dashboard_officer_profile_picture"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_centerHorizontal="true"
+        app:civ_border_color="@color/colorPrimary"
+        app:civ_border_width="1.5dp" />
 
     <TextView
-        android:id="@+id/text_welcome"
-        android:layout_width="wrap_content"
+        android:id="@+id/dashboard_officer_welcome"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/beacon_status"
-        android:layout_gravity="center"
-        android:text="Welcome back,"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/text_officer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_welcome"
-        android:layout_gravity="center"
-        android:text="Officer Jones"
-        android:textSize="24sp" />
+        android:layout_below="@id/dashboard_officer_profile_picture"
+        android:gravity="center"
+        android:textSize="36sp" />
 
     <Button
         android:id="@+id/button_manage_beacon"
         android:layout_width="match_parent"
         android:layout_height="61dp"
-        android:layout_below="@id/text_officer"
+        android:layout_below="@id/dashboard_officer_welcome"
         android:text="Manage Beacon"
         android:visibility="visible" />
 
@@ -44,6 +42,7 @@
         android:layout_gravity="center"
         android:text="Make Stop"
         android:visibility="visible" />
+
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
