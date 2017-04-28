@@ -13,10 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,20 +26,33 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.policestrategies.calm_stop.BeaconSimulator;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
 import com.policestrategies.calm_stop.officer.beacon_registration.BeaconRegistrationActivity;
+
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.Region;
+
+import java.util.Collection;
 
 /**
  * Officer landing page. From here, an officer can begin a traffic stop.
  * @author Talal Abou Haiba
  */
 
-public class DashboardActivity extends AppCompatActivity implements View.OnClickListener {
+public class DashboardActivity extends AppCompatActivity implements View.OnClickListener,
+        BeaconConsumer {
 
     private BottomNavigationView mBottomNavigationView;
     private ProgressDialog mProgressDialog;
     private ImageView mProfileImageView;
+
+    private BeaconManager mBeaconManager;
 
     private DatabaseReference mDatabaseReference;
     private StorageReference mStorageReference;
@@ -60,6 +75,11 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.button_manage_beacon).setOnClickListener(this);
         findViewById(R.id.button_make_stop).setOnClickListener(this);
 
+        mBeaconManager = BeaconManager.getInstanceForApplication(this);
+        mBeaconManager.getBeaconParsers().add(new BeaconParser().
+                setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
+        mBeaconManager.bind(this);
+
         mProfileImageView = ((ImageView) findViewById(R.id.dashboard_officer_profile_picture));
         mDepartmentNumber = Utility.getCurrentDepartmentNumber(this);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -81,6 +101,12 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         setBottomNavigationView();
 
+        if (BeaconSimulator.USE_SIMULATED_BEACONS) {
+            BeaconManager.setBeaconSimulator(new BeaconSimulator());
+            ((BeaconSimulator) BeaconManager.getBeaconSimulator()).createBasicSimulatedBeacons();
+        }
+
+
     } // end onCreate
 
     @Override
@@ -91,9 +117,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-
         switch(v.getId()) {
-
             case R.id.button_manage_beacon:
                 manageBeacon();
                 break;
@@ -101,8 +125,92 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             case R.id.button_make_stop:
                 beginStop();
                 break;
-
         }
+    }
+
+    @Override
+    public void onBeaconServiceConnect() {
+        System.out.println("Beacon service connected!");
+
+        mBeaconManager.addRangeNotifier(new RangeNotifier() {
+            @Override
+            public void didRangeBeaconsInRegion(Collection<Beacon> collection, final Region region) {
+
+                if (collection.size() == 0) {
+                    return;
+                }
+
+                for (Beacon beacon : collection) {
+                    if (beacon.getServiceUuid() == 0xfeaa && beacon.getBeaconTypeCode() == 0x00) {
+
+                        final String instance = beacon.getId2().toString();
+                        if (mCurrentlyRegisteredBeaconId.equals(instance)) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    activateBeacon(instance);
+                                    scanForCitizenResponse(instance);
+
+                                    try {
+                                        mBeaconManager.stopRangingBeaconsInRegion(region);
+                                    } catch (Exception e) {
+                                        Toast.makeText(DashboardActivity.this,
+                                                "Failed to stop ranging beacons",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            });
+                        }
+                    }
+                }
+
+
+            }
+        });
+
+    } // end onBeaconServiceConnect
+
+    private void activateBeacon(String beaconId) {
+        DatabaseReference beaconDatabaseReference = mDatabaseReference.child("beacons")
+                .child(beaconId).getRef();
+        beaconDatabaseReference.child("active").setValue(true);
+    }
+
+    private void scanForCitizenResponse(String beaconId) {
+
+        mProgressDialog = ProgressDialog.show(this, "", "Scanning for citizen", true, false);
+        DatabaseReference beaconDatabaseReference = mDatabaseReference.child("beacons")
+                .child(beaconId).child("citizen").getRef();
+        beaconDatabaseReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String citizenUid = dataSnapshot.getValue().toString();
+                System.out.println("added child:" + dataSnapshot.getValue());
+                SharedUtil.dismissProgressDialog(mProgressDialog);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                System.out.println("changed child");
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                System.out.println("removed child");
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                System.out.println("moved child");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("cancelled child");
+            }
+        });
     }
 
     private void manageBeacon() {
@@ -116,6 +224,18 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         if (mCurrentlyRegisteredBeaconId != null && !mCurrentlyRegisteredBeaconId.isEmpty()) {
 
             // Beacon is attached and active
+            // TODO: This should be called when we enter the region - don't need to click make stop
+            // TODO: This should only look for our specific beacons
+            Region region = new Region("all-beacons-region", null, null, null);
+
+            try {
+                System.out.println("Starting ranging");
+                mBeaconManager.startRangingBeaconsInRegion(region);
+            } catch (Exception e) {
+                Toast.makeText(this, "Failed to start ranging beacons",
+                        Toast.LENGTH_SHORT).show();
+                System.out.println(e.toString());
+            }
 
         } else {
 
