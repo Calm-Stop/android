@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
+import com.policestrategies.calm_stop.officer.dashboard.DashboardActivity;
 
 /**
  * Allows the officer to log in or create an account.

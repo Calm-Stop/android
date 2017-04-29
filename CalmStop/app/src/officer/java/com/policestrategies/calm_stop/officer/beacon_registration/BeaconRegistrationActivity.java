@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.BeaconSimulator;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
-import com.policestrategies.calm_stop.officer.DashboardActivity;
+import com.policestrategies.calm_stop.officer.dashboard.DashboardActivity;
 import com.policestrategies.calm_stop.officer.LoginActivity;
 import com.policestrategies.calm_stop.officer.Utility;
 

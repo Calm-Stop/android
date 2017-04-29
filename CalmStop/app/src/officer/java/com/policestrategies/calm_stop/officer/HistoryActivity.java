@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.officer.dashboard.DashboardActivity;
 
 public class HistoryActivity extends AppCompatActivity implements View.OnClickListener {
 

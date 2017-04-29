@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.RegexChecks;
 import com.policestrategies.calm_stop.SharedUtil;
+import com.policestrategies.calm_stop.officer.dashboard.DashboardActivity;
 
 /**
  * Allows the user to sign up or return to the log in page.

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.policestrategies.calm_stop.officer.dashboard.DashboardActivity;
 
 /**
  * First activity loaded when cold-booting the app. Determines whether the user should be sent to
