@@ -20,6 +20,7 @@ class BeaconChildEventListener implements ChildEventListener {
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        // TODO: Go to next activity once child has been found
         String citizenUid = dataSnapshot.getValue().toString();
         System.out.println("Added child:" + dataSnapshot.getValue());
         SharedUtil.dismissProgressDialog(mProgressDialog);

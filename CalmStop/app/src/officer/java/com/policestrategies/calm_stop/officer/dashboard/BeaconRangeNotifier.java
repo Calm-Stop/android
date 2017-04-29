@@ -12,15 +12,10 @@ import java.util.Collection;
  */
 class BeaconRangeNotifier implements RangeNotifier {
 
-    private String mCurrentlyRegisteredBeaconId;
     private DashboardManager mDashboardManager;
 
     BeaconRangeNotifier(DashboardManager dashboardManager) {
         mDashboardManager = dashboardManager;
-    }
-
-    void setCurrentBeaconId(String beaconId) {
-        mCurrentlyRegisteredBeaconId = beaconId;
     }
 
     @Override
@@ -33,13 +28,12 @@ class BeaconRangeNotifier implements RangeNotifier {
         for (Beacon beacon : collection) {
             if (beacon.getServiceUuid() == 0xfeaa && beacon.getBeaconTypeCode() == 0x00) {
                 final String instance = beacon.getId2().toString();
-                if (mCurrentlyRegisteredBeaconId != null &&
-                        mCurrentlyRegisteredBeaconId.equals(instance)) {
+                if (mDashboardManager.beaconRegistrationStatus() &&
+                        instance.equals(mDashboardManager.getCurrentlyRegisteredBeaconId())) {
                     mDashboardManager.onSuccessfulBeaconScan(instance, region);
                 }
             }
         }
-
     }
 
 } // end class BeaconRangeNotifier

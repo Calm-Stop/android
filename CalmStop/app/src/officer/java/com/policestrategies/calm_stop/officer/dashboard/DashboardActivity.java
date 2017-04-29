@@ -56,10 +56,6 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     private DatabaseReference mDatabaseReference;
     private StorageReference mStorageReference;
 
-    private String mUid;
-    private String mDepartmentNumber;
-    private String mCurrentlyRegisteredBeaconId;
-
     private DashboardManager mDashboardManager;
 
     @Override
@@ -83,22 +79,8 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
 
         mProfileImageView = ((ImageView) findViewById(R.id.dashboard_officer_profile_picture));
-        mDepartmentNumber = Utility.getCurrentDepartmentNumber(this);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mStorageReference = FirebaseStorage.getInstance().getReference();
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() != null && !mDepartmentNumber.isEmpty()) {
-            mUid = mAuth.getCurrentUser().getUid();
-        } else {
-            mAuth.signOut();
-            Intent i = new Intent(this, LoginActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
-        }
-
-        loadCurrentProfile();
-        obtainCurrentBeaconInfo();
 
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         setBottomNavigationView();
@@ -110,12 +92,21 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
         mDashboardManager = new DashboardManager(this, mDatabaseReference, mProgressDialog, mBeaconManager);
 
+        loadCurrentProfile();
+        obtainCurrentBeaconInfo();
+
     } // end onCreate
 
     @Override
     public void onResume() {
         super.onResume();
         updateNavigationMenuSelection(0);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mBeaconManager.unbind(this);
     }
 
     @Override
@@ -147,7 +138,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     private void beginStop() {
 
-        if (mCurrentlyRegisteredBeaconId != null && !mCurrentlyRegisteredBeaconId.isEmpty()) {
+        if (mDashboardManager.beaconRegistrationStatus()) {
 
             // Beacon is attached and active
             // TODO: This should be called when we enter the region - don't need to click make stop
@@ -191,7 +182,8 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
         final DatabaseReference profileReference;
         profileReference = FirebaseDatabase.getInstance().getReference("officer")
-                .child(mDepartmentNumber).child(mUid).child("profile");
+                .child(mDashboardManager.getDepartmentNumber())
+                .child(mDashboardManager.getUid()).child("profile");
 
         profileReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -220,14 +212,16 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     private void obtainCurrentBeaconInfo() {
 
-        DatabaseReference officerProfileReference = mDatabaseReference.child("officer")
-                .child(mDepartmentNumber).child(mUid).child("profile").getRef();
+        DatabaseReference officerProfileReference = FirebaseDatabase.getInstance().getReference("officer")
+                .child(mDashboardManager.getDepartmentNumber())
+                .child(mDashboardManager.getUid()).child("profile");
 
         officerProfileReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild("beacon")) {
-                    mCurrentlyRegisteredBeaconId = dataSnapshot.child("beacon").getValue().toString();
+                    mDashboardManager.setCurrentlyRegisteredBeaconId(dataSnapshot.child("beacon")
+                            .getValue().toString());
                 }
                 updateCurrentBeaconInfo();
                 SharedUtil.dismissProgressDialog(mProgressDialog);
@@ -242,8 +236,8 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     private void updateCurrentBeaconInfo() {
         String beaconStatus;
-        if (mCurrentlyRegisteredBeaconId != null && !mCurrentlyRegisteredBeaconId.isEmpty()) {
-            beaconStatus = "Connected to beacon #" + mCurrentlyRegisteredBeaconId;
+        if (mDashboardManager.beaconRegistrationStatus()) {
+            beaconStatus = "Connected to beacon #" + mDashboardManager.getCurrentlyRegisteredBeaconId();
             ((ImageView) findViewById(R.id.dashboard_beacon_image))
                     .setImageResource(R.mipmap.ic_done_all_black_48dp);
         } else {

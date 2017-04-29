@@ -2,9 +2,13 @@ package com.policestrategies.calm_stop.officer.dashboard;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.policestrategies.calm_stop.officer.LoginActivity;
+import com.policestrategies.calm_stop.officer.Utility;
 
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.Region;
@@ -21,12 +25,53 @@ class DashboardManager {
     private ProgressDialog mProgressDialog;
     private BeaconManager mBeaconManager;
 
+    private String mUid;
+    private String mDepartmentNumber;
+    private String mCurrentlyRegisteredBeaconId;
+
+
     DashboardManager(Activity ctx, DatabaseReference databaseReference, ProgressDialog pd,
                      BeaconManager manager) {
         mActivityReference = ctx;
         mDatabaseReference = databaseReference;
         mProgressDialog = pd;
         mBeaconManager = manager;
+
+        initialize();
+    }
+
+    private void initialize() {
+        mDepartmentNumber = Utility.getCurrentDepartmentNumber(mActivityReference);
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null && !mDepartmentNumber.isEmpty()) {
+            mUid = mAuth.getCurrentUser().getUid();
+        } else {
+            mAuth.signOut();
+            Intent i = new Intent(mActivityReference, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            mActivityReference.startActivity(i);
+        }
+
+    }
+
+    boolean beaconRegistrationStatus() {
+        return mCurrentlyRegisteredBeaconId != null && !mCurrentlyRegisteredBeaconId.isEmpty();
+    }
+
+    void setCurrentlyRegisteredBeaconId(String newBeaconId) {
+        mCurrentlyRegisteredBeaconId = newBeaconId;
+    }
+    String getCurrentlyRegisteredBeaconId() {
+        return mCurrentlyRegisteredBeaconId;
+    }
+
+    String getUid() {
+        return mUid;
+    }
+
+    String getDepartmentNumber() {
+        return mDepartmentNumber;
     }
 
     /**
@@ -41,6 +86,7 @@ class DashboardManager {
             @Override
             public void run() {
                 activateBeacon(instance);
+                System.out.println("Got instance: " + instance);
                 scanForCitizenResponse(instance);
 
                 try {
