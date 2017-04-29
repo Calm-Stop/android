@@ -20,6 +20,10 @@ public class StopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stop);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         mCitizenUid = getIntent().getExtras().getString("citizen_id");
         mStopId = getIntent().getExtras().getString("stop_id");
 
