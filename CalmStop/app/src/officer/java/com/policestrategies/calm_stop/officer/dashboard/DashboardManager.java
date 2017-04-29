@@ -104,6 +104,9 @@ class DashboardManager {
         officerStopsReference = FirebaseDatabase.getInstance().getReference("officer")
                 .child(mDepartmentNumber).child(mUid).child("stops").getRef();
 
+        mDatabaseReference.child("beacons").child(mCurrentlyRegisteredBeaconId)
+                .child("stop_id").getRef().setValue(stopId);
+
         officerStopsReference.push().getRef().child("stop_id").setValue(stopId);
 
         Intent i = new Intent(mActivityReference, StopActivity.class);
