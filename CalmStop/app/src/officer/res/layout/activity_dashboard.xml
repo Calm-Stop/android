@@ -50,8 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/dashboard_beacon_image"
             android:gravity="center_vertical"
-            android:paddingTop="14dp"
             android:paddingLeft="15dp"
+            android:paddingTop="14dp"
             android:textSize="24sp" />
 
     </RelativeLayout>
@@ -73,6 +73,24 @@
         android:text="Make Stop"
         android:visibility="visible" />
 
+    <RelativeLayout
+        android:id="@+id/loading_indicator_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_make_stop"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/av_loading_indicator"
+            android:layout_width="256dp"
+            android:layout_height="256dp"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            app:indicatorColor="@color/colorPrimary"
+            app:indicatorName="BallScaleMultipleIndicator" />
+
+    </RelativeLayout>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"

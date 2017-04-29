@@ -3,10 +3,12 @@ package com.policestrategies.calm_stop.officer.dashboard;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.officer.LoginActivity;
 import com.policestrategies.calm_stop.officer.Utility;
 
@@ -74,6 +76,14 @@ class DashboardManager {
         return mDepartmentNumber;
     }
 
+    void enableScanningIndicator() {
+        mActivityReference.findViewById(R.id.loading_indicator_layout).setVisibility(View.VISIBLE);
+    }
+
+    void disableScanningIndicator() {
+        mActivityReference.findViewById(R.id.loading_indicator_layout).setVisibility(View.GONE);
+    }
+
     /**
      * Called from {@link BeaconRangeNotifier} following a successful scan of the registered beacon.
      * Activates the beacon and begins scanning for citizen responses.
@@ -107,11 +117,10 @@ class DashboardManager {
     }
 
     private void scanForCitizenResponse(String beaconId) {
-        mProgressDialog = ProgressDialog.show(mActivityReference, "", "Scanning for citizen",
-                true, false);
+        enableScanningIndicator();
         DatabaseReference beaconDatabaseReference = mDatabaseReference.child("beacons")
                 .child(beaconId).child("citizen").getRef();
-        beaconDatabaseReference.addChildEventListener(new BeaconChildEventListener(mProgressDialog));
+        beaconDatabaseReference.addChildEventListener(new BeaconChildEventListener(this));
     }
 
 } // end class DashboardManager

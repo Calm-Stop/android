@@ -12,10 +12,10 @@ import com.policestrategies.calm_stop.SharedUtil;
  */
 class BeaconChildEventListener implements ChildEventListener {
 
-    private ProgressDialog mProgressDialog;
+    private DashboardManager mDashboardManager;
 
-    BeaconChildEventListener(ProgressDialog progressDialogReference) {
-        mProgressDialog = progressDialogReference;
+    BeaconChildEventListener(DashboardManager dashboardManager) {
+        mDashboardManager = dashboardManager;
     }
 
     @Override
@@ -23,7 +23,7 @@ class BeaconChildEventListener implements ChildEventListener {
         // TODO: Go to next activity once child has been found
         String citizenUid = dataSnapshot.getValue().toString();
         System.out.println("Added child:" + dataSnapshot.getValue());
-        SharedUtil.dismissProgressDialog(mProgressDialog);
+        mDashboardManager.disableScanningIndicator();
     }
 
     @Override
@@ -44,7 +44,7 @@ class BeaconChildEventListener implements ChildEventListener {
     @Override
     public void onCancelled(DatabaseError databaseError) {
         System.out.println("Cancelled child");
-        SharedUtil.dismissProgressDialog(mProgressDialog);
+        mDashboardManager.disableScanningIndicator();
     }
 
 }

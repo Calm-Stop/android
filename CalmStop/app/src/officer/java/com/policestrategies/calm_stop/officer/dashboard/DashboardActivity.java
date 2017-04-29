@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,9 +29,7 @@ import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
 import com.policestrategies.calm_stop.officer.AccountActivity;
 import com.policestrategies.calm_stop.officer.HistoryActivity;
-import com.policestrategies.calm_stop.officer.LoginActivity;
 import com.policestrategies.calm_stop.officer.RatingActivity;
-import com.policestrategies.calm_stop.officer.Utility;
 import com.policestrategies.calm_stop.officer.beacon_registration.BeaconRegistrationActivity;
 
 import org.altbeacon.beacon.BeaconConsumer;
@@ -71,12 +68,10 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
         findViewById(R.id.button_manage_beacon).setOnClickListener(this);
         findViewById(R.id.button_make_stop).setOnClickListener(this);
-
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
         mBeaconManager.getBeaconParsers().add(new BeaconParser().
                 setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
         mBeaconManager.bind(this);
-
 
         mProfileImageView = ((ImageView) findViewById(R.id.dashboard_officer_profile_picture));
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
