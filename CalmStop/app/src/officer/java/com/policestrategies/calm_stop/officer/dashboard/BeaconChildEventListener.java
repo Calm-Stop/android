@@ -1,11 +1,8 @@
 package com.policestrategies.calm_stop.officer.dashboard;
 
-import android.app.ProgressDialog;
-
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.policestrategies.calm_stop.SharedUtil;
 
 /**
  * @author Talal Abou Haiba
@@ -20,9 +17,9 @@ class BeaconChildEventListener implements ChildEventListener {
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        // TODO: Go to next activity once child has been found
         String citizenUid = dataSnapshot.getValue().toString();
         System.out.println("Added child:" + dataSnapshot.getValue());
+        mDashboardManager.writeStop(citizenUid);
         mDashboardManager.disableScanningIndicator();
     }
 

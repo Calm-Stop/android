@@ -8,12 +8,17 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.officer.LoginActivity;
 import com.policestrategies.calm_stop.officer.Utility;
 
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.Region;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Manages beacon in {@link DashboardActivity}
@@ -24,7 +29,6 @@ class DashboardManager {
 
     private Activity mActivityReference;
     private DatabaseReference mDatabaseReference;
-    private ProgressDialog mProgressDialog;
     private BeaconManager mBeaconManager;
 
     private String mUid;
@@ -32,17 +36,15 @@ class DashboardManager {
     private String mCurrentlyRegisteredBeaconId;
 
 
-    DashboardManager(Activity ctx, DatabaseReference databaseReference, ProgressDialog pd,
-                     BeaconManager manager) {
+    DashboardManager(Activity ctx, BeaconManager manager) {
         mActivityReference = ctx;
-        mDatabaseReference = databaseReference;
-        mProgressDialog = pd;
         mBeaconManager = manager;
 
         initialize();
     }
 
     private void initialize() {
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mDepartmentNumber = Utility.getCurrentDepartmentNumber(mActivityReference);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -64,6 +66,7 @@ class DashboardManager {
     void setCurrentlyRegisteredBeaconId(String newBeaconId) {
         mCurrentlyRegisteredBeaconId = newBeaconId;
     }
+
     String getCurrentlyRegisteredBeaconId() {
         return mCurrentlyRegisteredBeaconId;
     }
@@ -76,7 +79,36 @@ class DashboardManager {
         return mDepartmentNumber;
     }
 
-    void enableScanningIndicator() {
+    void writeStop(String citizenUid) {
+        DatabaseReference stopReference = mDatabaseReference.child("stops").getRef().push();
+        String stopId = stopReference.getKey();
+
+        // Generate date and time
+        Calendar c = Calendar.getInstance();
+        String formattedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(c.getTime());
+        String formattedTime = new SimpleDateFormat("HH:mm", Locale.US).format(c.getTime());
+
+        String latitude = "35.478";
+        String longitude = "115.116";
+
+        stopReference.child("citizenID").setValue(citizenUid);
+        stopReference.child("officerID").setValue(mUid);
+        stopReference.child("date").setValue(formattedDate);
+        stopReference.child("time").setValue(formattedTime);
+        stopReference.child("lat").setValue(latitude);
+        stopReference.child("long").setValue(longitude);
+        stopReference.child("reason").setValue("");
+
+        // Write stop to officer uid
+        final DatabaseReference officerStopsReference;
+        officerStopsReference = FirebaseDatabase.getInstance().getReference("officer")
+                .child(mDepartmentNumber).child(mUid).child("stops").getRef();
+
+        officerStopsReference.push().getRef().child("stop_id").setValue(stopId);
+
+    }
+
+    private void enableScanningIndicator() {
         mActivityReference.findViewById(R.id.loading_indicator_layout).setVisibility(View.VISIBLE);
     }
 

@@ -50,7 +50,6 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     private BeaconManager mBeaconManager;
 
-    private DatabaseReference mDatabaseReference;
     private StorageReference mStorageReference;
 
     private DashboardManager mDashboardManager;
@@ -74,7 +73,6 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         mBeaconManager.bind(this);
 
         mProfileImageView = ((ImageView) findViewById(R.id.dashboard_officer_profile_picture));
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mStorageReference = FirebaseStorage.getInstance().getReference();
 
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -85,7 +83,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             ((BeaconSimulator) BeaconManager.getBeaconSimulator()).createBasicSimulatedBeacons();
         }
 
-        mDashboardManager = new DashboardManager(this, mDatabaseReference, mProgressDialog, mBeaconManager);
+        mDashboardManager = new DashboardManager(this, mBeaconManager);
 
         loadCurrentProfile();
         obtainCurrentBeaconInfo();
