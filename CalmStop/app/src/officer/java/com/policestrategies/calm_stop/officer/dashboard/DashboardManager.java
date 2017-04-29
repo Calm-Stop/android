@@ -1,7 +1,6 @@
 package com.policestrategies.calm_stop.officer.dashboard;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Toast;
@@ -11,6 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.officer.LoginActivity;
+import com.policestrategies.calm_stop.officer.StopActivity;
 import com.policestrategies.calm_stop.officer.Utility;
 
 import org.altbeacon.beacon.BeaconManager;
@@ -106,6 +106,11 @@ class DashboardManager {
 
         officerStopsReference.push().getRef().child("stop_id").setValue(stopId);
 
+        Intent i = new Intent(mActivityReference, StopActivity.class);
+        i.putExtra("stop_id", stopId);
+        i.putExtra("citizen_id", citizenUid);
+        mActivityReference.startActivity(i);
+        mActivityReference.finish();
     }
 
     private void enableScanningIndicator() {

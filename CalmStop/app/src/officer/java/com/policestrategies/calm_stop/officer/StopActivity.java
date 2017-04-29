@@ -12,10 +12,19 @@ import com.policestrategies.calm_stop.R;
 
 public class StopActivity extends AppCompatActivity {
 
+    private String mCitizenUid;
+    private String mStopId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stop);
+
+        mCitizenUid = getIntent().getExtras().getString("citizen_id");
+        mStopId = getIntent().getExtras().getString("stop_id");
+
+        System.out.println("GOT: " + mCitizenUid);
+        System.out.println("GOT: " + mStopId);
     }
 
 } // end class StopActivity
