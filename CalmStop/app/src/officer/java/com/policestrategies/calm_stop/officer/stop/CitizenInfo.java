@@ -9,58 +9,58 @@ import com.google.firebase.database.DataSnapshot;
 
 class CitizenInfo {
 
-    private int mNumberOfStops;
-    private int mNumberOfAlerts;
-    private int mNumberOfWarnings;
-    private int mNumberOfThreats;
-    private int mNumberOfCitations;
-    private int mNumberOfIntoxicated;
-    private int mNumberOfArrests;
-    private int mNumberOfWeapons;
+    private long mNumberOfStops;
+    private long mNumberOfAlerts;
+    private long mNumberOfWarnings;
+    private long mNumberOfThreats;
+    private long mNumberOfCitations;
+    private long mNumberOfIntoxicated;
+    private long mNumberOfArrests;
+    private long mNumberOfWeapons;
 
     CitizenInfo() {}
 
     void setCitizenInfo(DataSnapshot infoSnapshot) {
-        mNumberOfStops = ((int) infoSnapshot.child("stops").getValue());
-        mNumberOfAlerts = ((int) infoSnapshot.child("alerts").getValue());
-        mNumberOfWarnings = ((int) infoSnapshot.child("warnings").getValue());
-        mNumberOfThreats = ((int) infoSnapshot.child("threats").getValue());
-        mNumberOfCitations = ((int) infoSnapshot.child("citations").getValue());
-        mNumberOfIntoxicated = ((int) infoSnapshot.child("intoxicated").getValue());
-        mNumberOfArrests = ((int) infoSnapshot.child("arrests").getValue());
-        mNumberOfWeapons = ((int) infoSnapshot.child("weapons").getValue());
+        mNumberOfStops = ((long) infoSnapshot.child("stops").getValue());
+        mNumberOfAlerts = ((long) infoSnapshot.child("alerts").getValue());
+        mNumberOfWarnings = ((long) infoSnapshot.child("warnings").getValue());
+        mNumberOfThreats = ((long) infoSnapshot.child("threats").getValue());
+        mNumberOfCitations = ((long) infoSnapshot.child("citations").getValue());
+        mNumberOfIntoxicated = ((long) infoSnapshot.child("intoxicated").getValue());
+        mNumberOfArrests = ((long) infoSnapshot.child("arrests").getValue());
+        mNumberOfWeapons = ((long) infoSnapshot.child("weapons").getValue());
     }
 
     int getNumberOfStops() {
-        return mNumberOfStops;
+        return (int) mNumberOfStops;
     }
 
     int getNumberOfAlerts() {
-        return mNumberOfAlerts;
+        return (int) mNumberOfAlerts;
     }
 
     int getNumberOfWarnings() {
-        return mNumberOfWarnings;
+        return (int) mNumberOfWarnings;
     }
 
     int getNumberOfThreats() {
-        return mNumberOfThreats;
+        return (int) mNumberOfThreats;
     }
 
     int getNumberOfCitations() {
-        return mNumberOfCitations;
+        return (int) mNumberOfCitations;
     }
 
     int getNumberOfIntoxicated() {
-        return mNumberOfIntoxicated;
+        return (int) mNumberOfIntoxicated;
     }
 
     int getNumberOfArrests() {
-        return mNumberOfArrests;
+        return (int) mNumberOfArrests;
     }
 
     int getNumberOfWeapons() {
-        return mNumberOfWeapons;
+        return (int) mNumberOfWeapons;
     }
 
 } // end class CitizenInfo
