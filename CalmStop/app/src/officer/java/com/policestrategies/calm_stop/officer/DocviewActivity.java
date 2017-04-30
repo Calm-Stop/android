@@ -62,13 +62,19 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.registration:
-                i = new Intent(getBaseContext(), BeaconRegistrationActivity.class);
-                startActivity(i);
+                StorageReference registrationRef = mStorageRef.child(mStopID).child("registration");
+                Glide.with(this)
+                        .using(new FirebaseImageLoader())
+                        .load(registrationRef)
+                        .into(mLicense);
                 break;
 
             case R.id.insurance:
-                i = new Intent(getBaseContext(), DocviewActivity.class);
-                startActivity(i);
+                StorageReference insuranceRef = mStorageRef.child(mStopID).child("insurance");
+                Glide.with(this)
+                        .using(new FirebaseImageLoader())
+                        .load(insuranceRef)
+                        .into(mLicense);
                 break;
 
         }
