@@ -34,7 +34,7 @@ class CitizenInfo {
     void setCitizenInfo(DataSnapshot citizenSnapshot) {
         loadCitizenProfile(citizenSnapshot.child("profile"));
         loadCitizenInfo(citizenSnapshot.child("profile").child("info"));
-        //loadCitizenInfo(citizenSnapshot.child("info"));
+        //loadCitizenInfo(citizenSnapshot.child("info")); TODO: NO PROFILE #45
     }
 
     private void loadCitizenProfile(DataSnapshot profileSnapshot) {
@@ -78,6 +78,18 @@ class CitizenInfo {
 
         }
         return "Male - " + age;
+    }
+
+    String getFullName() {
+        return mFullName;
+    }
+
+    String getPreferredLanguage() {
+        return mPreferredLanguage;
+    }
+
+    String getAgeAndGender() {
+        return mAgeAndGender;
     }
 
     int getNumberOfStops() {

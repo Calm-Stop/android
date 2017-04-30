@@ -40,11 +40,17 @@ class StopManager {
 
     private void retrieveCitizenInfo() {
         DatabaseReference citizenInfoReference = mDatabaseReference.child("citizen")
-                .child(mCitizenUid).getRef(); // TODO: NO PROFILE #45
+                .child(mCitizenUid).getRef();
         citizenInfoReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                 mCitizenInfo.setCitizenInfo(dataSnapshot);
+                mCitizenInfo.setCitizenInfo(dataSnapshot);
+                mActivityReference.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((StopActivity) mActivityReference).displayCitizenInformation(mCitizenInfo);
+                    }
+                });
             }
 
             @Override
