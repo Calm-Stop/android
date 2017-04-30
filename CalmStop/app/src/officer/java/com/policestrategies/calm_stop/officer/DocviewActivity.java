@@ -39,6 +39,7 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
         mStopRef = mDatabaseRef.child("stops").child("temp_stop_id").getRef();
 //ASSUMPTION: Images uploaded onto firebase have unique names (for unique path)
 //If not, make it so
+        //mStorageRef is the root of storage: gs://calm-stop.appspot.com
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
         mLocalImagePath = "/path/to/local/file";

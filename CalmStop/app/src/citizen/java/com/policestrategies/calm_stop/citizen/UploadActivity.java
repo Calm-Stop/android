@@ -1,10 +1,9 @@
 package com.policestrategies.calm_stop.citizen;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,8 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -24,11 +21,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.policestrategies.calm_stop.R;
 
-/**
- * Created by mariavizcaino on 2/26/17.
- */
 
-public class DocumentsActivity extends AppCompatActivity implements View.OnClickListener {
+public class UploadActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int chosenImage = 1;
     private static final String DOCS = "Documents";
     private static final String LICEN = "license";
@@ -92,7 +86,7 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
             minsurance.setImageURI(insurancePic);
         }
 
-        Toast.makeText(DocumentsActivity.this, "Click on Image To Upload", Toast.LENGTH_SHORT).show();
+        Toast.makeText(UploadActivity.this, "Click on Image To Upload", Toast.LENGTH_SHORT).show();
     }
 
     public void onClick(View v) {
@@ -134,13 +128,13 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             mProgressDialog.dismiss();
-                            Toast.makeText(DocumentsActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UploadActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             mProgressDialog.dismiss();
-                            Toast.makeText(DocumentsActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UploadActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
                         }
                     });
                     mlicense.setImageURI(licensePic);
@@ -150,7 +144,7 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                     editor.putString(LICEN, license);
                     editor.commit();
                 } else
-                    Toast.makeText(DocumentsActivity.this, "Error with License", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UploadActivity.this, "Error with License", Toast.LENGTH_LONG).show();
                 break;
             case 1:
                 if (requestCode == chosenImage && resultCode == RESULT_OK && data != null) {
@@ -161,13 +155,13 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             mProgressDialog.dismiss();
-                            Toast.makeText(DocumentsActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UploadActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             mProgressDialog.dismiss();
-                            Toast.makeText(DocumentsActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UploadActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
                         }
                     });
                     mregistration.setImageURI(registrationPic);
@@ -177,7 +171,7 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                     editor.putString(REGI, regi);
                     editor.commit();
                 } else
-                    Toast.makeText(DocumentsActivity.this, "Error with Registration", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UploadActivity.this, "Error with Registration", Toast.LENGTH_LONG).show();
                 break;
             case 2:
                 if (requestCode == chosenImage && resultCode == RESULT_OK && data != null) {
@@ -188,13 +182,13 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             mProgressDialog.dismiss();
-                            Toast.makeText(DocumentsActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UploadActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             mProgressDialog.dismiss();
-                            Toast.makeText(DocumentsActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UploadActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
                         }
                     });
                     minsurance.setImageURI(insurancePic);
@@ -204,14 +198,9 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                     editor.putString(INSUR, insur);
                     editor.commit();
                 } else
-                    Toast.makeText(DocumentsActivity.this, "Error with Insurance", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UploadActivity.this, "Error with Insurance", Toast.LENGTH_LONG).show();
                 break;
         }
 
-    }
-
-    private void toProfile() {
-        Intent i = new Intent(getBaseContext(), ProfileActivity.class);
-        startActivity(i);
     }
 }
