@@ -24,31 +24,25 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
     private DatabaseReference mDatabaseRef;
     private DatabaseReference mStopRef;
     private StorageReference mStorageRef;
-    private StorageReference mLocalPathRef;
-    private StorageReference mFirebaseImageRef;
-//mLicense, mInsurance and mRegistration expected to each store string path URI's
-    private Uri mInsurance;
-    private Uri mRegistration;
-    private ImageView mLicense;
-    String mLocalImagePath;
-    String mFirebaseImagePath;
 
+    private ImageView mLicense;
+    private ImageView mRegistration;
+    private ImageView mInsurance;
+
+    private String mStopID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_documents);
         mLicense = (ImageView) findViewById(R.id.license);
+//Use database reference to get stopID
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-        mStopRef = mDatabaseRef.child("stops").child("temp_stop_id").getRef();
+        mStopID = "temp_stop_id";
+        mStopRef = mDatabaseRef.child("stops").child(mStopID).getRef();
 //ASSUMPTION: Images uploaded onto firebase have unique names (for unique path)
-//If not, make it so
-        //mStorageRef is the root of storage: gs://calm-stop.appspot.com
+//mStorageRef is the root of storage: gs://calm-stop.appspot.com
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
-        mLocalImagePath = "/path/to/local/file";
-        mFirebaseImagePath = "gs://retrieve/URL/from/citizen";
-
-        mLocalPathRef = mStorageRef.child(mLocalImagePath);
         findViewById(R.id.license).setOnClickListener(this);
         findViewById(R.id.registration).setOnClickListener(this);
         findViewById(R.id.insurance).setOnClickListener(this);
@@ -60,7 +54,7 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
         switch(v.getId()) {
 
             case R.id.license:
-                StorageReference licenseRef = mStorageRef.child("temp_beacon_ID").child("license");
+                StorageReference licenseRef = mStorageRef.child(mStopID).child("license");
                 Glide.with(this)
                         .using(new FirebaseImageLoader())
                         .load(licenseRef)
