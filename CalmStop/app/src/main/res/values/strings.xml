@@ -40,7 +40,19 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
+    <!-- Officer -->
+
     <!-- DashboardActivity -->
     <string name="officer_welcome">Welcome back, Officer %s!</string>
+
+    <!-- StopActivity -->
+    <string name="stop_citizen_num_stops">Stops: %d</string>
+    <string name="stop_citizen_num_alerts">Alerts: %d</string>
+    <string name="stop_citizen_num_warnings">Warnings: %d</string>
+    <string name="stop_citizen_num_threats">Threats: %d</string>
+    <string name="stop_citizen_num_citations">Citations: %d</string>
+    <string name="stop_citizen_num_intoxicated">Intoxicated: %d</string>
+    <string name="stop_citizen_num_arrests">Arrests: %d</string>
+    <string name="stop_citizen_num_weapons">Weapons: %d</string>
 
 </resources>

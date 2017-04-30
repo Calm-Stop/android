@@ -63,7 +63,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".officer.StopActivity"
+            android:name=".officer.stop.StopActivity"
             android:screenOrientation="portrait" />
 
     </application>

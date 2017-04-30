@@ -10,7 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.officer.LoginActivity;
-import com.policestrategies.calm_stop.officer.StopActivity;
+import com.policestrategies.calm_stop.officer.stop.StopActivity;
 import com.policestrategies.calm_stop.officer.Utility;
 
 import org.altbeacon.beacon.BeaconManager;
