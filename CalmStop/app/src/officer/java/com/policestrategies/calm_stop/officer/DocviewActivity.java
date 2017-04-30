@@ -23,6 +23,7 @@ import com.policestrategies.calm_stop.R;
 //PLAN: listen in firebase for image, then set image from firebase when image is pushed (ostensibly to stop)
 //LOCATION: document image URL's will be expected to be unique and created by citizen and pushed under the stop instance specified by a unique stop_ID
 //ASSUMPTION: stop_ID is passed to this class from intent EXTRA or SharedPreference
+//ASSUMPTION: stop_ID is already stored in database; reference will not be null
 public class DocviewActivity extends AppCompatActivity implements View.OnClickListener {
     private DatabaseReference mDatabaseRef;
     private DatabaseReference mStopRef;
@@ -35,7 +36,7 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
     private String LicenseUp;
     private String RegistrationUp;
     private String InsuranceUp;
-    private Boolean ImageUploaded;
+    private String ImageUploaded;
 
     private String mStopID;
     @Override
@@ -43,24 +44,27 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_documents);
         mLicense = (ImageView) findViewById(R.id.license);
-//Error catch; these should be set the moment stop occurs before entering this activity
-        ImageUploaded = false;
-        mStopRef.child("license").setValue(ImageUploaded);
-        mStopRef.child("registration").setValue(ImageUploaded);
-        mStopRef.child("insurance").setValue(ImageUploaded);
+
+//The below are set here for testing purposes; not having these will cause crash in ValueEventListener
+//The image dock assumes these exist under stop; it is how image uploading is instantly detected
+
 //Use database reference to get stopID
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         mStopID = "temp_stop_ID";
+//The following retrieval of stopID is not compatible with current database schema
+//the stopID should already exist and is passed to this activity via beacon
         mStopRef = mDatabaseRef.child("stops").child(mStopID).getRef();
+        LicenseUp = RegistrationUp = InsuranceUp = "false";
+        ImageUploaded = "true";
+        mStopRef.child("license").setValue(ImageUploaded);
+        mStopRef.child("registration").setValue(ImageUploaded);
+        mStopRef.child("insurance").setValue(ImageUploaded);
+
         mStopRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                LicenseUp = dataSnapshot.child("license").getValue().toString();
-                RegistrationUp = dataSnapshot.child("registration").getValue().toString();
-                InsuranceUp = dataSnapshot.child("insurance").getValue().toString();
+                if (LicenseUp.equalsIgnoreCase("false")) { LicenseUp = dataSnapshot.child("license").getValue().toString(); }
                 if (LicenseUp.equalsIgnoreCase("true")) { SetImage(mLicense, "license"); }
-                if (RegistrationUp.equalsIgnoreCase("true")) { SetImage(mRegistration, "registration"); }
-                if (InsuranceUp.equalsIgnoreCase("true")) {SetImage(mInsurance, "insurance"); }
             }
 
             @Override

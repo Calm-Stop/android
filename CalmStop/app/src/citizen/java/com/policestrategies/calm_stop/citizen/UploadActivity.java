@@ -52,11 +52,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ImageUploaded = false;
-        mStopRef.child("license").setValue(ImageUploaded);
-        mStopRef.child("registration").setValue(ImageUploaded);
-        mStopRef.child("insurance").setValue(ImageUploaded);
-        
         mProgressDialog = new ProgressDialog(this);
 //Stop ID is retrievable from Beacon ID; no need to explicitly have BeaconID
         mStopID = "temp_stop_ID";
@@ -64,7 +59,12 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mImagePath = mStorageRef.child(mStopID);
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+
+        ImageUploaded = false;
         mStopRef = mDatabaseRef.child("stops").child(mStopID).getRef();
+        mStopRef.child("license").setValue(ImageUploaded);
+        mStopRef.child("registration").setValue(ImageUploaded);
+        mStopRef.child("insurance").setValue(ImageUploaded);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
