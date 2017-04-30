@@ -5,8 +5,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -25,8 +28,8 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
     private StorageReference mFirebaseImageRef;
 //mLicense, mInsurance and mRegistration expected to each store string path URI's
     private Uri mInsurance;
-    private Uri mLicense;
     private Uri mRegistration;
+    private ImageView mLicense;
     String mLocalImagePath;
     String mFirebaseImagePath;
 
@@ -34,7 +37,7 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_documents);
-
+        mLicense = (ImageView) findViewById(R.id.license);
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         mStopRef = mDatabaseRef.child("stops").child("temp_stop_id").getRef();
 //ASSUMPTION: Images uploaded onto firebase have unique names (for unique path)
@@ -46,7 +49,6 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
         mFirebaseImagePath = "gs://retrieve/URL/from/citizen";
 
         mLocalPathRef = mStorageRef.child(mLocalImagePath);
-        mFirebaseImageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mFirebaseImagePath);
         findViewById(R.id.license).setOnClickListener(this);
         findViewById(R.id.registration).setOnClickListener(this);
         findViewById(R.id.insurance).setOnClickListener(this);
@@ -58,8 +60,11 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
         switch(v.getId()) {
 
             case R.id.license:
-                i = new Intent(getBaseContext(), BeaconRegistrationActivity.class);
-                startActivity(i);
+                StorageReference licenseRef = mStorageRef.child("temp_beacon_ID").child("license");
+                Glide.with(this)
+                        .using(new FirebaseImageLoader())
+                        .load(licenseRef)
+                        .into(mLicense);
                 break;
 
             case R.id.registration:
