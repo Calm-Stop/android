@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Switch;
-
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
@@ -44,6 +42,8 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_documents);
         mLicense = (ImageView) findViewById(R.id.license);
+        mRegistration = (ImageView) findViewById(R.id.registration);
+        mInsurance = (ImageView) findViewById(R.id.insurance);
 
 //The below are set here for testing purposes; not having these will cause crash in ValueEventListener
 //The image dock assumes these exist under stop; it is how image uploading is instantly detected
@@ -60,11 +60,31 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
         mStopRef.child("registration").setValue(ImageUploaded);
         mStopRef.child("insurance").setValue(ImageUploaded);
 
+// Once image is uploaded, grab it. Don't grab again unless citizen does another upload
         mStopRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (LicenseUp.equalsIgnoreCase("false")) { LicenseUp = dataSnapshot.child("license").getValue().toString(); }
-                if (LicenseUp.equalsIgnoreCase("true")) { SetImage(mLicense, "license"); }
+
+                if (RegistrationUp.equalsIgnoreCase("false")) { RegistrationUp = dataSnapshot.child("registration").getValue().toString(); }
+
+                if (InsuranceUp.equalsIgnoreCase("false")) { InsuranceUp = dataSnapshot.child("insurance").getValue().toString(); }
+
+                if (LicenseUp.equalsIgnoreCase("true")) {
+                    mStopRef.child("license").setValue("false");
+                    SetImage(mLicense, "license");
+                    LicenseUp = "false";
+                }
+                if (RegistrationUp.equalsIgnoreCase("true")) {
+                    SetImage(mRegistration, "registration");
+                    mStopRef.child("registration").setValue("false");
+                    RegistrationUp = "false";
+                }
+                if (InsuranceUp.equalsIgnoreCase("true")) {
+                    SetImage(mInsurance, "insurance");
+                    mStopRef.child("insurance").setValue("false");
+                    InsuranceUp = "false";
+                }
             }
 
             @Override

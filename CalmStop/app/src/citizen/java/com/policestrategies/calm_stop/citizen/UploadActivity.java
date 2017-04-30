@@ -45,7 +45,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private StorageReference mStorageRef;
     private StorageReference mImagePath;
     private String mStopID;
-    private boolean ImageUploaded;
+    private String ImageUploaded;
 
     private ProgressDialog mProgressDialog;
 
@@ -60,11 +60,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         mImagePath = mStorageRef.child(mStopID);
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
 
-        ImageUploaded = false;
         mStopRef = mDatabaseRef.child("stops").child(mStopID).getRef();
-        mStopRef.child("license").setValue(ImageUploaded);
-        mStopRef.child("registration").setValue(ImageUploaded);
-        mStopRef.child("insurance").setValue(ImageUploaded);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -143,14 +139,14 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             mProgressDialog.dismiss();
-                            ImageUploaded = true;
+                            ImageUploaded = "true";
                             Toast.makeText(UploadActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             mProgressDialog.dismiss();
-                            ImageUploaded = false;
+                            ImageUploaded = "false";
                             Toast.makeText(UploadActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -173,14 +169,14 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             mProgressDialog.dismiss();
-                            ImageUploaded = true;
+                            ImageUploaded = "true";
                             Toast.makeText(UploadActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             mProgressDialog.dismiss();
-                            ImageUploaded = false;
+                            ImageUploaded = "false";
                             Toast.makeText(UploadActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -203,14 +199,14 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             mProgressDialog.dismiss();
-                            ImageUploaded = true;
+                            ImageUploaded = "true";
                             Toast.makeText(UploadActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             mProgressDialog.dismiss();
-                            ImageUploaded = false;
+                            ImageUploaded = "false";
                             Toast.makeText(UploadActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
                         }
                     });
