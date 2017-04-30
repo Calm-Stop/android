@@ -24,7 +24,6 @@ public class StopActivity extends AppCompatActivity {
         }
 
         mStopManager = new StopManager(this);
-
     }
 
 } // end class StopActivity

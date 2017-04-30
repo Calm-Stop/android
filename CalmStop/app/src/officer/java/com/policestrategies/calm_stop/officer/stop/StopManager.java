@@ -40,7 +40,7 @@ class StopManager {
 
     private void retrieveCitizenInfo() {
         DatabaseReference citizenInfoReference = mDatabaseReference.child("citizen")
-                .child(mCitizenUid).child("profile").child("info").getRef(); // TODO: NO PROFILE #45
+                .child(mCitizenUid).getRef(); // TODO: NO PROFILE #45
         citizenInfoReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
