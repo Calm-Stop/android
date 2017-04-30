@@ -54,97 +54,104 @@
         android:id="@+id/separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/dashboard_officer_welcome"
         android:background="@color/colorPrimary"
         android:paddingBottom="15dp" />
 
-
-    <TableRow
-        android:layout_width="match_parent"
+    <TableLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center">
+        android:divider="?android:attr/dividerHorizontal"
+        android:showDividers="middle">
 
-        <TextView
-            android:id="@+id/stop_citizen_info_stops"
-            android:layout_width="wrap_content"
+        <TableRow
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="18dp"
-            android:textSize="18sp" />
+            android:layout_gravity="center"
+            android:gravity="center">
 
-        <TextView
-            android:id="@+id/stop_citizen_info_alerts"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/stop_citizen_info_stops"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dp"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/stop_citizen_info_alerts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dp"
+                android:textSize="18sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="18dp"
-            android:textSize="18sp" />
+            android:layout_gravity="center"
+            android:gravity="center">
 
-    </TableRow>
+            <TextView
+                android:id="@+id/stop_citizen_info_warnings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dp"
+                android:textSize="18sp" />
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center">
+            <TextView
+                android:id="@+id/stop_citizen_info_threats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dp"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/stop_citizen_info_warnings"
-            android:layout_width="wrap_content"
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="18dp"
-            android:textSize="18sp" />
+            android:layout_gravity="center"
+            android:gravity="center">
 
-        <TextView
-            android:id="@+id/stop_citizen_info_threats"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/stop_citizen_info_citations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dp"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/stop_citizen_info_intoxicated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dp"
+                android:textSize="18sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="18dp"
-            android:textSize="18sp" />
+            android:layout_gravity="center"
+            android:gravity="center">
 
-    </TableRow>
+            <TextView
+                android:id="@+id/stop_citizen_info_arrests"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dp"
+                android:textSize="18sp" />
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center">
+            <TextView
+                android:id="@+id/stop_citizen_info_weapons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dp"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/stop_citizen_info_citations"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dp"
-            android:textSize="18sp" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/stop_citizen_info_intoxicated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dp"
-            android:textSize="18sp" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/stop_citizen_info_arrests"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dp"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/stop_citizen_info_weapons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dp"
-            android:textSize="18sp" />
-
-    </TableRow>
+    </TableLayout>
 
 </LinearLayout>
