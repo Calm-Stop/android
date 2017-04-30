@@ -158,6 +158,9 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         } else if (id == R.id.logout) {
             logout();
+        } else if (id == R.id.image_upload_debug) {
+            Intent i = new Intent(this, UploadActivity.class);
+            startActivity(i);
         } else if (id == R.id.detect_beacon_debug) {
             Intent i = new Intent(this, BeaconDetectionActivity.class);
             startActivity(i);

@@ -1,6 +1,5 @@
 package com.policestrategies.calm_stop.citizen;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;

@@ -8,7 +8,6 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -17,7 +16,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -44,18 +42,10 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
     private Uri registrationPic;
     private Uri insurancePic;
 
-    private StorageReference mStorageRef;
-    private StorageReference mFilePath;
-
-    private ProgressDialog mProgressDialog;
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mProgressDialog = new ProgressDialog(this);
         String beaconID = "temp_beacon_ID";
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-        mFilePath = mStorageRef.child(beaconID);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -99,6 +89,9 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
 
         switch(v.getId()) {
 
+//            case R.id.backbutton: // The login button was pressed - let's run the login function
+//                toProfile();
+//                break;
             case R.id.license:
                 PhotoUpdating = 0;
                 Intent lisence = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -127,22 +120,7 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
         switch(PhotoUpdating) {
             case 0:
                 if (requestCode == chosenImage && resultCode == RESULT_OK && data != null) {
-                    mProgressDialog.setMessage("Uploading to Firebase ...");
-                    mProgressDialog.show();
                     licensePic = data.getData();
-                    mFilePath.child("license").putFile(licensePic).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            mProgressDialog.dismiss();
-                            Toast.makeText(DocumentsActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            mProgressDialog.dismiss();
-                            Toast.makeText(DocumentsActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
-                        }
-                    });
                     mlicense.setImageURI(licensePic);
                     String license = licensePic.toString();
                     SharedPreferences docs = getSharedPreferences(DOCS, 0);
@@ -154,22 +132,7 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                 break;
             case 1:
                 if (requestCode == chosenImage && resultCode == RESULT_OK && data != null) {
-                    mProgressDialog.setMessage("Uploading to Firebase ...");
-                    mProgressDialog.show();
                     registrationPic = data.getData();
-                    mFilePath.child("registration").putFile(licensePic).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            mProgressDialog.dismiss();
-                            Toast.makeText(DocumentsActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            mProgressDialog.dismiss();
-                            Toast.makeText(DocumentsActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
-                        }
-                    });
                     mregistration.setImageURI(registrationPic);
                     String regi = registrationPic.toString();
                     SharedPreferences docs = getSharedPreferences(DOCS, 0);
@@ -181,22 +144,7 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                 break;
             case 2:
                 if (requestCode == chosenImage && resultCode == RESULT_OK && data != null) {
-                    mProgressDialog.setMessage("Uploading to Firebase ...");
-                    mProgressDialog.show();
                     insurancePic = data.getData();
-                    mFilePath.child("insurance").putFile(licensePic).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            mProgressDialog.dismiss();
-                            Toast.makeText(DocumentsActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            mProgressDialog.dismiss();
-                            Toast.makeText(DocumentsActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
-                        }
-                    });
                     minsurance.setImageURI(insurancePic);
                     String insur = insurancePic.toString();
                     SharedPreferences docs = getSharedPreferences(DOCS, 0);
