@@ -15,7 +15,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.policestrategies.calm_stop.R;
-import com.policestrategies.calm_stop.officer.beacon_registration.BeaconRegistrationActivity;
 
 //PLAN: listen in firebase for image, then set image from firebase when image is pushed (ostensibly to stop)
 //LOCATION: document image URL's will be expected to be unique and created by citizen and pushed under the stop instance specified by a unique stop_ID
@@ -37,8 +36,9 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
         mLicense = (ImageView) findViewById(R.id.license);
 //Use database reference to get stopID
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-        mStopID = "temp_stop_id";
+        mStopID = "temp_stop_ID";
         mStopRef = mDatabaseRef.child("stops").child(mStopID).getRef();
+
 //ASSUMPTION: Images uploaded onto firebase have unique names (for unique path)
 //mStorageRef is the root of storage: gs://calm-stop.appspot.com
         mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -50,7 +50,6 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        Intent i;
         switch(v.getId()) {
 
             case R.id.license:

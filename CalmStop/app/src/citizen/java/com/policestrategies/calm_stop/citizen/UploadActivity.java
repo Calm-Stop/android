@@ -3,6 +3,7 @@ package com.policestrategies.calm_stop.citizen;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -37,18 +40,27 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private Uri registrationPic;
     private Uri insurancePic;
 
+    private DatabaseReference mDatabaseRef;
+    private DatabaseReference mStopRef;
     private StorageReference mStorageRef;
-    private StorageReference mFilePath;
+    private StorageReference mImagePath;
+    private String mStopID;
+    private boolean ImageUploaded;
 
     private ProgressDialog mProgressDialog;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ImageUploaded = false;
         mProgressDialog = new ProgressDialog(this);
-        String beaconID = "temp_beacon_ID";
+//Stop ID is retrievable from Beacon ID; no need to explicitly have BeaconID
+        mStopID = "temp_stop_ID";
+
         mStorageRef = FirebaseStorage.getInstance().getReference();
-        mFilePath = mStorageRef.child(beaconID);
+        mImagePath = mStorageRef.child(mStopID);
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+        mStopRef = mDatabaseRef.child("stops").child(mStopID).getRef();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -123,19 +135,22 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                     mProgressDialog.setMessage("Uploading to Firebase ...");
                     mProgressDialog.show();
                     licensePic = data.getData();
-                    mFilePath.child("license").putFile(licensePic).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    mImagePath.child("license").putFile(licensePic).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             mProgressDialog.dismiss();
+                            ImageUploaded = true;
                             Toast.makeText(UploadActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             mProgressDialog.dismiss();
+                            ImageUploaded = false;
                             Toast.makeText(UploadActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
                         }
                     });
+                    mStopRef.child("license").setValue(ImageUploaded);
                     mlicense.setImageURI(licensePic);
                     String license = licensePic.toString();
                     SharedPreferences docs = getSharedPreferences(DOCS, 0);
@@ -150,19 +165,22 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                     mProgressDialog.setMessage("Uploading to Firebase ...");
                     mProgressDialog.show();
                     registrationPic = data.getData();
-                    mFilePath.child("registration").putFile(licensePic).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    mImagePath.child("registration").putFile(licensePic).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             mProgressDialog.dismiss();
+                            ImageUploaded = true;
                             Toast.makeText(UploadActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             mProgressDialog.dismiss();
+                            ImageUploaded = false;
                             Toast.makeText(UploadActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
                         }
                     });
+                    mStopRef.child("registration").setValue(ImageUploaded);
                     mregistration.setImageURI(registrationPic);
                     String regi = registrationPic.toString();
                     SharedPreferences docs = getSharedPreferences(DOCS, 0);
@@ -177,19 +195,22 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                     mProgressDialog.setMessage("Uploading to Firebase ...");
                     mProgressDialog.show();
                     insurancePic = data.getData();
-                    mFilePath.child("insurance").putFile(licensePic).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    mImagePath.child("insurance").putFile(licensePic).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             mProgressDialog.dismiss();
+                            ImageUploaded = true;
                             Toast.makeText(UploadActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             mProgressDialog.dismiss();
+                            ImageUploaded = false;
                             Toast.makeText(UploadActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
                         }
                     });
+                    mStopRef.child("registration").setValue(ImageUploaded);
                     minsurance.setImageURI(insurancePic);
                     String insur = insurancePic.toString();
                     SharedPreferences docs = getSharedPreferences(DOCS, 0);
