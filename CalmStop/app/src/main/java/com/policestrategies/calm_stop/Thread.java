@@ -5,14 +5,14 @@ package com.policestrategies.calm_stop;
  *  e.g. timestamp is an integer time variable based on UNIX time stamp)
  * 1) Create thread:
  *  Thread thread = new Thread(timestamp(int), threadID(int), citizenID(int), officerID(int);
- * 2) Generate a Message object each time user types in content to the messager:
- *  Message message = new Message(content(String), timestamp(String), authorID(String), threadID(String), messageID(String));
+ * 2) Generate a ChatMessage object each time user types in content to the messager:
+ *  ChatMessage message = new ChatMessage(content(String), timestamp(String), authorID(String), threadID(String), messageID(String));
  * 3) Insert into thread as messages are generated:
- *  thread.insertMessage(message(Message));
+ *  thread.insertMessage(message(ChatMessage));
  */
 public class Thread {
 //FIELDS
-    private Message[] Messages;
+    private ChatMessage[] chatMessages;
     private int numMessages=0;
     private int timestamp; //stores time at which thread was created/instantiated
     private String threadID;
@@ -28,8 +28,8 @@ public class Thread {
     }
 
 //GETTERS AND SETTERS
-    public  Message[] getMessages() { return Messages; }
-    public void setMessages(Message[] messages) { Messages = messages; }
+    public  ChatMessage[] getChatMessages() { return chatMessages; }
+    public void setChatMessages(ChatMessage[] chatMessages) { this.chatMessages = chatMessages; }
 
     public int getTimestamp() { return timestamp; }
 //    public void setTimestamp(int timestamp) { this.timestamp = timestamp; }
@@ -44,22 +44,22 @@ public class Thread {
 //    public void setCitizenID(String citizenID) { this.citizenID = citizenID; }
 
 //INSERTING INTO MESSAGE ARRAY:
-    public void insertMessage(Message message) {
-        //if there isn't enough space to insert into the Messages[] array
-        //instantiate the Messages[] array and make sure there's enough space on the next array slot
-        //The size of the message array is 8 at minimum (if not null) and is expanded in multiples of 2
-        if (Messages == null) {
-            Messages = new Message[8];
-        } else if (numMessages == Messages.length) {
-            Message[] newMessages = new Message[numMessages*2];
+    public void insertMessage(ChatMessage chatMessage) {
+        //if there isn't enough space to insert into the chatMessages[] array
+        //instantiate the chatMessages[] array and make sure there's enough space on the next array slot
+        //The size of the chatMessage array is 8 at minimum (if not null) and is expanded in multiples of 2
+        if (chatMessages == null) {
+            chatMessages = new ChatMessage[8];
+        } else if (numMessages == chatMessages.length) {
+            ChatMessage[] newChatMessages = new ChatMessage[numMessages*2];
             for (int i = 0; i < numMessages; i++) {
-                newMessages[i] = Messages[i];
+                newChatMessages[i] = chatMessages[i];
             }
-            Messages = newMessages;
+            chatMessages = newChatMessages;
         }
-        //insert into the Messages[] array
-        Messages[numMessages] = message;
+        //insert into the chatMessages[] array
+        chatMessages[numMessages] = chatMessage;
         numMessages++;
     }
 
-} // end class Message
+} // end class ChatMessage

@@ -199,7 +199,8 @@ public class RegexChecksTest {
     @Test
     public void testLessThanNineteenTenDateOfBirth() {
         String testDateOfBirth = "1-20-1909";
-        Assert.assertFalse(SignupVerification.validDateOfBirth(testDateOfBirth));
+        Assert.assertFalse(RegexChecks.validDateOfBirth(testDateOfBirth));
+    }
 
     public void testLessThanNineteenThirtyDateOfBirth() {
         String testDateOfBirth = "1-20-1929";

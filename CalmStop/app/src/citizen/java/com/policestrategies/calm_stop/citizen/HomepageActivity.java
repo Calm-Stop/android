@@ -209,6 +209,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         finish();
     }
 
+
     private void logout() {
         //You want to logout -> login page
         FirebaseAuth.getInstance().signOut();

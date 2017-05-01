@@ -30,6 +30,10 @@
             android:id="@+id/detect_beacon_debug"
             android:title="DEBUG - Beacon Detection" />
 
+        <item
+            android:id="@+id/chat_activity_debug"
+            android:title="DEBUG - Chat Activity" />
+
     </group>
 
 </menu>
