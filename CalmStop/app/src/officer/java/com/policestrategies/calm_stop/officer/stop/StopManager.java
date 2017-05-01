@@ -32,6 +32,18 @@ class StopManager {
         retrieveCitizenInfo();
     }
 
+    void generateTextChat() {
+        DatabaseReference threadReference = mDatabaseReference.child("threads").getRef().push();
+        String threadId = threadReference.getKey();
+
+        // TODO: This should be posted as a regular message, with full metadata.
+        threadReference.child("messages").push().getRef().setValue("Hello there!");
+
+        // Post thread id to the current stop
+        DatabaseReference stopReference = mDatabaseReference.child("stops").child(mStopId).getRef();
+        stopReference.child("threadID").setValue(threadId);
+    }
+
     private void loadIntentExtras() {
         Intent currentIntent = mActivityReference.getIntent();
         mCitizenUid = currentIntent.getExtras().getString("citizen_id");

@@ -2,6 +2,8 @@ package com.policestrategies.calm_stop.officer.stop;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.policestrategies.calm_stop.R;
@@ -11,7 +13,7 @@ import com.policestrategies.calm_stop.R;
  * @author Talal Abou Haiba
  */
 
-public class StopActivity extends AppCompatActivity {
+public class StopActivity extends AppCompatActivity implements View.OnClickListener {
 
     private StopManager mStopManager;
 
@@ -24,7 +26,31 @@ public class StopActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
+        findViewById(R.id.stop_request_call_button).setOnClickListener(this);
+        findViewById(R.id.stop_request_text_button).setOnClickListener(this);
+        findViewById(R.id.stop_request_documents_button).setOnClickListener(this);
+
         mStopManager = new StopManager(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.stop_request_call_button:
+                break;
+
+            case R.id.stop_request_text_button:
+                requestTextChat();
+                break;
+
+            case R.id.stop_request_documents_button:
+                break;
+        }
+    }
+
+    private void requestTextChat() {
+        mStopManager.generateTextChat();
     }
 
     void displayCitizenInformation(CitizenInfo citizenInfo) {
