@@ -8,6 +8,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 /**
  * Handles backend of traffic stop in {@link StopActivity}
@@ -18,6 +20,7 @@ class StopManager {
 
     private Activity mActivityReference;
     private DatabaseReference mDatabaseReference;
+    private StorageReference mStorageReference;
 
     private CitizenInfo mCitizenInfo;
 
@@ -27,6 +30,8 @@ class StopManager {
     StopManager(Activity context) {
         mActivityReference = context;
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mStorageReference = FirebaseStorage.getInstance().getReference();
+
         mCitizenInfo = new CitizenInfo();
         loadIntentExtras();
         retrieveCitizenInfo();
@@ -61,6 +66,8 @@ class StopManager {
                     @Override
                     public void run() {
                         ((StopActivity) mActivityReference).displayCitizenInformation(mCitizenInfo);
+                        ((StopActivity) mActivityReference).displayCitizenProfilePicture(
+                                mStorageReference.child(mCitizenInfo.getPhotoUrl()));
                     }
                 });
             }

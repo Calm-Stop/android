@@ -23,7 +23,6 @@
                 android:paddingBottom="5dp"
                 android:paddingRight="15dp"
                 android:paddingTop="15dp"
-                android:src="@mipmap/ic_launcher"
                 app:civ_border_color="@color/colorPrimary"
                 app:civ_border_width="1.5dp" />
 
@@ -66,6 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="30dp"
             android:divider="?android:attr/dividerHorizontal"
             android:showDividers="middle">
 
@@ -170,11 +170,11 @@
             android:id="@+id/stop_request_documents_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginBottom="15dp"
             android:background="@null"
-            android:layout_centerHorizontal="true"
             android:src="@mipmap/documents3x" />
 
         <ImageButton
@@ -182,8 +182,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:background="@null"
             android:layout_toLeftOf="@id/stop_request_documents_button"
+            android:background="@null"
             android:src="@mipmap/call3x" />
 
         <ImageButton
@@ -191,8 +191,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:background="@null"
             android:layout_toRightOf="@id/stop_request_documents_button"
+            android:background="@null"
             android:src="@mipmap/text3x" />
 
     </RelativeLayout>

@@ -20,6 +20,8 @@ class CitizenInfo {
     private String mPreferredLanguage;
     private String mAgeAndGender;
 
+    private String mPhotoUrl;
+
     private long mNumberOfStops;
     private long mNumberOfAlerts;
     private long mNumberOfWarnings;
@@ -44,6 +46,7 @@ class CitizenInfo {
         long language = ((long) profileSnapshot.child("language").getValue());
         long gender = ((long) profileSnapshot.child("gender").getValue());
 
+        mPhotoUrl = profileSnapshot.child("photo").getValue().toString();
         mFullName = firstName + " " + lastName;
         mPreferredLanguage = "English";
         mAgeAndGender = calculateAgeAndGender(dob, gender);
@@ -90,6 +93,10 @@ class CitizenInfo {
 
     String getAgeAndGender() {
         return mAgeAndGender;
+    }
+
+    String getPhotoUrl() {
+        return mPhotoUrl;
     }
 
     int getNumberOfStops() {
