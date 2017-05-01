@@ -27,7 +27,7 @@ public class ChatArrayAdapter extends ArrayAdapter {
     private List chatMessageList = new ArrayList();
     private LinearLayout singleMessageContainer;
 
-    public void add(ChatMessage object) {
+    public void add(Message object) {
         chatMessageList.add(object);
         super.add(object);
     }
@@ -40,8 +40,8 @@ public class ChatArrayAdapter extends ArrayAdapter {
         return this.chatMessageList.size();
     }
 
-    public ChatMessage getItem(int index) {
-        return (ChatMessage) this.chatMessageList.get(index);
+    public Message getItem(int index) {
+        return (Message) this.chatMessageList.get(index);
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -54,10 +54,10 @@ public class ChatArrayAdapter extends ArrayAdapter {
             row = inflater.inflate(R.layout.activity_chat_singlemessage, parent, false);
         }
         singleMessageContainer = (LinearLayout) row.findViewById(R.id.singleMessageContainer);
-        ChatMessage chatMessageObj = getItem(position);
-        boolean right = chatMessageObj.getAuthorID().equalsIgnoreCase(currentUserID);
+        Message messageObj = getItem(position);
+        boolean right = messageObj.getAuthorID().equalsIgnoreCase(currentUserID);
         chatText = (TextView) row.findViewById(R.id.singleMessage);
-        chatText.setText(chatMessageObj.getContent());
+        chatText.setText(messageObj.getContent());
         chatText.setBackgroundResource(!right ? R.drawable.rect_fgreen : R.drawable.rect_fyellow);
         singleMessageContainer.setGravity(!right ? Gravity.LEFT : Gravity.RIGHT);
         return row;

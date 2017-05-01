@@ -52,7 +52,7 @@ public class ChatActivity extends Activity {
         mChatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.activity_chat_singlemessage);
         mListView.setAdapter(mChatArrayAdapter);
 
-//Default ChatMessage object values to be passed to ChatMessage constructor
+//Default Message object values to be passed to Message constructor
         mChatText = (EditText) findViewById(R.id.chat_text);
         mTimestamp = Long.toString(System.currentTimeMillis());
         mCurrentUserID = mAuthorID = mThreadID = "01";
@@ -72,7 +72,7 @@ public class ChatActivity extends Activity {
             mMessagesReference = mDatabaseRef.child("threads").
                     child(mThreadID).child("messages").getRef();
 //ChildEventListener listens for changes to chat
-//When a ChatMessage is pushed to firebase, the onChildAdded method of childEventListener activates
+//When a Message is pushed to firebase, the onChildAdded method of childEventListener activates
 //ChildEventListener is also used for initialization of arrayadapter
             mMessagesReference.addChildEventListener(new ChildEventListener() {
                 @Override
@@ -121,7 +121,7 @@ public class ChatActivity extends Activity {
                 mContent = mChatText.getText().toString();
                 //The context for generating threadID has yet to be designed or implemented
                 //creating new message from set fields
-                ChatMessage newMessage = new ChatMessage(mContent,
+                Message newMessage = new Message(mContent,
                         mTimestamp, mThreadID, mCurrentUserID);
                 if (user != null) {
                     sendToFirebase(newMessage);
@@ -146,7 +146,7 @@ public class ChatActivity extends Activity {
 //SEND MESSAGE TO ADAPTER
     private boolean sendChatMessage(){
         Log.v(TAG, "Sending message.");
-        ChatMessage newMessage = new ChatMessage(mContent,
+        Message newMessage = new Message(mContent,
                 mTimestamp, mThreadID, mAuthorID);
         mChatArrayAdapter.add(newMessage);
         mChatText.setText("");
@@ -160,7 +160,7 @@ public class ChatActivity extends Activity {
     //1. a message is received from firebase
     //2. a message is sent to firebase
     //in no other case should chatarrayadapter receive messages
-    private void sendToFirebase(ChatMessage newMessage){
+    private void sendToFirebase(Message newMessage){
         //if user_ID == authorID, set side = false; else set side equal true
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
