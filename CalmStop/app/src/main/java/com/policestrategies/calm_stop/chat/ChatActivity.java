@@ -13,8 +13,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.citizen.LoginActivity;
 
-import static java.lang.System.currentTimeMillis;
-
 // TODO: Clean up remaining code
 
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
@@ -33,19 +31,16 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_chat);
 
         mChatManager = new ChatManager(this);
-        mListView = (ListView) findViewById(R.id.listView1);
+        mListView = (ListView) findViewById(R.id.chat_list_view);
 
         mChatArrayAdapter = new ChatArrayAdapter(getApplicationContext(),
                 R.layout.activity_chat_singlemessage);
 
         mListView.setAdapter(mChatArrayAdapter);
 
-        // Default Message object values to be passed to Message constructor
         mChatText = (EditText) findViewById(R.id.chat_text);
 
-        // Obtaining the user's data from firebase
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
         if (firebaseAuth.getCurrentUser() != null) {
             mUid = firebaseAuth.getCurrentUser().getUid();
         } else {
@@ -74,9 +69,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.button_send:
-                String timestamp = Long.toString(currentTimeMillis());
                 String content = mChatText.getText().toString();
-                Message newMessage = new Message(content, timestamp, mUid);
+                Message newMessage = new Message(content, System.currentTimeMillis(), mUid);
                 mChatManager.sendToFirebase(newMessage);
                 mChatText.setText("");
         }

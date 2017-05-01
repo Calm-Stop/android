@@ -3,24 +3,24 @@ package com.policestrategies.calm_stop.chat;
 class Message {
 
     private String mContent;
-    private String mTimestamp;
-    private String mAuthorId;
+    private long mTimestamp;
+    private String mAuthor;
 
-    Message(String content, String timestamp, String authorID) {
+    Message(String content, long timestamp, String author) {
         mContent = content;
         mTimestamp = timestamp;
-        mAuthorId = authorID;
+        mAuthor = author;
     }
 
     public String getContent() {
         return mContent;
     }
 
-    public String getAuthorID() {
-        return mAuthorId;
+    public String getAuthor() {
+        return mAuthor;
     }
 
-    public String getTimestamp() {
+    public long getTimestamp() {
         return mTimestamp;
     }
 

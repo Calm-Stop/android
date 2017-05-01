@@ -22,10 +22,15 @@ class ChatManager {
         mMessagesReference = FirebaseDatabase.getInstance().getReference().child("threads")
                 .child(threadId).child("messages").getRef();
         mMessagesReference.addChildEventListener(new ChatChildEventListener(this));
-
     }
 
-    void sendChatMessage(String content, String author, String timestamp) {
+    /**
+     * Adds a message into the array adapter, displaying it on the screen.
+     * @param content of the message
+     * @param author of the message
+     * @param timestamp - when the message was created
+     */
+    void displayMessage(String content, String author, long timestamp) {
         Message newMessage = new Message(content, timestamp, author);
         ((ChatActivity) mActivityReference).displayChatMessage(newMessage);
     }

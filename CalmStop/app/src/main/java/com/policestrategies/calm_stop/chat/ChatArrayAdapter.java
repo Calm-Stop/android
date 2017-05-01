@@ -53,7 +53,7 @@ class ChatArrayAdapter extends ArrayAdapter<Message> {
         }
         LinearLayout singleMessageContainer = (LinearLayout) row.findViewById(R.id.singleMessageContainer);
         Message messageObj = getItem(position);
-        boolean right = messageObj.getAuthorID().equalsIgnoreCase(currentUserID);
+        boolean right = messageObj.getAuthor().equalsIgnoreCase(currentUserID);
         TextView chatText = (TextView) row.findViewById(R.id.singleMessage);
         chatText.setText(messageObj.getContent());
         chatText.setBackgroundResource(!right ? R.drawable.rect_fgreen : R.drawable.rect_fyellow);

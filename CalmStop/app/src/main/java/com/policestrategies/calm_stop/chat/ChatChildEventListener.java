@@ -26,10 +26,10 @@ class ChatChildEventListener implements ChildEventListener {
         Log.d(TAG, "In Citizen/ChatActivity, onChildAdded");
 
         String content = dataSnapshot.child("content").getValue().toString();
-        String authorID = dataSnapshot.child("authorID").getValue().toString();
-        String timestamp = dataSnapshot.child("timestamp").getValue().toString();
+        String authorID = dataSnapshot.child("author").getValue().toString();
+        long timestamp = ((long) dataSnapshot.child("timestamp").getValue());
 
-        mChatManager.sendChatMessage(content, authorID, timestamp);
+        mChatManager.displayMessage(content, authorID, timestamp);
     }
 
     @Override
