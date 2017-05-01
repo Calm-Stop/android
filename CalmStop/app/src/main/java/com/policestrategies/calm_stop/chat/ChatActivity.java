@@ -1,6 +1,5 @@
 package com.policestrategies.calm_stop.chat;
 
-import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +10,6 @@ import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.policestrategies.calm_stop.R;
-import com.policestrategies.calm_stop.citizen.LoginActivity;
 
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -40,9 +38,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             mUid = firebaseAuth.getCurrentUser().getUid();
         } else {
             firebaseAuth.signOut();
-            Intent i = new Intent(this, LoginActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
+            finish();
         }
 
         mChatArrayAdapter = new ChatArrayAdapter(getApplicationContext(),
