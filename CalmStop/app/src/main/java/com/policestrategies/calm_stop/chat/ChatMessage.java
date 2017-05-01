@@ -1,4 +1,4 @@
-package com.policestrategies.calm_stop;
+package com.policestrategies.calm_stop.chat;
 
 public class ChatMessage {
 //FIELDS

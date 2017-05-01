@@ -55,7 +55,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ChatActivity"
+            android:name=".chat.ChatActivity"
             android:screenOrientation="portrait" />
 
         <activity

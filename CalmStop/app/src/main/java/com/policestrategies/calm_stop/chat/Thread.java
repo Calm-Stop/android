@@ -1,4 +1,7 @@
-package com.policestrategies.calm_stop;
+package com.policestrategies.calm_stop.chat;
+
+import com.policestrategies.calm_stop.chat.ChatMessage;
+
 /*
  * Usage:
  * (NOTE: All constructor fields must be retrieved beforehand

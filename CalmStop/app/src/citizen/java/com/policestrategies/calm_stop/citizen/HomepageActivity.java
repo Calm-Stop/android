@@ -21,9 +21,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.policestrategies.calm_stop.ChatActivity;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
+import com.policestrategies.calm_stop.chat.ChatActivity;
 import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
 
 public class HomepageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {

@@ -1,4 +1,4 @@
-package com.policestrategies.calm_stop;
+package com.policestrategies.calm_stop.chat;
 
 
 import android.content.Context;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.policestrategies.calm_stop.R;
 
 import java.util.ArrayList;
 import java.util.List;

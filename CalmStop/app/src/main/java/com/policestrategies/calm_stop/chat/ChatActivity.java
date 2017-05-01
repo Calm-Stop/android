@@ -1,4 +1,4 @@
-package com.policestrategies.calm_stop;
+package com.policestrategies.calm_stop.chat;
 
 import android.app.Activity;
 import android.database.DataSetObserver;
@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.policestrategies.calm_stop.R;
 
 import static java.lang.System.currentTimeMillis;
 
