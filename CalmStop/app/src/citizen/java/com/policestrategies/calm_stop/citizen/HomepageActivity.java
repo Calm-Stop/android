@@ -1,8 +1,8 @@
 package com.policestrategies.calm_stop.citizen;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,27 +24,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
-import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.policestrategies.calm_stop.R;
-
-import static android.R.attr.action;
-import static android.R.attr.drawable;
-import static android.R.attr.phoneNumber;
-import static android.R.id.toggle;
-import static com.policestrategies.calm_stop.R.id.license;
-import static com.policestrategies.calm_stop.R.id.nameDisplay;
-import static com.policestrategies.calm_stop.R.layout.nav_header_main;
-
+import com.policestrategies.calm_stop.chat.ChatActivity;
 import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
 
 public class HomepageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout mDrawerLayout;
     private TextView mProfileName;
+    private TextView Title;
 
     private ProgressDialog mProgressDialog;
+
 
     private FirebaseUser mCurrentUser;
     private DatabaseReference mProfileReference;
@@ -60,9 +49,14 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         ActionBar actionBar = getSupportActionBar();;
         actionBar.hide();
 
+        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/avenir-next.ttf");
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Title = (TextView) findViewById(R.id.WelcomeTitle);
 
         //mProfileName = (TextView) ((nav_header_main)context).findViewById(R.id.nameDisplay);
+        Title.setTypeface(custom_font);
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -76,6 +70,8 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                     .child(mCurrentUser.getUid()).child("profile");
 
         }
+
+        navigationView.setNavigationItemSelectedListener(this);
 
         mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
         mProfileReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -102,7 +98,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
             @Override
             public void onClick(View v) {
-
                 switch(v.getId()) {
                     case R.id.menu_main:
                         mDrawerLayout.openDrawer(Gravity.LEFT);
@@ -114,18 +109,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         });
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
-//
-//    @Override
-//    public void setContentView(int layoutResID)
-//    {
-//        mDrawerLayout = (DrawerLayout) getLayoutInflater().inflate(R.layout.drawer_layout, null);
-//        FrameLayout activityContainer = (FrameLayout) fullView.findViewById(R.id.activity_content);
-//        getLayoutInflater().inflate(layoutResID, activityContainer, true);
-//        super.setContentView(fullView);
-//    }
 
     @Override
     public void onBackPressed() {
@@ -137,30 +121,45 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId(); // TODO: This should be a switch statement
+        switch(item.getItemId()) {
 
-        if (id == R.id.profile) {
-            profile();
-        } else if (id == R.id.previous_stops) {
-            previousStops();
-        } else if (id == R.id.help) {
-            help();
+            case R.id.profile:
+                profile();
+                break;
 
-        } else if (id == R.id.about_us) {
-            aboutUs();
+            case R.id.previous_stops:
+                previousStops();
+                break;
 
-        } else if (id == R.id.settings) {
-            settings();
+            case R.id.help:
+                help();
+                break;
 
-        } else if (id == R.id.logout) {
-            logout();
-        } else if (id == R.id.detect_beacon_debug) {
-            Intent i = new Intent(this, BeaconDetectionActivity.class);
-            startActivity(i);
+            case R.id.about_us:
+                aboutUs();
+                break;
+
+            case R.id.settings:
+                settings();
+                break;
+
+            case R.id.logout:
+                logout();
+                break;
+
+            case R.id.documents:
+                documents();
+                break;
+
+            case R.id.detect_beacon_debug:
+                detectBeacon();
+                break;
+
+            case R.id.chat_activity_debug:
+                debugChat();
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -198,6 +197,12 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         finish();
     }
 
+    private void documents() {
+        Intent i = new Intent(getBaseContext(), DocumentsActivity.class);
+        startActivity(i);
+        finish();
+    }
+
     private void logout() {
         //You want to logout -> login page
         FirebaseAuth.getInstance().signOut();
@@ -205,5 +210,19 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         startActivity(i);
         finish();
     }
+
+    private void detectBeacon(){
+        Intent i = new Intent(this, BeaconDetectionActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void debugChat() {
+        Intent i = new Intent(this, ChatActivity.class);
+        i.putExtra("thread_id", "01");
+        startActivity(i);
+        finish();
+    }
+
 
 }

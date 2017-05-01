@@ -18,7 +18,9 @@
             android:id="@+id/settings"
             android:title="Settings" />
 
-        <item android:enabled="false" />
+        <item
+            android:id="@+id/documents"
+            android:title="Documents" />
 
         <item
             android:id="@+id/logout"
@@ -27,6 +29,10 @@
         <item
             android:id="@+id/detect_beacon_debug"
             android:title="DEBUG - Beacon Detection" />
+
+        <item
+            android:id="@+id/chat_activity_debug"
+            android:title="DEBUG - Chat Activity" />
 
     </group>
 
