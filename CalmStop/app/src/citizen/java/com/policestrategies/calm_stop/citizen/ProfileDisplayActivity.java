@@ -123,52 +123,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
 
         }
 
-        Title.setTypeface(custom_font);
-        Nametxt.setTypeface(custom_font);
-        Emailtxt.setTypeface(custom_font);
-        Phonetxt.setTypeface(custom_font);
-        DOBtxt.setTypeface(custom_font);
-        DriverListxt.setTypeface(custom_font);
-        Zipcodetxt.setTypeface(custom_font);
-        Langtxt.setTypeface(custom_font);
-        Gendertxt.setTypeface(custom_font);
-        Ethntxt.setTypeface(custom_font);
-
-        Name.setTextColor(getResources().getColor(R.color.black));
-        Name.setTypeface(custom_font);
-        Name.setTextSize(14);
-
-        Email.setTextColor(getResources().getColor(R.color.black));
-        Email.setTypeface(custom_font);
-        Email.setTextSize(14);
-
-        Phone.setTextColor(getResources().getColor(R.color.black));
-        Phone.setTypeface(custom_font);
-        Phone.setTextSize(14);
-
-        DOB.setTextColor(getResources().getColor(R.color.black));
-        DOB.setTypeface(custom_font);
-        DOB.setTextSize(14);
-
-        DriverLis.setTextColor(getResources().getColor(R.color.black));
-        DriverLis.setTypeface(custom_font);
-        DriverLis.setTextSize(14);
-
-        Zipcode.setTextColor(getResources().getColor(R.color.black));
-        Zipcode.setTypeface(custom_font);
-        Zipcode.setTextSize(14);
-
-        Lang.setTextColor(getResources().getColor(R.color.black));
-        Lang.setTypeface(custom_font);
-        Lang.setTextSize(14);
-
-        Gender.setTextColor(getResources().getColor(R.color.black));
-        Gender.setTypeface(custom_font);
-        Gender.setTextSize(14);
-
-        Ethn.setTextColor(getResources().getColor(R.color.black));
-        Ethn.setTypeface(custom_font);
-        Ethn.setTextSize(14);
+        customizeFont(custom_font);
 
         mProfileReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -248,7 +203,12 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
     }
 
     public void onBackPressed() {
-        toHomepage();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private String getEth(int id){
@@ -324,6 +284,57 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                 mDrawerLayout.openDrawer(Gravity.LEFT);
                 break;
         }
+    }
+
+    private void customizeFont(Typeface custom_font){
+
+        Title.setTypeface(custom_font);
+        Nametxt.setTypeface(custom_font);
+        Emailtxt.setTypeface(custom_font);
+        Phonetxt.setTypeface(custom_font);
+        DOBtxt.setTypeface(custom_font);
+        DriverListxt.setTypeface(custom_font);
+        Zipcodetxt.setTypeface(custom_font);
+        Langtxt.setTypeface(custom_font);
+        Gendertxt.setTypeface(custom_font);
+        Ethntxt.setTypeface(custom_font);
+
+        Name.setTextColor(getResources().getColor(R.color.black));
+        Name.setTypeface(custom_font);
+        Name.setTextSize(14);
+
+        Email.setTextColor(getResources().getColor(R.color.black));
+        Email.setTypeface(custom_font);
+        Email.setTextSize(14);
+
+        Phone.setTextColor(getResources().getColor(R.color.black));
+        Phone.setTypeface(custom_font);
+        Phone.setTextSize(14);
+
+        DOB.setTextColor(getResources().getColor(R.color.black));
+        DOB.setTypeface(custom_font);
+        DOB.setTextSize(14);
+
+        DriverLis.setTextColor(getResources().getColor(R.color.black));
+        DriverLis.setTypeface(custom_font);
+        DriverLis.setTextSize(14);
+
+        Zipcode.setTextColor(getResources().getColor(R.color.black));
+        Zipcode.setTypeface(custom_font);
+        Zipcode.setTextSize(14);
+
+        Lang.setTextColor(getResources().getColor(R.color.black));
+        Lang.setTypeface(custom_font);
+        Lang.setTextSize(14);
+
+        Gender.setTextColor(getResources().getColor(R.color.black));
+        Gender.setTypeface(custom_font);
+        Gender.setTextSize(14);
+
+        Ethn.setTextColor(getResources().getColor(R.color.black));
+        Ethn.setTypeface(custom_font);
+        Ethn.setTextSize(14);
+
     }
 
     private void toHomepage() {
