@@ -35,8 +35,7 @@ class CitizenInfo {
 
     void setCitizenInfo(DataSnapshot citizenSnapshot) {
         loadCitizenProfile(citizenSnapshot.child("profile"));
-        loadCitizenInfo(citizenSnapshot.child("profile").child("info"));
-        //loadCitizenInfo(citizenSnapshot.child("info")); TODO: NO PROFILE #45
+        loadCitizenInfo(citizenSnapshot.child("info"));
     }
 
     private void loadCitizenProfile(DataSnapshot profileSnapshot) {
