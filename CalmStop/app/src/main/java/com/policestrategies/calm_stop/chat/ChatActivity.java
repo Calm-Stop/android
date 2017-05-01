@@ -13,16 +13,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.citizen.LoginActivity;
 
-// TODO: Clean up remaining code
-
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ChatArrayAdapter mChatArrayAdapter;
     private ListView mListView;
     private EditText mChatText;
+    private ChatArrayAdapter mChatArrayAdapter;
 
     private String mUid;
-
     private ChatManager mChatManager;
 
     @Override
@@ -71,6 +68,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         switch(v.getId()) {
             case R.id.button_send:
                 String content = mChatText.getText().toString();
+                if (content.isEmpty()) {
+                    return;
+                }
                 Message newMessage = new Message(content, System.currentTimeMillis(), mUid);
                 mChatManager.sendToFirebase(newMessage);
                 mChatText.setText("");

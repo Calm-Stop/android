@@ -36,7 +36,7 @@
             android:layout_alignBottom="@+id/chat_text"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="Send" />
+            android:text="@string/send_message" />
 
     </RelativeLayout>
 
