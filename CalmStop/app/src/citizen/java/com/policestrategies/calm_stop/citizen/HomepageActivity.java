@@ -1,6 +1,5 @@
 package com.policestrategies.calm_stop.citizen;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,21 +21,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.policestrategies.calm_stop.ChatActivity;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
-import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.policestrategies.calm_stop.R;
-
-import static android.R.attr.action;
-import static android.R.attr.drawable;
-import static android.R.attr.phoneNumber;
-import static android.R.id.toggle;
-import static com.policestrategies.calm_stop.R.id.license;
-import static com.policestrategies.calm_stop.R.id.nameDisplay;
-import static com.policestrategies.calm_stop.R.layout.nav_header_main;
-
 import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
 
 public class HomepageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {

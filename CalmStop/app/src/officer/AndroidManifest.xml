@@ -54,6 +54,9 @@
             android:name=".officer.HelpActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ChatActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".officer.profile.ProfileActivity"
