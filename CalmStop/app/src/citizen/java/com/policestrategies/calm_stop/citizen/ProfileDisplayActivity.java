@@ -2,10 +2,17 @@ package com.policestrategies.calm_stop.citizen;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,14 +25,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
+import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
 
 import org.w3c.dom.Text;
+
+import static android.os.Build.VERSION_CODES.N;
 
 /**
  * Created by mariavizcaino on 4/14/17.
  */
 
 public class ProfileDisplayActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private DrawerLayout mDrawerLayout;
 
     private TextView Name;
     private TextView Email;
@@ -36,6 +48,17 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
     private TextView Lang;
     private TextView Ethn;
     private TextView Zipcode;
+
+    private TextView Title;
+    private TextView Nametxt;
+    private TextView Emailtxt;
+    private TextView Phonetxt;
+    private TextView DOBtxt;
+    private TextView DriverListxt;
+    private TextView Gendertxt;
+    private TextView Langtxt;
+    private TextView Ethntxt;
+    private TextView Zipcodetxt;
 
     private int i_gender, i_ethnicity, i_language;
 
@@ -54,6 +77,12 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/avenir-next.ttf");
+
         Name = (TextView) findViewById(R.id.Nametxt);
         Email = (TextView) findViewById(R.id.Emailtxt);
         Phone = (TextView) findViewById(R.id.Phonenumtxt);
@@ -64,8 +93,20 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         Gender = (TextView) findViewById(R.id.Gendertxt);
         Ethn = (TextView) findViewById(R.id.Ethnicitytxt);
 
+        Title = (TextView) findViewById(R.id.title);
+        Nametxt = (TextView) findViewById(R.id.Name);
+        Emailtxt = (TextView) findViewById(R.id.Email);
+        Phonetxt = (TextView) findViewById(R.id.Phonenumber);
+        DOBtxt = (TextView) findViewById(R.id.DOB);
+        DriverListxt = (TextView) findViewById(R.id.DriversLis);
+        Zipcodetxt = (TextView) findViewById(R.id.Zipcode);
+        Langtxt = (TextView) findViewById(R.id.langPref);
+        Gendertxt = (TextView) findViewById(R.id.Gender);
+        Ethntxt = (TextView) findViewById(R.id.ethnicity);
+
         findViewById(R.id.viewDocs).setOnClickListener(this);
         findViewById(R.id.EditButton).setOnClickListener(this);
+        findViewById(R.id.menu_main).setOnClickListener(this);
 
         mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
 
@@ -82,31 +123,51 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
 
         }
 
+        Title.setTypeface(custom_font);
+        Nametxt.setTypeface(custom_font);
+        Emailtxt.setTypeface(custom_font);
+        Phonetxt.setTypeface(custom_font);
+        DOBtxt.setTypeface(custom_font);
+        DriverListxt.setTypeface(custom_font);
+        Zipcodetxt.setTypeface(custom_font);
+        Langtxt.setTypeface(custom_font);
+        Gendertxt.setTypeface(custom_font);
+        Ethntxt.setTypeface(custom_font);
+
         Name.setTextColor(getResources().getColor(R.color.black));
+        Name.setTypeface(custom_font);
         Name.setTextSize(14);
 
         Email.setTextColor(getResources().getColor(R.color.black));
+        Email.setTypeface(custom_font);
         Email.setTextSize(14);
 
         Phone.setTextColor(getResources().getColor(R.color.black));
+        Phone.setTypeface(custom_font);
         Phone.setTextSize(14);
 
         DOB.setTextColor(getResources().getColor(R.color.black));
+        DOB.setTypeface(custom_font);
         DOB.setTextSize(14);
 
         DriverLis.setTextColor(getResources().getColor(R.color.black));
+        DriverLis.setTypeface(custom_font);
         DriverLis.setTextSize(14);
 
         Zipcode.setTextColor(getResources().getColor(R.color.black));
+        Zipcode.setTypeface(custom_font);
         Zipcode.setTextSize(14);
 
         Lang.setTextColor(getResources().getColor(R.color.black));
+        Lang.setTypeface(custom_font);
         Lang.setTextSize(14);
 
         Gender.setTextColor(getResources().getColor(R.color.black));
+        Gender.setTypeface(custom_font);
         Gender.setTextSize(14);
 
         Ethn.setTextColor(getResources().getColor(R.color.black));
+        Ethn.setTypeface(custom_font);
         Ethn.setTextSize(14);
 
         mProfileReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -144,6 +205,45 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
             }
 
         });
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch(id) {
+                    case R.id.profile:
+                        profile();
+                        break;
+                    case R.id.previous_stops:
+                        previousStops();
+                        break;
+                    case R.id.help:
+                        help();
+                        break;
+                    case R.id.about_us:
+                        aboutUs();
+                        break;
+                    case R.id.settings:
+                        settings();
+                        break;
+                    case R.id.logout:
+                        logout();
+                        break;
+                    case R.id.documents:
+                        documents();
+                        break;
+
+                    case R.id.detect_beacon_debug:
+                        detectBecon();
+                        break;
+                }
+
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+
 
     }
 
@@ -220,6 +320,9 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
             case R.id.EditButton:
                 toProfileEdit();
                 break;
+            case R.id.menu_main:
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+                break;
         }
     }
 
@@ -237,5 +340,56 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         Intent i = new Intent(getBaseContext(), DocumentsActivity.class);
         startActivity(i);
     }
+
+    private void profile() {
+        Intent i = new Intent(getBaseContext(), ProfileDisplayActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void previousStops() {
+        Intent i = new Intent(getBaseContext(), PreviousStopsActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void help() {
+        Intent i = new Intent(getBaseContext(), HelpActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void aboutUs() {
+        Intent i = new Intent(getBaseContext(), AboutUsActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void settings() {
+        Intent i = new Intent(getBaseContext(), SettingsActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void documents() {
+        Intent i = new Intent(getBaseContext(), DocumentsActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void logout() {
+        //You want to logout -> login page
+        FirebaseAuth.getInstance().signOut();
+        Intent i = new Intent(getBaseContext(), LoginActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void detectBecon(){
+        Intent i = new Intent(this, BeaconDetectionActivity.class);
+        startActivity(i);
+        finish();
+    }
+
 
 }

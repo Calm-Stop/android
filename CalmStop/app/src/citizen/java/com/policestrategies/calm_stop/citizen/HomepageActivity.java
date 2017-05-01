@@ -3,6 +3,7 @@ package com.policestrategies.calm_stop.citizen;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -44,8 +45,10 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
     private DrawerLayout mDrawerLayout;
     private TextView mProfileName;
+    private TextView Title;
 
     private ProgressDialog mProgressDialog;
+
 
     private FirebaseUser mCurrentUser;
     private DatabaseReference mProfileReference;
@@ -60,9 +63,14 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         ActionBar actionBar = getSupportActionBar();;
         actionBar.hide();
 
+        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/avenir-next.ttf");
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Title = (TextView) findViewById(R.id.WelcomeTitle);
 
         //mProfileName = (TextView) ((nav_header_main)context).findViewById(R.id.nameDisplay);
+        Title.setTypeface(custom_font);
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -76,6 +84,8 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                     .child(mCurrentUser.getUid()).child("profile");
 
         }
+
+        navigationView.setNavigationItemSelectedListener(this);
 
         mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
         mProfileReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -102,7 +112,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
             @Override
             public void onClick(View v) {
-
                 switch(v.getId()) {
                     case R.id.menu_main:
                         mDrawerLayout.openDrawer(Gravity.LEFT);
@@ -114,8 +123,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         });
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
