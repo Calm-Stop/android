@@ -33,8 +33,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mChatManager = new ChatManager(this);
         mListView = (ListView) findViewById(R.id.chat_list_view);
 
-        mChatArrayAdapter = new ChatArrayAdapter(getApplicationContext(),
-                R.layout.activity_chat_singlemessage);
 
         mListView.setAdapter(mChatArrayAdapter);
 
@@ -49,6 +47,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
+
+        mChatArrayAdapter = new ChatArrayAdapter(getApplicationContext(),
+                R.layout.chat_message, mUid);
 
         findViewById(R.id.button_send).setOnClickListener(this);
 
