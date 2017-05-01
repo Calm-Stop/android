@@ -4,17 +4,12 @@ import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
@@ -22,8 +17,11 @@ import com.policestrategies.calm_stop.citizen.LoginActivity;
 
 import static java.lang.System.currentTimeMillis;
 
+// TODO: Obtain thread id as intent extra
+// TODO: Clean up remaining code
+// TODO: Move pushing to firebase outside of this activity
+
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = "ChatActivity";
 
     private ChatArrayAdapter mChatArrayAdapter;
     private ListView mListView;
@@ -33,16 +31,16 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private String mUid;
 
-    private String mContent;
-    private String mAuthorID;
     private String mThreadID;
-    private String mTimestamp;
+
+    private ChatManager mChatManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        mChatManager = new ChatManager(this);
         mListView = (ListView) findViewById(R.id.listView1);
 
         mChatArrayAdapter = new ChatArrayAdapter(getApplicationContext(),
@@ -52,7 +50,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         // Default Message object values to be passed to Message constructor
         mChatText = (EditText) findViewById(R.id.chat_text);
-        mAuthorID = mThreadID = "01";
+        mThreadID = "01";
 
         // Obtaining the user's data from firebase
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -67,48 +65,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-            DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+        //Store messageID's under messageReference (messages)
+        mMessagesReference = FirebaseDatabase.getInstance().getReference().child("threads")
+                .child(mThreadID).child("messages").getRef();
 
-            //Store messageID's under messageReference (messages)
-            mMessagesReference = mDatabaseRef.child("threads").
-                    child(mThreadID).child("messages").getRef();
-//ChildEventListener listens for changes to chat
-//When a Message is pushed to firebase, the onChildAdded method of childEventListener activates
-//ChildEventListener is also used for initialization of arrayadapter
-            mMessagesReference.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                    Log.d(TAG, "In Citizen/ChatActivity, onChildAdded");
-
-                    mContent = dataSnapshot.child("content").getValue().toString();
-                    mAuthorID = dataSnapshot.child("authorID").getValue().toString();
-                    mTimestamp = dataSnapshot.child("timestamp").getValue().toString();
-                    sendChatMessage();
-                    mChatText.setText("");
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                    Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                    Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "postComments:onCancelled", databaseError.toException());
-                    Toast.makeText(getBaseContext(), "Failed to load comments.",
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
+        //ChildEventListener listens for changes to chat
+        //When a Message is pushed to firebase, the onChildAdded method of childEventListener activates
+        //ChildEventListener is also used for initialization of arrayadapter
+        mMessagesReference.addChildEventListener(new ChatChildEventListener(mChatManager));
 
 
         findViewById(R.id.button_send).setOnClickListener(this);
@@ -130,23 +94,16 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.button_send:
-                mTimestamp = Long.toString(currentTimeMillis());
-                mContent = mChatText.getText().toString();
-                //The context for generating threadID has yet to be designed or implemented
-                //creating new message from set fields
-                Message newMessage = new Message(mContent,
-                        mTimestamp, mThreadID, mUid);
-                    sendToFirebase(newMessage);
+                String timestamp = Long.toString(currentTimeMillis());
+                String content = mChatText.getText().toString();
+                Message newMessage = new Message(content, timestamp, mUid);
+                sendToFirebase(newMessage);
+                mChatText.setText("");
         }
     }
 
-    private boolean sendChatMessage(){
-        Log.v(TAG, "Sending message.");
-        Message newMessage = new Message(mContent,
-                mTimestamp, mThreadID, mAuthorID);
-        mChatArrayAdapter.add(newMessage);
-        mChatText.setText("");
-        return true;
+    void displayChatMessage(Message message){
+        mChatArrayAdapter.add(message);
     }
 
     /**
