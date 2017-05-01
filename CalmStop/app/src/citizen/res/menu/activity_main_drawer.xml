@@ -18,7 +18,9 @@
             android:id="@+id/settings"
             android:title="Settings" />
 
-        <item android:enabled="false" />
+        <item
+            android:id="@+id/documents"
+            android:title="Documents" />
 
         <item
             android:id="@+id/logout"

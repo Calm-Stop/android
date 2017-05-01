@@ -173,6 +173,25 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             citizenDatabaseRef.child("language").setValue(i_language);
                             citizenDatabaseRef.child("ethnicity").setValue(i_ethnicity);
                             citizenDatabaseRef.child("dob").setValue(dateOfBirth);
+                            String photoPath;
+                            if (i_gender == 0) {
+                                photoPath = "images/profile/default_female";
+                            } else {
+                                photoPath = "images/profile/default_male";
+                            }
+
+                            citizenDatabaseRef.child("photo").setValue(photoPath);
+
+                            DatabaseReference citizenInfoRef = databaseRef.child("citizen")
+                                    .child(uuid).child("info").getRef();
+                            citizenInfoRef.child("alerts").setValue(0);
+                            citizenInfoRef.child("arrests").setValue(0);
+                            citizenInfoRef.child("citations").setValue(0);
+                            citizenInfoRef.child("intoxicated").setValue(0);
+                            citizenInfoRef.child("stops").setValue(0);
+                            citizenInfoRef.child("threats").setValue(0);
+                            citizenInfoRef.child("warnings").setValue(0);
+                            citizenInfoRef.child("weapons").setValue(0);
 
                             SharedUtil.dismissProgressDialog(mProgressDialog);
 
