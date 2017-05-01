@@ -1,41 +1,38 @@
 package com.policestrategies.calm_stop.chat;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.citizen.LoginActivity;
 
 import static java.lang.System.currentTimeMillis;
 
-public class ChatActivity extends Activity {
+public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "ChatActivity";
 
     private ChatArrayAdapter mChatArrayAdapter;
     private ListView mListView;
     private EditText mChatText;
-    private Button mButtonSend;
 
-    private DatabaseReference mDatabaseRef;
-    private FirebaseAuth mAuth;
     private DatabaseReference mMessagesReference;
 
+    private String mUid;
 
-    private String mCurrentUserID;
     private String mContent;
     private String mAuthorID;
     private String mThreadID;
@@ -43,30 +40,34 @@ public class ChatActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        mButtonSend = (Button) findViewById(R.id.button_send);
+
         mListView = (ListView) findViewById(R.id.listView1);
 
-        mChatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.activity_chat_singlemessage);
+        mChatArrayAdapter = new ChatArrayAdapter(getApplicationContext(),
+                R.layout.activity_chat_singlemessage);
+
         mListView.setAdapter(mChatArrayAdapter);
 
-//Default Message object values to be passed to Message constructor
+        // Default Message object values to be passed to Message constructor
         mChatText = (EditText) findViewById(R.id.chat_text);
-        mTimestamp = Long.toString(System.currentTimeMillis());
-        mCurrentUserID = mAuthorID = mThreadID = "01";
+        mAuthorID = mThreadID = "01";
 
-//Obtaining the user's data from firebase
-        mAuth = FirebaseAuth.getInstance();
-        final FirebaseUser user = mAuth.getCurrentUser();
-//FIREBASE CODE WORKS ONLY IF SUCCESSFULLY RETRIEVED USER
-//PROGRAM SENDS MESSAGES TO ADAPTER WITHOUT STORING IT OTHERWISE
-        if (user != null) {
-//IF DATABASE ACCESSIBLE:
-            //Set References to thread and user
-            mCurrentUserID = user.getUid();
-            mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+        // Obtaining the user's data from firebase
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        if (firebaseAuth.getCurrentUser() != null) {
+            mUid = firebaseAuth.getCurrentUser().getUid();
+        } else {
+            firebaseAuth.signOut();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        }
+
+
+            DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference();
 
             //Store messageID's under messageReference (messages)
             mMessagesReference = mDatabaseRef.child("threads").
@@ -108,28 +109,10 @@ public class ChatActivity extends Activity {
                             Toast.LENGTH_SHORT).show();
                 }
             });
-//END DATABASE CODE
-        }
-//END FIREBASE CODE
 
-        mButtonSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                //setting newMessage fields
 
-                mTimestamp = Long.toString(currentTimeMillis());
-                mContent = mChatText.getText().toString();
-                //The context for generating threadID has yet to be designed or implemented
-                //creating new message from set fields
-                Message newMessage = new Message(mContent,
-                        mTimestamp, mThreadID, mCurrentUserID);
-                if (user != null) {
-                    sendToFirebase(newMessage);
-                } else {
-                    sendChatMessage();
-                }
-            }
-        });
+        findViewById(R.id.button_send).setOnClickListener(this);
+
         mListView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         mListView.setAdapter(mChatArrayAdapter);
 
@@ -143,7 +126,20 @@ public class ChatActivity extends Activity {
         });
     }
 
-//SEND MESSAGE TO ADAPTER
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.button_send:
+                mTimestamp = Long.toString(currentTimeMillis());
+                mContent = mChatText.getText().toString();
+                //The context for generating threadID has yet to be designed or implemented
+                //creating new message from set fields
+                Message newMessage = new Message(mContent,
+                        mTimestamp, mThreadID, mUid);
+                    sendToFirebase(newMessage);
+        }
+    }
+
     private boolean sendChatMessage(){
         Log.v(TAG, "Sending message.");
         Message newMessage = new Message(mContent,
@@ -153,20 +149,12 @@ public class ChatActivity extends Activity {
         return true;
     }
 
-//SEND MESSAGE TO FIREBASE:
-    //A message is sent to firebase, triggering onChildEvent.
-    //chatArrayAdapter will update only on firebase change.
-    //This change will only occur on the following:
-    //1. a message is received from firebase
-    //2. a message is sent to firebase
-    //in no other case should chatarrayadapter receive messages
+    /**
+     * Sends a message to Firebase, triggering onChildAdded which will update the array adapter
+     * @param newMessage to be posted to Firebase
+     */
     private void sendToFirebase(Message newMessage){
-        //if user_ID == authorID, set side = false; else set side equal true
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            //push a new message onto message tree:
-            DatabaseReference newMessagesRef = mMessagesReference.push(); //push a unique message ID string
-            newMessagesRef.setValue(newMessage); //store corresponding message content under the key
-        }
+        DatabaseReference newMessagesRef = mMessagesReference.push(); //push a unique message ID string
+        newMessagesRef.setValue(newMessage); //store corresponding message content under the key
     }
 }

@@ -8,10 +8,10 @@ class Message {
     private String mAuthorId;
 
     Message(String content, String timestamp, String threadID, String authorID) {
-        this.mContent = content;
-        this.mTimestamp = timestamp;
-        this.mThreadId = threadID;
-        this.mAuthorId = authorID;
+        mContent = content;
+        mTimestamp = timestamp;
+        mThreadId = threadID;
+        mAuthorId = authorID;
     }
 
     public String getContent() {
