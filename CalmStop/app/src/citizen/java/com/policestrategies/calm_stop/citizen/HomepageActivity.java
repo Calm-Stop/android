@@ -149,6 +149,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
             startActivity(i);
         } else if (id == R.id.chat_activity_debug) {
             Intent i = new Intent(this, ChatActivity.class);
+            i.putExtra("thread_id", "01");
             startActivity(i);
         }
 
