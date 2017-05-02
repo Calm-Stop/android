@@ -8,7 +8,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -17,11 +20,22 @@ import android.widget.Toast;
 
 import com.policestrategies.calm_stop.R;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+
+import static android.R.attr.data;
+import static android.R.attr.path;
+import static com.policestrategies.calm_stop.R.id.imageView;
+import static com.policestrategies.calm_stop.R.id.license;
+import static com.policestrategies.calm_stop.R.id.registration;
+import static java.security.AccessController.getContext;
 
 /**
  * Created by mariavizcaino on 2/26/17.
@@ -65,32 +79,9 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.uploadLicense).setOnClickListener(this);
         findViewById(R.id.uploadRegistration).setOnClickListener(this);
 
-        SharedPreferences docs = getSharedPreferences(DOCS, 0);
-
-
-        String licen = docs.getString(LICEN, null);
-        String regi = docs.getString(REGI, null);
-        String insur = docs.getString(INSUR, null);
-        /*
-        loadImageFromStorage(path0, 0); //For License
-        loadImageFromStorage(path1, 1); //For Registation
-        loadImageFromStorage(path2, 2); //For Insurance
-*/
-
-        if(licen != null) {
-            licensePic = Uri.parse(licen);
-            mlicense.setImageURI(licensePic);
-        }
-
-        if(regi != null) {
-            registrationPic = Uri.parse(regi);
-            mregistration.setImageURI(registrationPic);
-        }
-
-        if(insur != null) {
-            insurancePic = Uri.parse(insur);
-            minsurance.setImageURI(insurancePic);
-        }
+        loadLicImage();
+        loadRegImage();
+        loadInsImage();
 
     }
 
@@ -135,13 +126,8 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                         e.printStackTrace();
                     }
 
-                    String license = licensePic.toString();
-                    SharedPreferences docs = getSharedPreferences(DOCS, 0);
-                    SharedPreferences.Editor editor = docs.edit();
-                    editor.putString(LICEN, license);
-                    editor.commit();
+                    saveLicImage(licBitmap);
 
-                    path0 = saveToInternalStorage(licBitmap);
                 } else
                     Toast.makeText(DocumentsActivity.this, "Error with License Image", Toast.LENGTH_LONG).show();
                 break;
@@ -156,13 +142,8 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                         e.printStackTrace();
                     }
 
-                    String regi = registrationPic.toString();
-                    SharedPreferences docs = getSharedPreferences(DOCS, 0);
-                    SharedPreferences.Editor editor = docs.edit();
-                    editor.putString(REGI, regi);
-                    editor.commit();
+                    saveRegImage(regBitmap);
 
-                    path1 = saveToInternalStorage(regBitmap);
                 } else
                     Toast.makeText(DocumentsActivity.this, "Error with Registration Image", Toast.LENGTH_LONG).show();
                 break;
@@ -177,13 +158,8 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                         e.printStackTrace();
                     }
 
-                    String insur = insurancePic.toString();
-                    SharedPreferences docs = getSharedPreferences(DOCS, 0);
-                    SharedPreferences.Editor editor = docs.edit();
-                    editor.putString(INSUR, insur);
-                    editor.commit();
+                    saveInsImage(insBitmap);
 
-                    path2 = saveToInternalStorage(insBitmap);
                 } else
                     Toast.makeText(DocumentsActivity.this, "Error with Insurance Image", Toast.LENGTH_LONG).show();
                 break;
@@ -191,82 +167,189 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    private String saveToInternalStorage(Bitmap bitmapImage){
+    //LOAD LICENSE IMAGE
+    private void loadLicImage() {
+
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        // Create imageDir
-        File mypath = null;
-        switch(PhotoUpdating) {
-            case 0:
-                mypath = new File(directory, "license.jpg");
-                break;
-            case 1:
-                mypath = new File(directory, "registration.jpg");
-                break;
-            case 2:
-                mypath = new File(directory, "insurance.jpg");
-                break;
-        }
+        File directory = cw.getDir("License", Context.MODE_PRIVATE);
 
-        FileOutputStream fos = null;
+        String path = directory.getAbsolutePath();
+        File f = new File(path, "license.JPG");
 
         try {
-            fos = new FileOutputStream(mypath);
-            // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (Exception e) {
-            Toast.makeText(DocumentsActivity.this, "Error with License bitImage", Toast.LENGTH_LONG).show();
+
+            Bitmap bg = BitmapFactory.decodeStream(new FileInputStream(f));
+            ImageView img = (ImageView) findViewById(R.id.license);
+            img.setImageBitmap(bg);
+
+        } catch(IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
-        return directory.getAbsolutePath();
+
+
     }
 
-    private void loadImageFromStorage(String path, int image) {
-        FileInputStream inputStream = null;
-        switch(image) {
-            case 0:
-                try {
-                    //File f = new File(path, "license.jpg");
-                    inputStream = new FileInputStream(path);
-                    Bitmap b = BitmapFactory.decodeStream(inputStream);
-                    mlicense.setImageBitmap(b);
-                } catch (FileNotFoundException e) {
-                    Toast.makeText(DocumentsActivity.this, "Error with License Image", Toast.LENGTH_LONG).show();
+    //LOAD REGISTRATION IMAGE
+    private void loadRegImage() {
 
-                    e.printStackTrace();
-                }
-                break;
-            case 1:
-                try {
-                    File f = new File(path, "registration.jpg");
-                    Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                    mregistration.setImageBitmap(b);
-                } catch (FileNotFoundException e) {
-                    Toast.makeText(DocumentsActivity.this, "Error with Registration Image", Toast.LENGTH_LONG).show();
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_Registration/registration.JPG
+        File directory = cw.getDir("Registration", Context.MODE_PRIVATE);
 
-                    e.printStackTrace();
-                }
-                break;
-            case 2:
-                try {
-                    File f = new File(path, "insurance.jpg");
-                    Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                    minsurance.setImageBitmap(b);
-                } catch (FileNotFoundException e) {
-                    Toast.makeText(DocumentsActivity.this, "Error with Insurance Image", Toast.LENGTH_LONG).show();
+        String path = directory.getAbsolutePath();
+        File f = new File(path, "registration.JPG");
 
-                    e.printStackTrace();
-                }
-                break;
+        try {
+
+            Bitmap bg = BitmapFactory.decodeStream(new FileInputStream(f));
+            ImageView img = (ImageView) findViewById(R.id.registration);
+            img.setImageBitmap(bg);
+
+        } catch(IOException e) {
+            e.printStackTrace();
         }
 
+
+    }
+
+    //LOAD INSURANCE IMAGE
+    private void loadInsImage() {
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("Insurance", Context.MODE_PRIVATE);
+
+        String path = directory.getAbsolutePath();
+        File f = new File(path, "insurance.JPG");
+
+        try {
+
+            Bitmap bg = BitmapFactory.decodeStream(new FileInputStream(f));
+            ImageView img = (ImageView) findViewById(R.id.insurance);
+            img.setImageBitmap(bg);
+
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public boolean isFilePresent(String fileName) {
+        //ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        String path = fileName;
+        File file = new File(path);
+        Toast.makeText(DocumentsActivity.this, "PATH: " + path, Toast.LENGTH_SHORT).show();
+        return file.exists();
+    }
+
+    private void saveLicImage(Bitmap image){
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File myfile = cw.getDir("License", Context.MODE_PRIVATE);
+        File mypath = new File(myfile, "license.JPG");
+
+        FileOutputStream fo;
+
+        //saving image into internal storage
+        try {
+            //myfile.createNewFile();
+            fo = new FileOutputStream(mypath);
+            fo.write(byteArray);
+            fo.flush();
+            fo.close();
+        } catch (FileNotFoundException e) {
+            Toast.makeText(DocumentsActivity.this, "Error with License Image", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        } catch (IOException e) {
+            Toast.makeText(DocumentsActivity.this, "Error with License Image", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+
+    }
+
+    private void saveRegImage(Bitmap image){
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File myfile = cw.getDir("Registration", Context.MODE_PRIVATE);
+        File mypath = new File(myfile, "registration.JPG");
+
+        FileOutputStream fo;
+
+        //saving image into internal storage
+        try {
+            //myfile.createNewFile();
+            fo = new FileOutputStream(mypath);
+            fo.write(byteArray);
+            fo.flush();
+            fo.close();
+        } catch (FileNotFoundException e) {
+            Toast.makeText(DocumentsActivity.this, "Error with Registration Image", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        } catch (IOException e) {
+            Toast.makeText(DocumentsActivity.this, "Error with Registration Image", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+
+    private void saveInsImage(Bitmap image){
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File myfile = cw.getDir("Insurance", Context.MODE_PRIVATE);
+        File mypath = new File(myfile, "insurance.JPG");
+
+        FileOutputStream fo;
+
+        //saving image into internal storage
+        try {
+            //myfile.createNewFile();
+            fo = new FileOutputStream(mypath);
+            fo.write(byteArray);
+            fo.flush();
+            fo.close();
+        } catch (FileNotFoundException e) {
+            Toast.makeText(DocumentsActivity.this, "Error with Insurance Image", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        } catch (IOException e) {
+            Toast.makeText(DocumentsActivity.this, "Error with Insurance Image", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+
+    }
+
+/*
+
+    public boolean isFilePresent(String fileName) {
+        //ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        String path = fileName;
+        File file = new File(path);
+        Toast.makeText(DocumentsActivity.this, "PATH: " + path, Toast.LENGTH_SHORT).show();
+        return file.exists();
+    }
+*/
+
+    public void onBackPressed() {
+        toHomepage();
+    }
+
+    private void toHomepage() {
+        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        startActivity(i);
     }
 
 }

@@ -42,6 +42,7 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         Title = (TextView) findViewById(R.id.AboutUsTitle);
         Title.setTypeface(custom_font);
+
         findViewById(R.id.menu_main).setOnClickListener(this);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
