@@ -26,9 +26,11 @@ class StopManager {
 
     private CitizenInfo mCitizenInfo;
 
+    private String mOfficerUid;
     private String mCitizenUid;
     private String mStopId;
-    private String mOfficerUid;
+    private String mThreadId;
+
 
     StopManager(Activity context) {
         mActivityReference = context;
@@ -45,17 +47,20 @@ class StopManager {
     }
 
     String generateTextChat() {
+        if (mThreadId != null && !mThreadId.isEmpty()) {
+            return mThreadId;
+        }
         DatabaseReference threadReference = mDatabaseReference.child("threads").getRef().push();
-        String threadId = threadReference.getKey();
+        mThreadId = threadReference.getKey();
 
         Message starterMessage = new Message("Hello there!", System.currentTimeMillis(), mOfficerUid);
         threadReference.child("messages").push().setValue(starterMessage);
 
         // Post thread id to the current stop
         DatabaseReference stopReference = mDatabaseReference.child("stops").child(mStopId).getRef();
-        stopReference.child("threadID").setValue(threadId);
+        stopReference.child("threadID").setValue(mThreadId);
 
-        return threadId;
+        return mThreadId;
     }
 
     private void loadIntentExtras() {
