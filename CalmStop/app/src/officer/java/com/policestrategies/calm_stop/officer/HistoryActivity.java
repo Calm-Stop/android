@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.officer.dashboard.DashboardActivity;
 
 public class HistoryActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -62,7 +63,7 @@ public class HistoryActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void home() {
-        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        Intent i = new Intent(getBaseContext(), DashboardActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NEW_TASK |
                 Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);

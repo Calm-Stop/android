@@ -1,6 +1,5 @@
 package com.policestrategies.calm_stop.citizen;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -11,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,19 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
-import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.policestrategies.calm_stop.R;
-
-import static android.R.attr.action;
-import static android.R.attr.drawable;
-import static android.R.attr.phoneNumber;
-import static android.R.id.toggle;
-import static com.policestrategies.calm_stop.R.id.license;
-import static com.policestrategies.calm_stop.R.id.nameDisplay;
-import static com.policestrategies.calm_stop.R.layout.nav_header_main;
-
+import com.policestrategies.calm_stop.chat.ChatActivity;
 import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
 
 public class HomepageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -135,36 +121,44 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        switch(id) {
+        switch(item.getItemId()) {
+
             case R.id.profile:
                 profile();
                 break;
+
             case R.id.previous_stops:
                 previousStops();
                 break;
+
             case R.id.help:
                 help();
                 break;
+
             case R.id.about_us:
                 aboutUs();
                 break;
+
             case R.id.settings:
                 settings();
                 break;
+
             case R.id.logout:
                 logout();
                 break;
+
             case R.id.documents:
                 documents();
                 break;
 
             case R.id.detect_beacon_debug:
-                detectBecon();
+                detectBeacon();
+                break;
+
+            case R.id.chat_activity_debug:
+                debugChat();
                 break;
         }
 
@@ -209,7 +203,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         finish();
     }
 
-
     private void logout() {
         //You want to logout -> login page
         FirebaseAuth.getInstance().signOut();
@@ -218,8 +211,15 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         finish();
     }
 
-    private void detectBecon(){
+    private void detectBeacon(){
         Intent i = new Intent(this, BeaconDetectionActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void debugChat() {
+        Intent i = new Intent(this, ChatActivity.class);
+        i.putExtra("thread_id", "01");
         startActivity(i);
         finish();
     }

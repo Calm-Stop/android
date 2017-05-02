@@ -30,13 +30,12 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".officer.HomepageActivity"
+            android:name=".officer.dashboard.DashboardActivity"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".officer.AccountActivity"
             android:screenOrientation="portrait" />
-
 
         <activity
             android:name=".officer.RatingActivity"
@@ -54,12 +53,14 @@
             android:name=".officer.HelpActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".chat.ChatActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".officer.profile.ProfileActivity"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" />
-
 
         <activity
             android:name=".officer.SettingsActivity"
@@ -67,6 +68,10 @@
 
         <activity
             android:name=".officer.beacon_registration.BeaconRegistrationActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".officer.stop.StopActivity"
             android:screenOrientation="portrait" />
 
     </application>
