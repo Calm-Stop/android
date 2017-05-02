@@ -1,12 +1,12 @@
 package com.policestrategies.calm_stop.chat;
 
-class Message {
+public class Message {
 
     private String mContent;
     private long mTimestamp;
     private String mAuthor;
 
-    Message(String content, long timestamp, String author) {
+    public Message(String content, long timestamp, String author) {
         mContent = content;
         mTimestamp = timestamp;
         mAuthor = author;

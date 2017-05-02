@@ -1,5 +1,6 @@
 package com.policestrategies.calm_stop.officer.stop;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.StorageReference;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.chat.ChatActivity;
 import com.policestrategies.calm_stop.officer.dashboard.DashboardActivity;
 
 /**
@@ -55,7 +57,10 @@ public class StopActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void requestTextChat() {
-        mStopManager.generateTextChat();
+        String threadId = mStopManager.generateTextChat();
+        Intent i = new Intent(StopActivity.this, ChatActivity.class);
+        i.putExtra("thread_id", threadId);
+        startActivity(i);
     }
 
     void displayCitizenInformation(CitizenInfo citizenInfo) {

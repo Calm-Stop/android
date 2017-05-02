@@ -3,6 +3,7 @@ package com.policestrategies.calm_stop.officer.stop;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -10,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.policestrategies.calm_stop.chat.Message;
 
 /**
  * Handles backend of traffic stop in {@link StopActivity}
@@ -26,6 +28,7 @@ class StopManager {
 
     private String mCitizenUid;
     private String mStopId;
+    private String mOfficerUid;
 
     StopManager(Activity context) {
         mActivityReference = context;
@@ -35,18 +38,24 @@ class StopManager {
         mCitizenInfo = new CitizenInfo();
         loadIntentExtras();
         retrieveCitizenInfo();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser() != null) {
+            mOfficerUid = firebaseAuth.getCurrentUser().getUid();
+        }
     }
 
-    void generateTextChat() {
+    String generateTextChat() {
         DatabaseReference threadReference = mDatabaseReference.child("threads").getRef().push();
         String threadId = threadReference.getKey();
 
-        // TODO: This should be posted as a regular message, with full metadata.
-        threadReference.child("messages").push().getRef().setValue("Hello there!");
+        Message starterMessage = new Message("Hello there!", System.currentTimeMillis(), mOfficerUid);
+        threadReference.child("messages").push().setValue(starterMessage);
 
         // Post thread id to the current stop
         DatabaseReference stopReference = mDatabaseReference.child("stops").child(mStopId).getRef();
         stopReference.child("threadID").setValue(threadId);
+
+        return threadId;
     }
 
     private void loadIntentExtras() {
