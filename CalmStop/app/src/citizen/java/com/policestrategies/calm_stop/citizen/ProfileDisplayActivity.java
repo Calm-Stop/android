@@ -60,8 +60,6 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
     private TextView Ethntxt;
     private TextView Zipcodetxt;
 
-    private int i_gender, i_ethnicity, i_language;
-
     private FirebaseUser mCurrentUser;
     private DatabaseReference mProfileReference;
 
@@ -135,9 +133,9 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                 String license = snapshot.child("license_number").getValue().toString();
                 String phoneNumber = snapshot.child("phone_number").getValue().toString();
                 String dateOfBirth = snapshot.child("dob").getValue().toString();
-                i_gender = Integer.parseInt(snapshot.child("gender").getValue().toString());
-                i_language = Integer.parseInt(snapshot.child("language").getValue().toString());
-                i_ethnicity = Integer.parseInt(snapshot.child("ethnicity").getValue().toString());
+                String gender = snapshot.child("gender").getValue().toString();
+                String language = snapshot.child("language").getValue().toString();
+                String ethnicity = snapshot.child("ethnicity").getValue().toString();
 
 
                 String name = firstName + " " + lastName;
@@ -147,9 +145,9 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                 DriverLis.setText(license);
                 Phone.setText(phoneNumber);
                 DOB.setText(dateOfBirth);
-                Ethn.setText(getEth(i_ethnicity));
-                Gender.setText(getGen(i_gender));
-                Lang.setText(getLang(i_language));
+                Ethn.setText(ethnicity);
+                Gender.setText(gender);
+                Lang.setText(language);
 
                 SharedUtil.dismissProgressDialog(mProgressDialog);
             }
@@ -211,6 +209,8 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         }
     }
 
+
+    /*
     private String getEth(int id){
         switch (id){
             case 0:
@@ -270,7 +270,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         }
         return "English";
     }
-
+*/
 
     public void onClick(View v) {
         switch (v.getId()) {

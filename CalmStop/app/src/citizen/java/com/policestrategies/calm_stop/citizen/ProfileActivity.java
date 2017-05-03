@@ -45,6 +45,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import static android.R.attr.id;
+
 
 /**
  * Allows the user to view and edit their profile.
@@ -55,7 +57,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private Spinner genderSetter;
     private Spinner ethnicitySetter;
     private Spinner languageSetter;
-    private int i_gender, i_ethnicity, i_language;
+
+    private String Gender;
+    private String Language;
+    private String Ethnicity;
 
 
     private EditText mFirstNameField;
@@ -110,11 +115,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
         languageSetter = (Spinner) findViewById(R.id.languageSetter);
 
-        setUpCalendar();
-        setUpGenderSetter();
-        setUpEthnicitySetter();
-        setUpLanguageSetter();
-
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (mCurrentUser == null) {
@@ -144,9 +144,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         String license = snapshot.child("license_number").getValue().toString();
                         String phoneNumber = snapshot.child("phone_number").getValue().toString();
                         String dateOfBirth = snapshot.child("dob").getValue().toString();
-                        i_gender = Integer.parseInt(snapshot.child("gender").getValue().toString());
-                        i_language = Integer.parseInt(snapshot.child("language").getValue().toString());
-                        i_ethnicity = Integer.parseInt(snapshot.child("ethnicity").getValue().toString());
+                        Language = snapshot.child("language").getValue().toString();
+                        Ethnicity = snapshot.child("ethnicity").getValue().toString();
+                        Gender = snapshot.child("gender").getValue().toString();
 
                         mZipField.setText(zip);
                         mEmailField.setText(email);
@@ -155,6 +155,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         mLicenseNumberField.setText(license);
                         mPhoneNumberField.setText(phoneNumber);
                         mDateOfBirthField.setText(dateOfBirth);
+                        languageSetter.setSelection(getLang(Language));
+                        ethnicitySetter.setSelection(getEth(Ethnicity));
+                        genderSetter.setSelection(getGen(Gender));
 
                         SharedUtil.dismissProgressDialog(mProgressDialog);
                     }
@@ -165,6 +168,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     }
 
                 });
+
+        setUpCalendar();
+        setUpGenderSetter();
+        setUpEthnicitySetter();
+        setUpLanguageSetter();
+
     }
 
     @Override
@@ -199,9 +208,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 updateLicense(license);
                 updateZip(zip);
                 updateDOB(dob);
-                updateLanguage();
-                updateGender();
-                updateEthnicity();
+                updateLanguage(Language);
+                updateGender(Gender);
+                updateEthnicity(Ethnicity);
 
                 recreate();
                 break;
@@ -238,7 +247,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         genderSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                i_gender = position;
+                //i_gender = position;
+                Gender = genderAdapter.getItem(position).toString();
             }
             public void onNothingSelected(AdapterView<?> arg0) {
             }
@@ -256,7 +266,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         ethnicitySetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                i_ethnicity = position;
+                //i_ethnicity = position;
+                Ethnicity = ethnicityAdapter.getItem(position).toString();
             }
             public void onNothingSelected(AdapterView<?> arg0) {
             }
@@ -274,7 +285,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         languageSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                i_language = position;
+                //i_language = position;
+                Language = languageAdapter.getItem(position).toString();
             }
             public void onNothingSelected(AdapterView<?> arg0) {
             }
@@ -389,16 +401,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mProfileReference.child("dob").setValue(dob);
     }
 
-    private void updateLanguage() {
-        mProfileReference.child("language").setValue(i_language);
+    private void updateLanguage(String lang) {
+        mProfileReference.child("language").setValue(lang);
     }
 
-    private void updateEthnicity() {
-        mProfileReference.child("ethnicity").setValue(i_ethnicity);
+    private void updateEthnicity(String ethn) {
+        mProfileReference.child("ethnicity").setValue(ethn);
     }
 
-    private void updateGender() {
-        mProfileReference.child("gender").setValue(i_gender);
+    private void updateGender(String gen) {
+        mProfileReference.child("gender").setValue(gen);
     }
 
     private void toHomepage() {
@@ -508,6 +520,66 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+    }
+
+    private int getEth(String id){
+        switch (id){
+            case "Prefer Not to Answer":
+                return 0;
+            case "African American":
+                return 1;
+            case "American Indian":
+                return 2;
+            case "Asian":
+                return 3;
+            case "Hispanic":
+                return 4;
+            case "Pacific Islander":
+                return 5;
+            case "White":
+                return 6;
+        }
+        return 0;
+    }
+
+    private int getGen(String id){
+        switch (id){
+            case "Female":
+                return 0;
+            case "Male":
+                return 1;
+            case "Prefer Not to Answer":
+                return 2;
+        }
+        return 2;
+    }
+
+    private int getLang(String id){
+        switch (id){
+            case "Arabic":
+                return 0 ;
+            case "Chinese (Mandarin)":
+                return 1;
+            case "English":
+                return 2;
+            case "French":
+                return 3;
+            case "German":
+                return 4;
+            case "Italian":
+                return 5;
+            case "Portuguese":
+                return 6;
+            case "Russian":
+                return 7;
+            case "Spanish":
+                return 8;
+            case "Swedish":
+                return 9;
+            case "Vietnamese":
+                return 10;
+        }
+        return 2;
     }
 
 } // end class ProfileActivity
