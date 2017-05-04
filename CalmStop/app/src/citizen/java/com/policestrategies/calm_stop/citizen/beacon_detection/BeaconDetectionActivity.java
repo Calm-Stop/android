@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.BeaconSimulator;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.SharedUtil;
 import com.policestrategies.calm_stop.citizen.LoginActivity;
 
 import org.altbeacon.beacon.Beacon;
@@ -82,7 +83,7 @@ public class BeaconDetectionActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        closeProgressDialog();
+        SharedUtil.dismissProgressDialog(mProgressDialog);
         super.onDestroy();
     }
 
@@ -122,7 +123,7 @@ public class BeaconDetectionActivity extends AppCompatActivity {
         try {
             mBeaconManager.startRangingBeaconsInRegion(region);
         } catch (Exception e) {
-            closeProgressDialog();
+            SharedUtil.dismissProgressDialog(mProgressDialog);
             Toast.makeText(BeaconDetectionActivity.this, "Failed to range beacons",
                     Toast.LENGTH_SHORT).show();
         }
@@ -186,9 +187,6 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                    //new DownloadImageTask((ImageView) findViewById(R.id.officer_photo))
-                    //.execute(officerPhotoUrl);
-
                         mRecyclerView.setAdapter(
                                 new BeaconDetectionAdapter(BeaconDetectionActivity.this, scannedBeacons,
                                 new BeaconDetectionAdapter.OnItemClickListener() {
@@ -197,7 +195,7 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                                         syncWithOfficer(item);
                                     }
                                 }));
-                        closeProgressDialog();
+                        SharedUtil.dismissProgressDialog(mProgressDialog);
                     }
                 });
 
@@ -205,7 +203,7 @@ public class BeaconDetectionActivity extends AppCompatActivity {
     
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                closeProgressDialog();
+                SharedUtil.dismissProgressDialog(mProgressDialog);
                 System.out.println("Database error while retrieving officer information");
             }
         });
@@ -236,36 +234,6 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                })
                .setCancelable(true)
                .show();
-    }
-
-//    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-//        ImageView bmImage;
-//
-//        public DownloadImageTask(ImageView bmImage) {
-//            this.bmImage = bmImage;
-//        }
-//
-//        protected Bitmap doInBackground(String... urls) {
-//            String urldisplay = urls[0];
-//            Bitmap mIcon11 = null;
-//            try {
-//                InputStream in = new java.net.URL(urldisplay).openStream();
-//                mIcon11 = BitmapFactory.decodeStream(in);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return mIcon11;
-//        }
-//
-//        protected void onPostExecute(Bitmap result) {
-//            bmImage.setImageBitmap(result);
-//        }
-//    }
-
-    private void closeProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
     }
 
 } // end class BeaconDetectionActivity
