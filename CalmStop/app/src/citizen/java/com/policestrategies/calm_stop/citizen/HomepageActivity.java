@@ -26,6 +26,7 @@ import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
 import com.policestrategies.calm_stop.chat.ChatActivity;
 import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
+import com.policestrategies.calm_stop.citizen.stop.StopActivity;
 
 public class HomepageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -160,6 +161,11 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
             case R.id.chat_activity_debug:
                 debugChat();
                 break;
+
+            case R.id.stop_activity_debug:
+                debugStop();
+                break;
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -224,5 +230,12 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         finish();
     }
 
+    private void debugStop() {
+        Intent i = new Intent(this, StopActivity.class);
+        i.putExtra("officer_department", "14567");
+        i.putExtra("officer_id", "Tl4pCcIjlxTXQgCcoLp4IB4Hzti2");
+        i.putExtra("stop_id", "-Kj9XharhDa88IxXePwx");
+        startActivity(i);
+    }
 
 }

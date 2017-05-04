@@ -34,6 +34,10 @@
             android:id="@+id/chat_activity_debug"
             android:title="DEBUG - Chat Activity" />
 
+        <item
+            android:id="@+id/stop_activity_debug"
+            android:title="DEBUG - Stop Activity" />
+
     </group>
 
 </menu>
