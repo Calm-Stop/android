@@ -42,6 +42,13 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
+    <!-- Citizen -->
+
+    <!-- StopActivity -->
+    <string name="stop_officer_name">Officer %s</string>
+    <string name="stop_officer_badge">Badge #%s</string>
+    <string name="stop_officer_department">Department #%s</string>
+
     <!-- Officer -->
 
     <!-- DashboardActivity -->

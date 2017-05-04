@@ -55,8 +55,9 @@ class StopManager {
                 mActivityReference.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("O B T A I N E D  D A T A");
-                        System.out.println(mOfficerInfo.getFullName());
+                        ((StopActivity) mActivityReference).displayOfficerInfo(mOfficerInfo);
+                        ((StopActivity) mActivityReference).displayOfficerProfilePicture(
+                                mStorageReference.child(mOfficerInfo.getPhotoUrl()));
                     }
                 });
             }
