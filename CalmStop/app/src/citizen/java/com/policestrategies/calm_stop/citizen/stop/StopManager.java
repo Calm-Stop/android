@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.policestrategies.calm_stop.chat.ChatActivity;
 
 /**
  * Handles backend of traffic stop in {@link StopActivity}
@@ -27,6 +28,7 @@ class StopManager {
     private String mOfficerDepartment;
     private String mOfficerUid;
     private String mStopId;
+    private String mThreadId;
 
     StopManager(Activity ctx) {
         mActivityReference = ctx;
@@ -37,6 +39,20 @@ class StopManager {
         loadIntentExtras();
         retieveOfficerInfo();
         listenForChatActivation();
+    }
+
+    void handleChatButton() {
+        if (chatEnabled()) {
+            Intent i = new Intent(mActivityReference, ChatActivity.class);
+            i.putExtra("thread_id", mThreadId);
+            mActivityReference.startActivity(i);
+        }
+    }
+
+    void enableChat(String threadId) {
+        if (!chatEnabled()) {
+            mThreadId = threadId;
+        }
     }
 
     private void loadIntentExtras() {
@@ -74,6 +90,10 @@ class StopManager {
         DatabaseReference stopReference = mDatabaseReference.child("stops")
                 .child(mStopId).getRef();
         stopReference.addChildEventListener(new StopChatChildEventListener(this));
+    }
+
+    private boolean chatEnabled() {
+        return (mThreadId != null && !mThreadId.isEmpty());
     }
 
 } // end class StopManager

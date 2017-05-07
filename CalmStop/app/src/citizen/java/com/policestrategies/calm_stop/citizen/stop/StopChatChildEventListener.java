@@ -27,6 +27,7 @@ class StopChatChildEventListener implements ChildEventListener {
         if (dataSnapshot.getKey().equals("threadID")) {
             String threadId = dataSnapshot.getValue().toString();
             System.out.println("Got thread id: "  + threadId);
+            mStopManager.enableChat(threadId);
         }
     }
 
