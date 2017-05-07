@@ -168,11 +168,9 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginTop="20dp"
-            android:fontFamily="monospace"
             android:text="Gender:"
             android:textColor="@android:color/background_dark"
-            android:textSize="16sp"
-            android:typeface="monospace" />
+            android:textSize="16dp"/>
 
         <Spinner
             android:id="@+id/genderSetter"
@@ -191,11 +189,9 @@
 
             android:layout_below="@+id/gender"
             android:layout_marginTop="20dp"
-            android:fontFamily="monospace"
             android:text="Preferred Language:"
             android:textColor="@android:color/background_dark"
-            android:textSize="16sp"
-            android:typeface="monospace" />
+            android:textSize="16dp"/>
 
         <Spinner
             android:id="@+id/langSetter"
@@ -210,12 +206,9 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginTop="20dp"
-
-            android:fontFamily="monospace"
             android:text="Ethnicity:"
             android:textColor="@android:color/background_dark"
-            android:textSize="16sp"
-            android:typeface="monospace" />
+            android:textSize="16dp"/>
 
         <Spinner
             android:id="@+id/ethnicitySetter"
@@ -249,7 +242,7 @@
             android:layout_marginBottom="24dp"
             android:gravity="center"
             android:text="Already have an account? Login"
-            android:textSize="16dip" />
+            android:textSize="16dp" />
 
     </LinearLayout>
 </ScrollView>
