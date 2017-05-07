@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -96,6 +99,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
 
+        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/avenir-next.ttf");
+
+        TextView Title = (TextView) findViewById(R.id.title);
+
         mFirstNameField = (EditText)findViewById(R.id.profile_input_firstname);
         mLastNameField = (EditText)findViewById(R.id.profile_input_lastname);
         mEmailField = (EditText)findViewById(R.id.profile_input_email);
@@ -116,6 +123,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         languageSetter = (Spinner) findViewById(R.id.languageSetter);
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        Title.setTypeface(custom_font);
+
 
         if (mCurrentUser == null) {
             FirebaseAuth.getInstance().signOut();
@@ -292,23 +302,29 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
+
     private void authentication() {
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View alertBox = inflater.inflate(R.layout.activity_alertdialog, null);
+
         AlertDialog.Builder authen = new AlertDialog.Builder(this);
+
         authen.setTitle("Reauthentication");
-        authen.setMessage("Please Confirm Old Email and Password");
+        authen.setMessage("Please Confirm Email and Password");
 
-        final EditText authEmail = new EditText(this);
-        final EditText authPassword = new EditText(this);
+        authen.setView(alertBox);
 
-        authen.setView(authEmail);
-        authen.setView(authPassword);
+        final EditText authEmail = (EditText) alertBox.findViewById(R.id.email);
+        final EditText authPassword = (EditText) alertBox.findViewById(R.id.password);
 
         authen.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 valueEmail = authEmail.getText().toString();
                 valuePassword = authPassword.getText().toString();
+
                 dialog.dismiss();
-            }
+                }
         });
 
         authen.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
@@ -321,7 +337,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateEmail(String email) {
-        mProfileReference.child("email").setValue(email);
         mCurrentUser.updateEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -353,6 +368,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         }
                     }
                 });
+        mProfileReference.child("email").setValue(email);
     }
 
 

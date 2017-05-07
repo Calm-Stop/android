@@ -187,7 +187,6 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
             e.printStackTrace();
         }
 
-
     }
 
     //LOAD REGISTRATION IMAGE

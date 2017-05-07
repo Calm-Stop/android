@@ -9,6 +9,12 @@
 
     <string name="send_message">Send</string>
 
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <string name="newpassword">New Password</string>
+    <string name="newpassword2">Confirm Password</string>
+
     <string-array name="Gender">
         <item>Female</item>
         <item>Male</item>

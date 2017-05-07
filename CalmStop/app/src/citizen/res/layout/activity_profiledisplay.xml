@@ -30,7 +30,7 @@
                 android:layout_height="25dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:background="@drawable/ic_dehaze_black_24dp" />
+                android:background="@drawable/ic_dehaze_white_24dp" />
 
             <Button
                 android:id="@+id/EditButton"
@@ -42,8 +42,7 @@
                 android:background="@android:drawable/ic_menu_edit"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light"
-                android:textSize="@dimen/textSize"
-                android:typeface="monospace" />
+                android:textSize="@dimen/textSize"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -84,8 +83,7 @@
                     android:layout_marginTop="15dp"
                     android:fontFamily="monospace"
                     android:text="Name:"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
+                    android:textSize="@dimen/textSize"/>
 
                 <TextView
                     android:id="@+id/Nametxt"
@@ -93,9 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
-                    android:typeface="monospace" />
+                    android:layout_marginTop="10dp" />
 
                 <TextView
                     android:id="@+id/Email"
@@ -104,10 +100,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
                     android:text="Email:"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
+                    android:textSize="@dimen/textSize" />
 
                 <TextView
                     android:id="@+id/Emailtxt"
@@ -115,9 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
-                    android:typeface="monospace" />
+                    android:layout_marginTop="10dp"/>
 
                 <TextView
                     android:id="@+id/Phonenumber"
@@ -126,10 +118,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
                     android:text="Phone Number:"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
+                    android:textSize="@dimen/textSize"/>
 
                 <TextView
                     android:id="@+id/Phonenumtxt"
@@ -137,9 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
-                    android:typeface="monospace" />
+                    android:layout_marginTop="10dp" />
 
                 <TextView
                     android:id="@+id/DOB"
@@ -148,10 +136,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
                     android:text="Date of Birth:"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
+                    android:textSize="@dimen/textSize" />
 
                 <TextView
                     android:id="@+id/DOBtxt"
@@ -159,9 +145,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
-                    android:typeface="monospace" />
+                    android:layout_marginTop="10dp"/>
 
                 <TextView
                     android:id="@+id/DriversLis"
@@ -170,10 +154,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
                     android:text="Driver's License:"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
+                    android:textSize="@dimen/textSize" />
 
                 <TextView
                     android:id="@+id/DriversListxt"
@@ -181,9 +163,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
-                    android:typeface="monospace" />
+                    android:layout_marginTop="10dp"/>
 
                 <TextView
                     android:id="@+id/Zipcode"
@@ -192,10 +172,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
                     android:text="Zip Code:"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
+                    android:textSize="@dimen/textSize" />
 
                 <TextView
                     android:id="@+id/Zipcodetxt"
@@ -203,9 +181,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
-                    android:typeface="monospace" />
+                    android:layout_marginTop="10dp" />
 
                 <TextView
                     android:id="@+id/Gender"
@@ -214,10 +190,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
                     android:text="Gender:"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
+                    android:textSize="@dimen/textSize"/>
 
                 <TextView
                     android:id="@+id/Gendertxt"
@@ -225,9 +199,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
-                    android:typeface="monospace" />
+                    android:layout_marginTop="10dp"/>
 
                 <TextView
                     android:id="@+id/ethnicity"
@@ -239,10 +211,8 @@
                     android:layout_alignRight="@+id/gender"
                     android:layout_below="@+id/gender"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
                     android:text="Ethnicity:"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
+                    android:textSize="@dimen/textSize" />
 
                 <TextView
                     android:id="@+id/Ethnicitytxt"
@@ -250,9 +220,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
-                    android:typeface="monospace" />
+                    android:layout_marginTop="10dp" />
 
                 <TextView
                     android:id="@+id/langPref"
@@ -261,10 +229,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
                     android:text="Language Preference:"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
+                    android:textSize="@dimen/textSize" />
 
                 <TextView
                     android:id="@+id/Langtxt"
@@ -272,9 +238,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="monospace"
-                    android:typeface="monospace" />
+                    android:layout_marginTop="10dp" />
 
                 <Button
                     android:id="@+id/viewDocs"
@@ -285,13 +249,10 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/login_button"
-                    android:fontFamily="monospace"
                     android:text="View My Documents"
                     android:textAlignment="center"
                     android:textColor="@android:color/background_light"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
-
+                    android:textSize="@dimen/textSize"/>
 
             </LinearLayout>
 

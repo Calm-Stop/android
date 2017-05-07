@@ -56,9 +56,6 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
                     case R.id.previous_stops:
                         previousStops();
                         break;
-                    case R.id.help:
-                        help();
-                        break;
                     case R.id.about_us:
                         aboutUs();
                         break;
@@ -68,10 +65,6 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
                     case R.id.logout:
                         logout();
                         break;
-                    case R.id.documents:
-                        documents();
-                        break;
-
                     case R.id.detect_beacon_debug:
                         detectBecon();
                         break;
@@ -120,12 +113,6 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
         finish();
     }
 
-    private void help() {
-        Intent i = new Intent(getBaseContext(), HelpActivity.class);
-        startActivity(i);
-        finish();
-    }
-
     private void aboutUs() {
         Intent i = new Intent(getBaseContext(), AboutUsActivity.class);
         startActivity(i);
@@ -134,12 +121,6 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
 
     private void settings() {
         Intent i = new Intent(getBaseContext(), SettingsActivity.class);
-        startActivity(i);
-        finish();
-    }
-
-    private void documents() {
-        Intent i = new Intent(getBaseContext(), DocumentsActivity.class);
         startActivity(i);
         finish();
     }

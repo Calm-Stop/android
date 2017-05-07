@@ -9,9 +9,6 @@
             android:id="@+id/previous_stops"
             android:title="Previous Stops" />
         <item
-            android:id="@+id/help"
-            android:title="Help" />
-        <item
             android:id="@+id/about_us"
             android:title="About Us" />
         <item
@@ -19,8 +16,8 @@
             android:title="Settings" />
 
         <item
-            android:id="@+id/documents"
-            android:title="Documents" />
+            android:checkable="false"
+            android:enabled="false"/>
 
         <item
             android:id="@+id/logout"

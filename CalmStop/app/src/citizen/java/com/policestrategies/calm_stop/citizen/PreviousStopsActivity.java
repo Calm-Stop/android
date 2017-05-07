@@ -54,9 +54,6 @@ public class PreviousStopsActivity extends AppCompatActivity implements View.OnC
                     case R.id.previous_stops:
                         previousStops();
                         break;
-                    case R.id.help:
-                        help();
-                        break;
                     case R.id.about_us:
                         aboutUs();
                         break;
@@ -66,10 +63,6 @@ public class PreviousStopsActivity extends AppCompatActivity implements View.OnC
                     case R.id.logout:
                         logout();
                         break;
-                    case R.id.documents:
-                        documents();
-                        break;
-
                     case R.id.detect_beacon_debug:
                         detectBecon();
                         break;
@@ -117,12 +110,6 @@ public class PreviousStopsActivity extends AppCompatActivity implements View.OnC
 
     private void previousStops() {
         Intent i = new Intent(getBaseContext(), PreviousStopsActivity.class);
-        startActivity(i);
-        finish();
-    }
-
-    private void help() {
-        Intent i = new Intent(getBaseContext(), HelpActivity.class);
         startActivity(i);
         finish();
     }

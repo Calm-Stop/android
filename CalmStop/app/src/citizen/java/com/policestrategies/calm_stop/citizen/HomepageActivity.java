@@ -73,7 +73,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
+        //mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
         mProfileReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -84,7 +84,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                 //FIXME
                 //mProfileName.setText(name);
 
-                SharedUtil.dismissProgressDialog(mProgressDialog);
+               // SharedUtil.dismissProgressDialog(mProgressDialog);
             }
 
             @Override
@@ -133,10 +133,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                 previousStops();
                 break;
 
-            case R.id.help:
-                help();
-                break;
-
             case R.id.about_us:
                 aboutUs();
                 break;
@@ -147,10 +143,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
             case R.id.logout:
                 logout();
-                break;
-
-            case R.id.documents:
-                documents();
                 break;
 
             case R.id.detect_beacon_debug:
@@ -179,12 +171,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         finish();
     }
 
-    private void help() {
-        Intent i = new Intent(getBaseContext(), HelpActivity.class);
-        startActivity(i);
-        finish();
-    }
-
     private void aboutUs() {
         Intent i = new Intent(getBaseContext(), AboutUsActivity.class);
         startActivity(i);
@@ -193,12 +179,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
     private void settings() {
         Intent i = new Intent(getBaseContext(), SettingsActivity.class);
-        startActivity(i);
-        finish();
-    }
-
-    private void documents() {
-        Intent i = new Intent(getBaseContext(), DocumentsActivity.class);
         startActivity(i);
         finish();
     }
