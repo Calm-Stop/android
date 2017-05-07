@@ -235,6 +235,7 @@ public class BeaconDetectionActivity extends AppCompatActivity {
         DatabaseReference beaconReference = mDatabase.child("beacons")
                 .child(officer.getBeaconInstanceId()).getRef();
         beaconReference.addChildEventListener(new BeaconChildEventListener(this, officer));
+        ProgressDialog.show(this, "", "Waiting for officer", true, false);
     }
 
     void beginStop(BeaconObject officer, String stop) {

@@ -1,13 +1,11 @@
 package com.policestrategies.calm_stop.citizen.beacon_detection;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.policestrategies.calm_stop.citizen.stop.StopActivity;
 
 /**
  * @author Talal Abou Haiba
