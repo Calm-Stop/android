@@ -52,6 +52,7 @@ class StopManager {
     void enableChat(String threadId) {
         if (!chatEnabled()) {
             mThreadId = threadId;
+            ((StopActivity) mActivityReference).enableChat();
         }
     }
 

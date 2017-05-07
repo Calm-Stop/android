@@ -30,6 +30,8 @@ public class StopActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.stop_documents_button).setOnClickListener(this);
         findViewById(R.id.stop_chat_button).setOnClickListener(this);
 
+        findViewById(R.id.stop_chat_button).setVisibility(View.INVISIBLE);
+
         mStopManager = new StopManager(this);
     }
 
@@ -60,6 +62,10 @@ public class StopActivity extends AppCompatActivity implements View.OnClickListe
                 .using(new FirebaseImageLoader())
                 .load(photoReference)
                 .into(((ImageView) findViewById(R.id.stop_officer_profile_picture)));
+    }
+
+    void enableChat() {
+        findViewById(R.id.stop_chat_button).setVisibility(View.VISIBLE);
     }
 
 } // end class StopActivity
