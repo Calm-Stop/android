@@ -36,6 +36,7 @@ class StopManager {
         mOfficerInfo = new OfficerInfo();
         loadIntentExtras();
         retieveOfficerInfo();
+        listenForChatActivation();
     }
 
     private void loadIntentExtras() {
@@ -67,7 +68,12 @@ class StopManager {
 
             }
         });
+    }
 
+    private void listenForChatActivation() {
+        DatabaseReference stopReference = mDatabaseReference.child("stops")
+                .child(mStopId).getRef();
+        stopReference.addChildEventListener(new StopChatChildEventListener(this));
     }
 
 } // end class StopManager

@@ -14,6 +14,9 @@ import com.policestrategies.calm_stop.R;
  * @author Talal Abou Haiba
  */
 
+// TODO: Scanning for stop_id in BeaconDetectionActivity. When detected, start this activity
+// TODO: Scanning for thread_id in stop (should be handled by stopmanager). When detected, enable button
+
 public class StopActivity extends AppCompatActivity {
 
     private StopManager mStopManager;
