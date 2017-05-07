@@ -39,6 +39,7 @@ import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionAc
 
 import static android.R.attr.targetActivity;
 import static android.R.attr.value;
+import static com.policestrategies.calm_stop.R.id.howToUse;
 import static com.policestrategies.calm_stop.R.layout.activity_alertdialog;
 
 /**
@@ -148,9 +149,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.changePassword:
                 getNewPassword();
-
                 break;
-            case R.id.howToUse:
+            case howToUse:
+                howToUse();
                 break;
         }
 
@@ -166,8 +167,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void toHomepage() {
-        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+    private void howToUse() {
+        Intent i = new Intent(getBaseContext(), HowToUseActivity.class);
         startActivity(i);
     }
 

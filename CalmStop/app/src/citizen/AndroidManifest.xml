@@ -47,7 +47,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".citizen.HelpActivity"
+            android:name=".citizen.HowToUseActivity"
             android:screenOrientation="portrait" />
 
         <activity
