@@ -66,6 +66,10 @@
             android:name=".chat.ChatActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".citizen.stop.StopActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

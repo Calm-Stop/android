@@ -1,5 +1,6 @@
-package com.policestrategies.calm_stop.chat;
+package com.policestrategies.calm_stop.citizen.beacon_detection;
 
+import android.app.Activity;
 import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
@@ -7,29 +8,29 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
 /**
- * ChildEventListener for {@link ChatActivity}
  * @author Talal Abou Haiba
  */
+class BeaconChildEventListener implements ChildEventListener {
 
-class ChatChildEventListener implements ChildEventListener {
+    private final String TAG = "BeaconChildListener";
 
-    private final String TAG = "ChatChildEventListener";
+    private Activity mActivityReference;
+    private BeaconObject mOfficer;
 
-    private ChatManager mChatManager;
-
-    ChatChildEventListener(ChatManager chatManager) {
-        mChatManager = chatManager;
+    BeaconChildEventListener(Activity ctx, BeaconObject officer) {
+        mActivityReference = ctx;
+        mOfficer = officer;
     }
 
     @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-        Log.d(TAG, "In Citizen/ChatActivity, onChildAdded");
-
-        String content = dataSnapshot.child("content").getValue().toString();
-        String authorID = dataSnapshot.child("author").getValue().toString();
-        long timestamp = ((long) dataSnapshot.child("timestamp").getValue());
-
-        mChatManager.displayMessage(content, authorID, timestamp);
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        Log.d(TAG, "onChildAdded");
+        System.out.println(dataSnapshot.getKey());
+        if (dataSnapshot.getKey().equals("stop_id")) {
+            String stopId = dataSnapshot.getValue().toString();
+            System.out.println("Got stop id: "  + stopId);
+            ((BeaconDetectionActivity) mActivityReference).beginStop(mOfficer, stopId);
+        }
     }
 
     @Override
@@ -52,4 +53,4 @@ class ChatChildEventListener implements ChildEventListener {
         Log.w(TAG, "postComments:onCancelled", databaseError.toException());
     }
 
-} // end class ChatChildEventListener
+} // end class StopChatChildEventListener

@@ -1,4 +1,4 @@
-package com.policestrategies.calm_stop.chat;
+package com.policestrategies.calm_stop.citizen.stop;
 
 import android.util.Log;
 
@@ -7,29 +7,28 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
 /**
- * ChildEventListener for {@link ChatActivity}
  * @author Talal Abou Haiba
  */
 
-class ChatChildEventListener implements ChildEventListener {
+class StopChatChildEventListener implements ChildEventListener {
 
     private final String TAG = "ChatChildEventListener";
 
-    private ChatManager mChatManager;
+    private StopManager mStopManager;
 
-    ChatChildEventListener(ChatManager chatManager) {
-        mChatManager = chatManager;
+    StopChatChildEventListener(StopManager stopManager) {
+        mStopManager = stopManager;
     }
 
     @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-        Log.d(TAG, "In Citizen/ChatActivity, onChildAdded");
-
-        String content = dataSnapshot.child("content").getValue().toString();
-        String authorID = dataSnapshot.child("author").getValue().toString();
-        long timestamp = ((long) dataSnapshot.child("timestamp").getValue());
-
-        mChatManager.displayMessage(content, authorID, timestamp);
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        Log.d(TAG, "onChildAdded");
+        System.out.println(dataSnapshot.getKey());
+        if (dataSnapshot.getKey().equals("threadID")) {
+            String threadId = dataSnapshot.getValue().toString();
+            System.out.println("Got thread id: "  + threadId);
+            mStopManager.enableChat(threadId);
+        }
     }
 
     @Override
@@ -52,4 +51,4 @@ class ChatChildEventListener implements ChildEventListener {
         Log.w(TAG, "postComments:onCancelled", databaseError.toException());
     }
 
-} // end class ChatChildEventListener
+} // end class StopChatChildEventListener

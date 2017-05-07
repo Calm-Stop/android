@@ -31,7 +31,6 @@ class StopManager {
     private String mStopId;
     private String mThreadId;
 
-
     StopManager(Activity context) {
         mActivityReference = context;
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
