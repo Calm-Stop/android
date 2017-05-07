@@ -13,12 +13,9 @@ import com.google.firebase.storage.StorageReference;
 import com.policestrategies.calm_stop.R;
 
 /**
+ * Allows the citizen to interact with and view the officer making the traffic stop.
  * @author Talal Abou Haiba
  */
-
-// TODO: Scanning for stop_id in BeaconDetectionActivity. When detected, start this activity
-// TODO: Scanning for thread_id in stop (should be handled by stopmanager). When detected, enable button
-
 public class StopActivity extends AppCompatActivity implements View.OnClickListener {
 
     private StopManager mStopManager;

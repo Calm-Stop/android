@@ -22,6 +22,7 @@ import com.policestrategies.calm_stop.BeaconSimulator;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
 import com.policestrategies.calm_stop.citizen.LoginActivity;
+import com.policestrategies.calm_stop.citizen.stop.StopActivity;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconManager;
@@ -36,7 +37,6 @@ import java.util.Locale;
 
 /**
  * Landing page after a beacon is detected. Find the UUID of the beacon and connect to the officer.
- * TODO: After finding valid officers, allow the user to leave this activity to begin communication
  * @author Talal Abou Haiba
  */
 public class BeaconDetectionActivity extends AppCompatActivity {
@@ -130,7 +130,6 @@ public class BeaconDetectionActivity extends AppCompatActivity {
 
     } // end enableBeaconRanging
 
-
     /**
      * Obtains the officer information associated with each beacon instance id from firebase.
      * @param instanceIds detected by the didRangeBeaconsInRegion function
@@ -222,18 +221,29 @@ public class BeaconDetectionActivity extends AppCompatActivity {
                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                    @Override
                    public void onClick(DialogInterface dialogInterface, int i) {
-                        mDatabase.child("beacons").child(officer.getBeaconInstanceId())
-                                .child("citizens").setValue(mUid);
+                       acceptStop(officer);
                    }
                })
-               .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                   @Override
-                   public void onClick(DialogInterface dialogInterface, int i) {
-                       // Do nothing
-                   }
-               })
+               .setNegativeButton("No", null)
                .setCancelable(true)
                .show();
+    }
+
+    private void acceptStop(BeaconObject officer) {
+        mDatabase.child("beacons").child(officer.getBeaconInstanceId()).child("citizens").setValue(mUid);
+
+        DatabaseReference beaconReference = mDatabase.child("beacons")
+                .child(officer.getBeaconInstanceId()).getRef();
+        beaconReference.addChildEventListener(new BeaconChildEventListener(this, officer));
+    }
+
+    void beginStop(BeaconObject officer, String stop) {
+        Intent i = new Intent(this, StopActivity.class);
+        i.putExtra("officer_department", officer.getDepartmentNumber());
+        i.putExtra("officer_id", officer.getOfficerUid());
+        i.putExtra("stop_id", stop); //"-Kj9XharhDa88IxXePwx"
+        startActivity(i);
+        finish();
     }
 
 } // end class BeaconDetectionActivity
