@@ -230,7 +230,8 @@ public class BeaconDetectionActivity extends AppCompatActivity {
     }
 
     private void acceptStop(BeaconObject officer) {
-        mDatabase.child("beacons").child(officer.getBeaconInstanceId()).child("citizens").setValue(mUid);
+        mDatabase.child("beacons").child(officer.getBeaconInstanceId()).child("citizen")
+                .child("uid").setValue(mUid);
 
         DatabaseReference beaconReference = mDatabase.child("beacons")
                 .child(officer.getBeaconInstanceId()).getRef();

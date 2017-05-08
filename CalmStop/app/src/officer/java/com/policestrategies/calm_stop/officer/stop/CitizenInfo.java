@@ -42,12 +42,11 @@ class CitizenInfo {
         String firstName = profileSnapshot.child("first_name").getValue().toString();
         String lastName = profileSnapshot.child("last_name").getValue().toString();
         String dob = profileSnapshot.child("dob").getValue().toString();
-        long language = ((long) profileSnapshot.child("language").getValue());
-        long gender = ((long) profileSnapshot.child("gender").getValue());
+        String gender = profileSnapshot.child("gender").getValue().toString();
 
         mPhotoUrl = profileSnapshot.child("photo").getValue().toString();
         mFullName = firstName + " " + lastName;
-        mPreferredLanguage = "English";
+        mPreferredLanguage = profileSnapshot.child("language").getValue().toString();
         mAgeAndGender = calculateAgeAndGender(dob, gender);
     }
 
@@ -62,7 +61,7 @@ class CitizenInfo {
         mNumberOfWeapons = ((long) infoSnapshot.child("weapons").getValue());
     }
 
-    private String calculateAgeAndGender(String dob, long gender) {
+    private String calculateAgeAndGender(String dob, String gender) {
 
         int age = 0;
 
@@ -77,9 +76,9 @@ class CitizenInfo {
             age = currentCalendar.get(Calendar.YEAR) - dobCalendar.get(Calendar.YEAR);
 
         } catch (ParseException e) {
-
+            System.out.println("Error parsing age in CitizenInfo.java");
         }
-        return "Male - " + age;
+        return gender + " - " + age;
     }
 
     String getFullName() {
