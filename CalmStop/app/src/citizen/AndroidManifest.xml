@@ -70,6 +70,9 @@
             android:name=".citizen.stop.StopActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".DocumentViewActivity" />
+
     </application>
 
 </manifest>

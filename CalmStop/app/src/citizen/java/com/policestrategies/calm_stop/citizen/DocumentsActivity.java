@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,18 +12,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.policestrategies.calm_stop.DocumentViewActivity;
 import com.policestrategies.calm_stop.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
  * @author mariavizcaino
  */
-
 public class DocumentsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int RESULT_LICENSE_SELECTED = 100;
@@ -35,6 +33,10 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
     private ImageView mRegistrationImageView;
     private ImageView mInsuranceImageView;
 
+    private String mLicenseFilePath;
+    private String mInsuranceFilePath;
+    private String mRegistrationFilePath;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -44,13 +46,17 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
 
         setContentView(R.layout.activity_documents);
 
-        mLicenseImageView = (ImageView) findViewById(R.id.license);
-        mRegistrationImageView = (ImageView) findViewById(R.id.registration);
-        mInsuranceImageView = (ImageView) findViewById(R.id.insurance);
+        mLicenseImageView = (ImageView) findViewById(R.id.image_view_license);
+        mRegistrationImageView = (ImageView) findViewById(R.id.image_view_registration);
+        mInsuranceImageView = (ImageView) findViewById(R.id.image_view_insurance);
 
         findViewById(R.id.uploadInsurance).setOnClickListener(this);
         findViewById(R.id.uploadLicense).setOnClickListener(this);
         findViewById(R.id.uploadRegistration).setOnClickListener(this);
+
+        findViewById(R.id.image_view_insurance).setOnClickListener(this);
+        findViewById(R.id.image_view_license).setOnClickListener(this);
+        findViewById(R.id.image_view_registration).setOnClickListener(this);
 
         loadLicImage();
         loadRegImage();
@@ -73,6 +79,12 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.uploadInsurance:
                 startActivityForResult(intent, RESULT_INSURANCE_SELECTED);
+                break;
+
+            case R.id.image_view_insurance:
+            case R.id.image_view_license:
+            case R.id.image_view_registration:
+                loadDocumentViewActivity(v.getId());
                 break;
         }
     }
@@ -106,6 +118,28 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+    private void loadDocumentViewActivity(int id) {
+        Intent i = new Intent(DocumentsActivity.this, DocumentViewActivity.class);
+        String filepath = "";
+
+        switch (id) {
+            case R.id.image_view_insurance:
+                filepath = mInsuranceFilePath;
+                break;
+
+            case R.id.image_view_license:
+                filepath = mLicenseFilePath;
+                break;
+
+            case R.id.image_view_registration:
+                filepath = mRegistrationFilePath;
+                break;
+        }
+
+        i.putExtra("document_path", filepath);
+        startActivity(i);
+    }
+
     //LOAD LICENSE IMAGE
     private void loadLicImage() {
 
@@ -115,17 +149,8 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
 
         String path = directory.getAbsolutePath();
         File f = new File(path, "license.JPG");
-
-        try {
-
-            Bitmap bg = BitmapFactory.decodeStream(new FileInputStream(f));
-            ImageView img = (ImageView) findViewById(R.id.license);
-            img.setImageBitmap(bg);
-
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-
+        mLicenseFilePath = f.toString();
+        mLicenseImageView.setImageURI(Uri.fromFile(f));
     }
 
     //LOAD REGISTRATION IMAGE
@@ -137,18 +162,8 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
 
         String path = directory.getAbsolutePath();
         File f = new File(path, "registration.JPG");
-
-        try {
-
-            Bitmap bg = BitmapFactory.decodeStream(new FileInputStream(f));
-            ImageView img = (ImageView) findViewById(R.id.registration);
-            img.setImageBitmap(bg);
-
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-
-
+        mRegistrationFilePath = f.toString();
+        mRegistrationImageView.setImageURI(Uri.fromFile(f));
     }
 
     //LOAD INSURANCE IMAGE
@@ -160,17 +175,8 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
 
         String path = directory.getAbsolutePath();
         File f = new File(path, "insurance.JPG");
-
-        try {
-
-            Bitmap bg = BitmapFactory.decodeStream(new FileInputStream(f));
-            ImageView img = (ImageView) findViewById(R.id.insurance);
-            img.setImageBitmap(bg);
-
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-
+        mInsuranceFilePath = f.toString();
+        mInsuranceImageView.setImageURI(Uri.fromFile(f));
     }
 
     private void saveLicImage(Uri data){

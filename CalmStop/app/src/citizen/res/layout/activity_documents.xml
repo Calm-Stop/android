@@ -27,7 +27,7 @@
             android:typeface="monospace" />
 
         <ImageView
-            android:id="@+id/license"
+            android:id="@+id/image_view_license"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -75,7 +75,7 @@
             android:typeface="monospace" />
 
         <ImageView
-            android:id="@+id/registration"
+            android:id="@+id/image_view_registration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -124,7 +124,7 @@
             android:typeface="monospace" />
 
         <ImageView
-            android:id="@+id/insurance"
+            android:id="@+id/image_view_insurance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
