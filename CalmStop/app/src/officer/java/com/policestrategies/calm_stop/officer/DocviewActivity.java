@@ -1,7 +1,5 @@
 package com.policestrategies.calm_stop.officer;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,10 +16,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.policestrategies.calm_stop.R;
 
-//PLAN: listen in firebase for image, then set image from firebase when image is pushed (ostensibly to stop)
+//PLAN: listen in firebase for image, then set image from firebase when image is pushed (ostensibly to stopID)
 //LOCATION: document image URL's will be expected to be unique and created by citizen and pushed under the stop instance specified by a unique stop_ID
 //ASSUMPTION: stop_ID is passed to this class from intent EXTRA or SharedPreference
-//ASSUMPTION: stop_ID is already stored in database; reference will not be null
+//ASSUMPTION: stop_ID is already stored in database; reference to stop_ID will not be null on call of this activity
 public class DocviewActivity extends AppCompatActivity implements View.OnClickListener {
     private DatabaseReference mDatabaseRef;
     private DatabaseReference mStopRef;
@@ -44,10 +42,6 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
         mLicense = (ImageView) findViewById(R.id.license);
         mRegistration = (ImageView) findViewById(R.id.registration);
         mInsurance = (ImageView) findViewById(R.id.insurance);
-
-//The below are set here for testing purposes; not having these will cause crash in ValueEventListener
-//The image dock assumes these exist under stop; it is how image uploading is instantly detected
-
 //Use database reference to get stopID
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         mStopID = "temp_stop_ID";
@@ -97,7 +91,7 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
 //mStorageRef is the root of storage: gs://calm-stop.appspot.com
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
-        findViewById(R.id.license).setOnClickListener(this);
+        findViewById(R.id.uploadLicense).setOnClickListener(this);
         findViewById(R.id.registration).setOnClickListener(this);
         findViewById(R.id.insurance).setOnClickListener(this);
     }

@@ -81,7 +81,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.button_image_dock:
-                i = new Intent(getBaseContext(), DocviewActivity.class);
+                i = new Intent(getBaseContext(), ImageActivity.class);
                 startActivity(i);
                 break;
 

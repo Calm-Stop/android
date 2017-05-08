@@ -223,4 +223,14 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         }
 
     }
+
+    //SetImage(PhotoView photoView, String docType)
+//retrieves image from Firebase Storage under stopID->${docType}
+    public void SetImage(PhotoView photoView, String docType) {
+        StorageReference imageRef = mStorageRef.child(mStopID).child(docType);
+        Glide.with(this)
+                .using(new FirebaseImageLoader())
+                .load(imageRef)
+                .into(photoView);
+    }
 }
