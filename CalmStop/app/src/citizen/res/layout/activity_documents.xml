@@ -14,8 +14,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="20dp"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,8 +23,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:text="License: "
-                android:textAlignment="center"
                 android:id="@+id/licenseTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,7 +30,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_gravity="center"
                 android:layout_marginTop="0dp"
-                android:textSize="@dimen/textSize"/>
+                android:text="License: "
+                android:textAlignment="center"
+                android:textSize="@dimen/textSize" />
 
             <ImageView
                 android:id="@+id/license"
@@ -54,8 +54,8 @@
                     android:id="@+id/viewLicense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/background_light"
                     android:layout_gravity="left"
+                    android:background="@android:color/background_light"
                     android:fontFamily="monospace"
                     android:text="View"
                     android:textAlignment="center"
@@ -67,6 +67,9 @@
                     android:id="@+id/uploadLicense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
                     android:layout_gravity="right"
                     android:background="@android:color/background_light"
                     android:fontFamily="monospace"
@@ -74,10 +77,7 @@
                     android:textAlignment="center"
                     android:textColor="@android:color/background_dark"
                     android:textSize="@dimen/textSize"
-                    android:typeface="monospace"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
+                    android:typeface="monospace" />
             </RelativeLayout>
 
             <TextView
@@ -113,8 +113,8 @@
                     android:id="@+id/viewRegistration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/background_light"
                     android:layout_gravity="left"
+                    android:background="@android:color/background_light"
                     android:fontFamily="monospace"
                     android:text="View"
                     android:textAlignment="center"
@@ -126,6 +126,9 @@
                     android:id="@+id/uploadRegistration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
                     android:layout_gravity="right"
                     android:background="@android:color/background_light"
                     android:fontFamily="monospace"
@@ -133,10 +136,7 @@
                     android:textAlignment="center"
                     android:textColor="@android:color/background_dark"
                     android:textSize="@dimen/textSize"
-                    android:typeface="monospace"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
+                    android:typeface="monospace" />
             </RelativeLayout>
 
             <TextView
@@ -147,10 +147,10 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/registrationTitle"
                 android:layout_marginTop="0dp"
-                android:textSize="@dimen/textSize"
                 android:fontFamily="monospace"
                 android:text="Proof of Insurance: "
                 android:textColor="@android:color/background_dark"
+                android:textSize="@dimen/textSize"
                 android:typeface="monospace" />
 
             <ImageView
@@ -159,8 +159,8 @@
                 android:layout_height="146dp"
                 android:layout_gravity="center_horizontal"
                 android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:background="@color/common_google_signin_btn_text_dark_disabled" />
+                android:background="@color/common_google_signin_btn_text_dark_disabled"
+                android:scaleType="fitXY" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -172,8 +172,8 @@
                     android:id="@+id/viewInsurance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/background_light"
                     android:layout_gravity="left"
+                    android:background="@android:color/background_light"
                     android:fontFamily="monospace"
                     android:text="View"
                     android:textAlignment="center"
@@ -185,6 +185,9 @@
                     android:id="@+id/uploadInsurance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
                     android:layout_gravity="right"
                     android:background="@android:color/background_light"
                     android:fontFamily="monospace"
@@ -192,10 +195,7 @@
                     android:textAlignment="center"
                     android:textColor="@android:color/background_dark"
                     android:textSize="@dimen/textSize"
-                    android:typeface="monospace"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
+                    android:typeface="monospace" />
             </RelativeLayout>
 
         </LinearLayout>
