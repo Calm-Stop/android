@@ -48,10 +48,6 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
         mRegistrationImageView = (ImageView) findViewById(R.id.registration);
         mInsuranceImageView = (ImageView) findViewById(R.id.insurance);
 
-        findViewById(R.id.viewLicense).setOnClickListener(this);
-        findViewById(R.id.viewInsurance).setOnClickListener(this);
-        findViewById(R.id.viewRegistration).setOnClickListener(this);
-
         findViewById(R.id.uploadInsurance).setOnClickListener(this);
         findViewById(R.id.uploadLicense).setOnClickListener(this);
         findViewById(R.id.uploadRegistration).setOnClickListener(this);

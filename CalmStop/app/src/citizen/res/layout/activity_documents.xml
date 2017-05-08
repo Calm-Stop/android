@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -8,198 +8,151 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="20dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/licenseTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:fontFamily="monospace"
+            android:text="License: "
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp"
+            android:typeface="monospace" />
 
-            <TextView
-                android:id="@+id/licenseTitle"
-                android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/license"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:adjustViewBounds="true"
+            android:background="@color/common_google_signin_btn_text_dark_disabled"
+            android:scaleType="fitXY" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/uploadLicense"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="center"
-                android:layout_marginTop="0dp"
-                android:text="License: "
+                android:background="@android:color/background_light"
+                android:fontFamily="monospace"
+                android:text="Upload"
                 android:textAlignment="center"
-                android:textSize="@dimen/textSize" />
-
-            <ImageView
-                android:id="@+id/license"
-                android:layout_width="match_parent"
-                android:layout_height="146dp"
-                android:layout_gravity="center_horizontal"
-                android:adjustViewBounds="true"
-                android:background="@color/common_google_signin_btn_text_dark_disabled"
-                android:scaleType="fitXY" />
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <Button
-                    android:id="@+id/viewLicense"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:background="@android:color/background_light"
-                    android:fontFamily="monospace"
-                    android:text="View"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/background_dark"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
-
-                <Button
-                    android:id="@+id/uploadLicense"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_gravity="right"
-                    android:background="@android:color/background_light"
-                    android:fontFamily="monospace"
-                    android:text="Upload"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/background_dark"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/registrationTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/licenseTitle"
-                android:layout_marginTop="0dp"
-                android:fontFamily="monospace"
-                android:text="Registration: "
                 android:textColor="@android:color/background_dark"
                 android:textSize="@dimen/textSize"
                 android:typeface="monospace" />
+        </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/registration"
-                android:layout_width="match_parent"
-                android:layout_height="146dp"
-                android:layout_gravity="center_horizontal"
-                android:adjustViewBounds="true"
-                android:background="@color/common_google_signin_btn_text_dark_disabled"
-                android:scaleType="fitXY" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/colorPrimary" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="1">
+        <TextView
+            android:id="@+id/registrationTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:fontFamily="monospace"
+            android:text="Registration: "
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp"
+            android:typeface="monospace" />
 
-                <Button
-                    android:id="@+id/viewRegistration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:background="@android:color/background_light"
-                    android:fontFamily="monospace"
-                    android:text="View"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/background_dark"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
+        <ImageView
+            android:id="@+id/registration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:adjustViewBounds="true"
+            android:background="@color/common_google_signin_btn_text_dark_disabled"
+            android:scaleType="fitXY" />
 
-                <Button
-                    android:id="@+id/uploadRegistration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_gravity="right"
-                    android:background="@android:color/background_light"
-                    android:fontFamily="monospace"
-                    android:text="Upload"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/background_dark"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
-            </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
-            <TextView
-                android:id="@+id/insuranceTitle"
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/uploadRegistration"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/registrationTitle"
-                android:layout_marginTop="0dp"
+                android:layout_alignParentTop="true"
+                android:background="@android:color/background_light"
                 android:fontFamily="monospace"
-                android:text="Proof of Insurance: "
+                android:text="Upload"
+                android:textAlignment="center"
                 android:textColor="@android:color/background_dark"
                 android:textSize="@dimen/textSize"
                 android:typeface="monospace" />
+        </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/insurance"
-                android:layout_width="match_parent"
-                android:layout_height="146dp"
-                android:layout_gravity="center_horizontal"
-                android:adjustViewBounds="true"
-                android:background="@color/common_google_signin_btn_text_dark_disabled"
-                android:scaleType="fitXY" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/colorPrimary" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="1">
+        <TextView
+            android:id="@+id/insuranceTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:fontFamily="monospace"
+            android:text="Proof of Insurance: "
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp"
+            android:typeface="monospace" />
 
-                <Button
-                    android:id="@+id/viewInsurance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:background="@android:color/background_light"
-                    android:fontFamily="monospace"
-                    android:text="View"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/background_dark"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
+        <ImageView
+            android:id="@+id/insurance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:adjustViewBounds="true"
+            android:background="@color/common_google_signin_btn_text_dark_disabled"
+            android:scaleType="fitXY" />
 
-                <Button
-                    android:id="@+id/uploadInsurance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_gravity="right"
-                    android:background="@android:color/background_light"
-                    android:fontFamily="monospace"
-                    android:text="Upload"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/background_dark"
-                    android:textSize="@dimen/textSize"
-                    android:typeface="monospace" />
-            </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
-        </LinearLayout>
+            <Button
+                android:id="@+id/uploadInsurance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/background_light"
+                android:fontFamily="monospace"
+                android:text="Upload"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_dark"
+                android:textSize="@dimen/textSize"
+                android:typeface="monospace" />
+        </RelativeLayout>
 
-    </ScrollView>
+    </LinearLayout>
 
-</RelativeLayout>
+</ScrollView>
