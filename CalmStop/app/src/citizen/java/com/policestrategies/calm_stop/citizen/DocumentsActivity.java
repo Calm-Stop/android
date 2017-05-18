@@ -27,6 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 
 /**
  * @author mariavizcaino
@@ -49,7 +50,12 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
     private StorageReference mStorageRef;
     private StorageReference mImagePath;
     private String mStopID;
-    private String ImageUploaded;
+    // used as a check by officer to see if images are sent before trying to retrieve them:
+    private boolean ImageUploaded;
+
+    private Uri mLicenseURI;
+    private Uri mInsuranceURI;
+    private Uri mRegistrationURI;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +78,10 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.uploadInsurance).setOnClickListener(this);
         findViewById(R.id.uploadLicense).setOnClickListener(this);
         findViewById(R.id.uploadRegistration).setOnClickListener(this);
-        findViewById(R.id.uploadAll).setOnClickListener(this);
+        findViewById(R.id.sendAll).setOnClickListener(this);
+        findViewById(R.id.sendLicense).setOnClickListener(this);
+        findViewById(R.id.sendInsurance).setOnClickListener(this);
+        findViewById(R.id.sendRegistration).setOnClickListener(this);
 
         findViewById(R.id.image_view_insurance).setOnClickListener(this);
         findViewById(R.id.image_view_license).setOnClickListener(this);
@@ -102,16 +111,16 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                 break;
 
             case R.id.sendLicense:
-                UriToFirebase(/*license uri*/);
+                ImageToFirebase("license");
                 break;
             case R.id.sendInsurance:
-                UriToFirebase(/*Insurance uri*/);
+                ImageToFirebase("insurance");
                 break;
             case R.id.sendRegistration:
-                UriToFirebase(/*Registration uri*/);
+                ImageToFirebase("registration");
                 break;
             case R.id.sendAll:
-                AllUriToFirebase();
+                ImagesToFirebase();
             case R.id.image_view_insurance:
             case R.id.image_view_license:
             case R.id.image_view_registration:
@@ -147,32 +156,6 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                 break;
         }
 
-    }
-
-    private void UriToFirebase(Uri license_uri) {
-        mProgressDialog.setMessage("Sending to Officer ...");
-        mProgressDialog.show();
-        mImagePath.child("license").putFile(license_uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                mProgressDialog.dismiss();
-                ImageUploaded = "true";
-                Toast.makeText(DocumentsActivity.this, "Documents sent.", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                mProgressDialog.dismiss();
-                ImageUploaded = "false";
-                Toast.makeText(DocumentsActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void AllUriToFirebase(Uri license_uri, Uri insurance_uri, Uri registration_uri) {
-        UriToFirebase(license_uri);
-        UriToFirebase(insurance_uri);
-        UriToFirebase(registration_uri);
     }
 
     private void loadDocumentViewActivity(int id) {
@@ -325,5 +308,89 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
         }
         return bitmap;
     }
+
+    private boolean ImageToFirebase(String imageType) {
+        //Error checking: if Uri of imageType (e.g. License) is null, error handle
+        if (imageType.equalsIgnoreCase("license")) {
+            if (mLicenseURI == null) {
+                Toast.makeText(this, "Upload an image before sending", Toast.LENGTH_SHORT).show();
+            } else {
+                mProgressDialog.setMessage("Sending to Officer ...");
+                mProgressDialog.show();
+                mImagePath.child(imageType).putFile(mLicenseURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        mProgressDialog.dismiss();
+                        ImageUploaded = true;
+                        Toast.makeText(DocumentsActivity.this, "Documents sent", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mProgressDialog.dismiss();
+                        ImageUploaded = false;
+                        Toast.makeText(DocumentsActivity.this, "Failed to Send License", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
+        if (!ImageUploaded) return ImageUploaded;
+        if (imageType.equalsIgnoreCase("registration")) {
+            if (mLicenseURI == null) {
+                Toast.makeText(this, "Upload an image before sending", Toast.LENGTH_SHORT).show();
+            } else {
+                mProgressDialog.setMessage("Sending to Officer ...");
+                mProgressDialog.show();
+                mImagePath.child(imageType).putFile(mLicenseURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        mProgressDialog.dismiss();
+                        ImageUploaded = true;
+                        Toast.makeText(DocumentsActivity.this, "Documents sent", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mProgressDialog.dismiss();
+                        ImageUploaded = false;
+                        Toast.makeText(DocumentsActivity.this, "Failed to Send Registration", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
+        if (!ImageUploaded) return ImageUploaded;
+        if (imageType.equalsIgnoreCase("insurance")) {
+            if (mLicenseURI == null) {
+                Toast.makeText(this, "Upload an image before sending", Toast.LENGTH_SHORT).show();
+            } else {
+                mProgressDialog.setMessage("Sending to Officer ...");
+                mProgressDialog.show();
+                mImagePath.child(imageType).putFile(mLicenseURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        mProgressDialog.dismiss();
+                        ImageUploaded = true;
+                        Toast.makeText(DocumentsActivity.this, "Failed to Send Insurance", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mProgressDialog.dismiss();
+                        ImageUploaded = false;
+                        Toast.makeText(DocumentsActivity.this, "Failure", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
+        if (!ImageUploaded) return ImageUploaded;
+        return true;
+    }
+
+    private void ImagesToFirebase() {
+        ImageToFirebase("license");
+        ImageToFirebase("insurance");
+        ImageToFirebase("registration");
+    }
+
 
 } // end class DocumentsActivity
