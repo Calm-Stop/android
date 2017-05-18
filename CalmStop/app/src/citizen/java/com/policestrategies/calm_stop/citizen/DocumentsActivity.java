@@ -8,12 +8,18 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.policestrategies.calm_stop.DocumentViewActivity;
 import com.policestrategies.calm_stop.R;
 
@@ -39,6 +45,12 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
     private String mInsuranceFilePath;
     private String mRegistrationFilePath;
 
+    private ProgressDialog mProgressDialog;
+    private StorageReference mStorageRef;
+    private StorageReference mImagePath;
+    private String mStopID;
+    private String ImageUploaded;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -48,6 +60,11 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
 
         setContentView(R.layout.activity_documents);
 
+        mStopID = "tempStopID";
+        mProgressDialog = new ProgressDialog(this);
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mImagePath = mStorageRef.child(mStopID);
+
         mLicenseImageView = (ImageView) findViewById(R.id.image_view_license);
         mRegistrationImageView = (ImageView) findViewById(R.id.image_view_registration);
         mInsuranceImageView = (ImageView) findViewById(R.id.image_view_insurance);
@@ -55,6 +72,7 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.uploadInsurance).setOnClickListener(this);
         findViewById(R.id.uploadLicense).setOnClickListener(this);
         findViewById(R.id.uploadRegistration).setOnClickListener(this);
+        findViewById(R.id.uploadAll).setOnClickListener(this);
 
         findViewById(R.id.image_view_insurance).setOnClickListener(this);
         findViewById(R.id.image_view_license).setOnClickListener(this);
@@ -83,6 +101,8 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                 startActivityForResult(intent, RESULT_INSURANCE_SELECTED);
                 break;
 
+            case R.id.uploadAll:
+                ImagesToFirebase();
             case R.id.image_view_insurance:
             case R.id.image_view_license:
             case R.id.image_view_registration:
@@ -118,6 +138,26 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                 break;
         }
 
+    }
+
+    private void ImagesToFirebase(Uri license_uri) {
+        mProgressDialog.setMessage("Sending to Officer ...");
+        mProgressDialog.show();
+        mImagePath.child("license").putFile(license_uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                mProgressDialog.dismiss();
+                ImageUploaded = "true";
+                Toast.makeText(DocumentsActivity.this, "Documents sent.", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mProgressDialog.dismiss();
+                ImageUploaded = "false";
+                Toast.makeText(DocumentsActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void loadDocumentViewActivity(int id) {
