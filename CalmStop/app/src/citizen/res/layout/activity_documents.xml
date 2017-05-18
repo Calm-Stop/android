@@ -54,6 +54,17 @@
                 android:textColor="@android:color/background_dark"
                 android:textSize="@dimen/textSize"
                 android:typeface="monospace" />
+            <Button
+                android:id="@+id/sendLicense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/background_light"
+                android:fontFamily="monospace"
+                android:text="Send"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_dark"
+                android:textSize="@dimen/textSize"
+                android:typeface="monospace" />
         </RelativeLayout>
 
         <View
@@ -99,6 +110,17 @@
                 android:background="@android:color/background_light"
                 android:fontFamily="monospace"
                 android:text="Upload"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_dark"
+                android:textSize="@dimen/textSize"
+                android:typeface="monospace" />
+            <Button
+                android:id="@+id/sendRegistration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/background_light"
+                android:fontFamily="monospace"
+                android:text="Send"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_dark"
                 android:textSize="@dimen/textSize"
@@ -151,8 +173,29 @@
                 android:textColor="@android:color/background_dark"
                 android:textSize="@dimen/textSize"
                 android:typeface="monospace" />
+            <Button
+                android:id="@+id/sendInsurance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/background_light"
+                android:fontFamily="monospace"
+                android:text="Send"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_dark"
+                android:textSize="@dimen/textSize"
+                android:typeface="monospace" />
         </RelativeLayout>
-
+        <Button
+            android:id="@+id/sendAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_light"
+            android:fontFamily="monospace"
+            android:text="Send All"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="@dimen/textSize"
+            android:typeface="monospace" />
     </LinearLayout>
 
 </ScrollView>

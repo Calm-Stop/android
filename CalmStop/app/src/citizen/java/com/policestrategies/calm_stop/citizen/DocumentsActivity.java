@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import com.policestrategies.calm_stop.R;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 
@@ -51,11 +53,7 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
     private StorageReference mImagePath;
     private String mStopID;
     // used as a check by officer to see if images are sent before trying to retrieve them:
-    private boolean ImageUploaded;
-
-    private Uri mLicenseURI;
-    private Uri mInsuranceURI;
-    private Uri mRegistrationURI;
+    private boolean mImageUploaded;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -310,79 +308,86 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
     }
 
     private boolean ImageToFirebase(String imageType) {
-        //Error checking: if Uri of imageType (e.g. License) is null, error handle
+        //Error checking: if file doesn't exist, error out
+        File tmpfile;
         if (imageType.equalsIgnoreCase("license")) {
-            if (mLicenseURI == null) {
+            if (mLicenseFilePath == null) {
                 Toast.makeText(this, "Upload an image before sending", Toast.LENGTH_SHORT).show();
+                return false;
             } else {
+                tmpfile = new File(Environment.getExternalStorageDirectory() + mLicenseFilePath);
                 mProgressDialog.setMessage("Sending to Officer ...");
                 mProgressDialog.show();
-                mImagePath.child(imageType).putFile(mLicenseURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                mImagePath.child(imageType).putFile(Uri.fromFile(tmpfile)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         mProgressDialog.dismiss();
-                        ImageUploaded = true;
+                        mImageUploaded = true;
                         Toast.makeText(DocumentsActivity.this, "Documents sent", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         mProgressDialog.dismiss();
-                        ImageUploaded = false;
+                        mImageUploaded = false;
                         Toast.makeText(DocumentsActivity.this, "Failed to Send License", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         }
-        if (!ImageUploaded) return ImageUploaded;
+        if (!mImageUploaded) return mImageUploaded;
         if (imageType.equalsIgnoreCase("registration")) {
-            if (mLicenseURI == null) {
+            if (mRegistrationFilePath == null) {
                 Toast.makeText(this, "Upload an image before sending", Toast.LENGTH_SHORT).show();
+                return false;
             } else {
+                tmpfile = new File(Environment.getExternalStorageDirectory() + mRegistrationFilePath);
                 mProgressDialog.setMessage("Sending to Officer ...");
                 mProgressDialog.show();
-                mImagePath.child(imageType).putFile(mLicenseURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                mImagePath.child(imageType).putFile(Uri.fromFile(tmpfile)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         mProgressDialog.dismiss();
-                        ImageUploaded = true;
+                        mImageUploaded = true;
                         Toast.makeText(DocumentsActivity.this, "Documents sent", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         mProgressDialog.dismiss();
-                        ImageUploaded = false;
+                        mImageUploaded = false;
                         Toast.makeText(DocumentsActivity.this, "Failed to Send Registration", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         }
-        if (!ImageUploaded) return ImageUploaded;
+        if (!mImageUploaded) return mImageUploaded;
         if (imageType.equalsIgnoreCase("insurance")) {
-            if (mLicenseURI == null) {
+            if (mInsuranceFilePath == null) {
                 Toast.makeText(this, "Upload an image before sending", Toast.LENGTH_SHORT).show();
+                return false;
             } else {
+                tmpfile = new File(Environment.getExternalStorageDirectory() + mInsuranceFilePath);
                 mProgressDialog.setMessage("Sending to Officer ...");
                 mProgressDialog.show();
-                mImagePath.child(imageType).putFile(mLicenseURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                mImagePath.child(imageType).putFile(Uri.fromFile(tmpfile)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         mProgressDialog.dismiss();
-                        ImageUploaded = true;
+                        mImageUploaded = true;
                         Toast.makeText(DocumentsActivity.this, "Failed to Send Insurance", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         mProgressDialog.dismiss();
-                        ImageUploaded = false;
+                        mImageUploaded = false;
                         Toast.makeText(DocumentsActivity.this, "Failure", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         }
-        if (!ImageUploaded) return ImageUploaded;
+        if (!mImageUploaded) return mImageUploaded;
         return true;
     }
 
