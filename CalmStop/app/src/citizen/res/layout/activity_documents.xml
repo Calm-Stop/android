@@ -58,6 +58,7 @@
                 android:id="@+id/sendLicense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/uploadLicense"
                 android:background="@android:color/background_light"
                 android:fontFamily="monospace"
                 android:text="Send"
@@ -118,6 +119,7 @@
                 android:id="@+id/sendRegistration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/uploadRegistration"
                 android:background="@android:color/background_light"
                 android:fontFamily="monospace"
                 android:text="Send"
@@ -174,6 +176,7 @@
                 android:textSize="@dimen/textSize"
                 android:typeface="monospace" />
             <Button
+                android:layout_below="@id/uploadInsurance"
                 android:id="@+id/sendInsurance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
