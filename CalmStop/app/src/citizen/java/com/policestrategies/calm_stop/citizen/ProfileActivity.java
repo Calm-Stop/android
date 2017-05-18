@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -45,6 +48,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import static android.R.attr.id;
+
 
 /**
  * Allows the user to view and edit their profile.
@@ -55,7 +60,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private Spinner genderSetter;
     private Spinner ethnicitySetter;
     private Spinner languageSetter;
-    private int i_gender, i_ethnicity, i_language;
+
+    private String Gender;
+    private String Language;
+    private String Ethnicity;
 
 
     private EditText mFirstNameField;
@@ -91,6 +99,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
 
+        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/avenir-next.ttf");
+
+        TextView Title = (TextView) findViewById(R.id.title);
+
         mFirstNameField = (EditText)findViewById(R.id.profile_input_firstname);
         mLastNameField = (EditText)findViewById(R.id.profile_input_lastname);
         mEmailField = (EditText)findViewById(R.id.profile_input_email);
@@ -110,12 +122,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
         languageSetter = (Spinner) findViewById(R.id.languageSetter);
 
-        setUpCalendar();
-        setUpGenderSetter();
-        setUpEthnicitySetter();
-        setUpLanguageSetter();
-
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        Title.setTypeface(custom_font);
+
 
         if (mCurrentUser == null) {
             FirebaseAuth.getInstance().signOut();
@@ -144,9 +154,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         String license = snapshot.child("license_number").getValue().toString();
                         String phoneNumber = snapshot.child("phone_number").getValue().toString();
                         String dateOfBirth = snapshot.child("dob").getValue().toString();
-                        i_gender = Integer.parseInt(snapshot.child("gender").getValue().toString());
-                        i_language = Integer.parseInt(snapshot.child("language").getValue().toString());
-                        i_ethnicity = Integer.parseInt(snapshot.child("ethnicity").getValue().toString());
+                        Language = snapshot.child("language").getValue().toString();
+                        Ethnicity = snapshot.child("ethnicity").getValue().toString();
+                        Gender = snapshot.child("gender").getValue().toString();
 
                         mZipField.setText(zip);
                         mEmailField.setText(email);
@@ -155,6 +165,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         mLicenseNumberField.setText(license);
                         mPhoneNumberField.setText(phoneNumber);
                         mDateOfBirthField.setText(dateOfBirth);
+                        languageSetter.setSelection(getLang(Language));
+                        ethnicitySetter.setSelection(getEth(Ethnicity));
+                        genderSetter.setSelection(getGen(Gender));
 
                         SharedUtil.dismissProgressDialog(mProgressDialog);
                     }
@@ -165,6 +178,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     }
 
                 });
+
+        setUpCalendar();
+        setUpGenderSetter();
+        setUpEthnicitySetter();
+        setUpLanguageSetter();
+
     }
 
     @Override
@@ -199,9 +218,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 updateLicense(license);
                 updateZip(zip);
                 updateDOB(dob);
-                updateLanguage();
-                updateGender();
-                updateEthnicity();
+                updateLanguage(Language);
+                updateGender(Gender);
+                updateEthnicity(Ethnicity);
 
                 recreate();
                 break;
@@ -238,7 +257,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         genderSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                i_gender = position;
+                //i_gender = position;
+                Gender = genderAdapter.getItem(position).toString();
             }
             public void onNothingSelected(AdapterView<?> arg0) {
             }
@@ -256,7 +276,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         ethnicitySetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                i_ethnicity = position;
+                //i_ethnicity = position;
+                Ethnicity = ethnicityAdapter.getItem(position).toString();
             }
             public void onNothingSelected(AdapterView<?> arg0) {
             }
@@ -274,29 +295,36 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         languageSetter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                i_language = position;
+                //i_language = position;
+                Language = languageAdapter.getItem(position).toString();
             }
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
     }
+
     private void authentication() {
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View alertBox = inflater.inflate(R.layout.activity_alertdialog, null);
+
         AlertDialog.Builder authen = new AlertDialog.Builder(this);
+
         authen.setTitle("Reauthentication");
-        authen.setMessage("Please Confirm Old Email and Password");
+        authen.setMessage("Please Confirm Email and Password");
 
-        final EditText authEmail = new EditText(this);
-        final EditText authPassword = new EditText(this);
+        authen.setView(alertBox);
 
-        authen.setView(authEmail);
-        authen.setView(authPassword);
+        final EditText authEmail = (EditText) alertBox.findViewById(R.id.email);
+        final EditText authPassword = (EditText) alertBox.findViewById(R.id.password);
 
         authen.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 valueEmail = authEmail.getText().toString();
                 valuePassword = authPassword.getText().toString();
+
                 dialog.dismiss();
-            }
+                }
         });
 
         authen.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
@@ -309,7 +337,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateEmail(String email) {
-        mProfileReference.child("email").setValue(email);
         mCurrentUser.updateEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -341,6 +368,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         }
                     }
                 });
+        mProfileReference.child("email").setValue(email);
     }
 
 
@@ -389,16 +417,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mProfileReference.child("dob").setValue(dob);
     }
 
-    private void updateLanguage() {
-        mProfileReference.child("language").setValue(i_language);
+    private void updateLanguage(String lang) {
+        mProfileReference.child("language").setValue(lang);
     }
 
-    private void updateEthnicity() {
-        mProfileReference.child("ethnicity").setValue(i_ethnicity);
+    private void updateEthnicity(String ethn) {
+        mProfileReference.child("ethnicity").setValue(ethn);
     }
 
-    private void updateGender() {
-        mProfileReference.child("gender").setValue(i_gender);
+    private void updateGender(String gen) {
+        mProfileReference.child("gender").setValue(gen);
     }
 
     private void toHomepage() {
@@ -508,6 +536,66 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+    }
+
+    private int getEth(String id){
+        switch (id){
+            case "Prefer Not to Answer":
+                return 0;
+            case "African American":
+                return 1;
+            case "American Indian":
+                return 2;
+            case "Asian":
+                return 3;
+            case "Hispanic":
+                return 4;
+            case "Pacific Islander":
+                return 5;
+            case "White":
+                return 6;
+        }
+        return 0;
+    }
+
+    private int getGen(String id){
+        switch (id){
+            case "Female":
+                return 0;
+            case "Male":
+                return 1;
+            case "Prefer Not to Answer":
+                return 2;
+        }
+        return 2;
+    }
+
+    private int getLang(String id){
+        switch (id){
+            case "Arabic":
+                return 0 ;
+            case "Chinese (Mandarin)":
+                return 1;
+            case "English":
+                return 2;
+            case "French":
+                return 3;
+            case "German":
+                return 4;
+            case "Italian":
+                return 5;
+            case "Portuguese":
+                return 6;
+            case "Russian":
+                return 7;
+            case "Spanish":
+                return 8;
+            case "Swedish":
+                return 9;
+            case "Vietnamese":
+                return 10;
+        }
+        return 2;
     }
 
 } // end class ProfileActivity

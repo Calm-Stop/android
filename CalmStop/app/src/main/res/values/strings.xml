@@ -7,13 +7,21 @@
 
     <string name="auth_failed">Authentication failed</string>
 
-    <string-array name = "Gender">
+    <string name="send_message">Send</string>
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <string name="newpassword">New Password</string>
+    <string name="newpassword2">Confirm Password</string>
+
+    <string-array name="Gender">
         <item>Female</item>
         <item>Male</item>
         <item>Prefer Not to Answer</item>
     </string-array>
 
-    <string-array name = "Ethnicity">
+    <string-array name="Ethnicity">
         <item>Prefer Not to Answer</item>
         <item>African American</item>
         <item>American Indian</item>
@@ -23,7 +31,7 @@
         <item>White</item>
     </string-array>
 
-    <string-array name = "Language">
+    <string-array name="Language">
         <item>Arabic</item>
         <item>Chinese (Mandarin)</item>
         <item>English</item>
@@ -39,4 +47,27 @@
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+
+    <!-- Citizen -->
+
+    <!-- StopActivity -->
+    <string name="stop_officer_name">Officer %s</string>
+    <string name="stop_officer_badge">Badge #%s</string>
+    <string name="stop_officer_department">Department #%s</string>
+
+    <!-- Officer -->
+
+    <!-- DashboardActivity -->
+    <string name="officer_welcome">Welcome back, Officer %s!</string>
+
+    <!-- StopActivity -->
+    <string name="stop_citizen_num_stops">Stops: %d</string>
+    <string name="stop_citizen_num_alerts">Alerts: %d</string>
+    <string name="stop_citizen_num_warnings">Warnings: %d</string>
+    <string name="stop_citizen_num_threats">Threats: %d</string>
+    <string name="stop_citizen_num_citations">Citations: %d</string>
+    <string name="stop_citizen_num_intoxicated">Intoxicated: %d</string>
+    <string name="stop_citizen_num_arrests">Arrests: %d</string>
+    <string name="stop_citizen_num_weapons">Weapons: %d</string>
+
 </resources>

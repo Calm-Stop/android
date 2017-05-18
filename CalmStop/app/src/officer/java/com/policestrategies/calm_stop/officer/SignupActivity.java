@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.RegexChecks;
 import com.policestrategies.calm_stop.SharedUtil;
+import com.policestrategies.calm_stop.officer.dashboard.DashboardActivity;
 
 /**
  * Allows the user to sign up or return to the log in page.
@@ -194,7 +195,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             Toast.makeText(SignupActivity.this, "Validation success!",
                                     Toast.LENGTH_SHORT).show();
                             SharedUtil.dismissProgressDialog(mProgressDialog);
-                            Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+                            Intent i = new Intent(getBaseContext(), DashboardActivity.class);
                             startActivity(i);
                             finish();
                         }

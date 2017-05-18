@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
+import com.policestrategies.calm_stop.officer.dashboard.DashboardActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -168,7 +169,7 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void home() {
-        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+        Intent i = new Intent(getBaseContext(), DashboardActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NEW_TASK |
                 Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);

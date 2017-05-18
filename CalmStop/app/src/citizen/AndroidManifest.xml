@@ -51,7 +51,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".citizen.HelpActivity"
+            android:name=".citizen.HowToUseActivity"
             android:screenOrientation="portrait" />
 
         <activity
@@ -67,8 +67,15 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".citizen.ChatActivity"
+            android:name=".chat.ChatActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".citizen.stop.StopActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".DocumentViewActivity" />
 
     </application>
 

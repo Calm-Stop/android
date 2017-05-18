@@ -2,14 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <ListView
-        android:id="@+id/listView1"
+        android:id="@+id/chat_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp">
-    </ListView>
+        android:layout_marginBottom="80dp" />
 
     <RelativeLayout
         android:id="@+id/form"
@@ -17,27 +16,28 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <EditText
+            android:id="@+id/chat_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:ems="10"
-            android:id="@+id/chat_text"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/button_send" />
+            android:layout_toLeftOf="@+id/button_send"
+            android:ems="10"
+            android:inputType="textMultiLine" />
 
         <Button
+            android:id="@+id/button_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send"
-            android:id="@+id/button_send"
             android:layout_alignBottom="@+id/chat_text"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:text="@string/send_message" />
+
     </RelativeLayout>
 
 </RelativeLayout>

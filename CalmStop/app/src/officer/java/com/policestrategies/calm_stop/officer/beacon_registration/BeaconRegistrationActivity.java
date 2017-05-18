@@ -22,7 +22,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.BeaconSimulator;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
+import com.policestrategies.calm_stop.officer.dashboard.DashboardActivity;
 import com.policestrategies.calm_stop.officer.LoginActivity;
+import com.policestrategies.calm_stop.officer.Utility;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -66,9 +68,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
         mDatabase = FirebaseDatabase.getInstance().getReference();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-        mDepartmentNumber = getSharedPreferences(getString(R.string.shared_preferences),
-                MODE_PRIVATE).getString(getString(R.string.shared_preferences_department_number),
-                "");
+        mDepartmentNumber = Utility.getCurrentDepartmentNumber(this);
 
         if (mAuth.getCurrentUser() != null && !mDepartmentNumber.isEmpty()) {
             mUid = mAuth.getCurrentUser().getUid();
@@ -115,6 +115,17 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
     public void onDestroy() {
         super.onDestroy();
         mBeaconManager.unbind(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        returnToDashboard();
+    }
+
+    private void returnToDashboard() {
+        Intent i = new Intent(this, DashboardActivity.class);
+        startActivity(i);
+        finish();
     }
 
     private void promptBeaconStatus() {
@@ -176,6 +187,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
                         public void onClick(DialogInterface dialogInterface, int i) {
                             deregisterBeacon(mCurrentlyRegisteredBeaconId);
                             registerBeacon(beaconRegistrationId);
+                            returnToDashboard();
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -188,6 +200,7 @@ public class BeaconRegistrationActivity extends AppCompatActivity implements Vie
                     .show();
         } else {
             registerBeacon(beaconRegistrationId);
+            returnToDashboard();
         }
     }
 

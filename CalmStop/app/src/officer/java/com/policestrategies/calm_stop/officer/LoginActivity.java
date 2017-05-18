@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
+import com.policestrategies.calm_stop.officer.dashboard.DashboardActivity;
 
 /**
  * Allows the officer to log in or create an account.
@@ -151,7 +152,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                     departmentNumber).commit();
                                             SharedUtil.dismissProgressDialog(mProgressDialog);
                                             Toast.makeText(LoginActivity.this, "Validation success!", Toast.LENGTH_SHORT).show();
-                                            Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+                                            Intent i = new Intent(getBaseContext(), DashboardActivity.class);
                                             startActivity(i);
                                             finish();
                                         } else {
