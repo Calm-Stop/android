@@ -101,8 +101,17 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                 startActivityForResult(intent, RESULT_INSURANCE_SELECTED);
                 break;
 
-            case R.id.uploadAll:
-                ImagesToFirebase();
+            case R.id.sendLicense:
+                UriToFirebase(/*license uri*/);
+                break;
+            case R.id.sendInsurance:
+                UriToFirebase(/*Insurance uri*/);
+                break;
+            case R.id.sendRegistration:
+                UriToFirebase(/*Registration uri*/);
+                break;
+            case R.id.sendAll:
+                AllUriToFirebase();
             case R.id.image_view_insurance:
             case R.id.image_view_license:
             case R.id.image_view_registration:
@@ -140,7 +149,7 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    private void ImagesToFirebase(Uri license_uri) {
+    private void UriToFirebase(Uri license_uri) {
         mProgressDialog.setMessage("Sending to Officer ...");
         mProgressDialog.show();
         mImagePath.child("license").putFile(license_uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -158,6 +167,12 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                 Toast.makeText(DocumentsActivity.this, "Upload Failure", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void AllUriToFirebase(Uri license_uri, Uri insurance_uri, Uri registration_uri) {
+        UriToFirebase(license_uri);
+        UriToFirebase(insurance_uri);
+        UriToFirebase(registration_uri);
     }
 
     private void loadDocumentViewActivity(int id) {
