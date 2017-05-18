@@ -124,35 +124,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-<<<<<<< HEAD
-        // Handle navigation view item clicks here.
-        int id = item.getItemId(); // TODO: This should be a switch statement
-
-        if (id == R.id.profile) {
-            profile();
-        } else if (id == R.id.previous_stops) {
-            previousStops();
-        } else if (id == R.id.help) {
-            help();
-
-        } else if (id == R.id.about_us) {
-            aboutUs();
-
-        } else if (id == R.id.settings) {
-            settings();
-
-        } else if (id == R.id.logout) {
-            logout();
-        } else if (id == R.id.image_upload_debug) {
-            Intent i = new Intent(this, UploadActivity.class);
-            startActivity(i);
-        } else if (id == R.id.detect_beacon_debug) {
-            Intent i = new Intent(this, BeaconDetectionActivity.class);
-            startActivity(i);
-        } else if (id == R.id.chat_activity_debug) {
-            Intent i = new Intent(this, ChatActivity.class);
-            startActivity(i);
-=======
         switch(item.getItemId()) {
 
             case R.id.profile:
@@ -186,8 +157,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
             case R.id.stop_activity_debug:
                 debugStop();
                 break;
-
->>>>>>> master
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
