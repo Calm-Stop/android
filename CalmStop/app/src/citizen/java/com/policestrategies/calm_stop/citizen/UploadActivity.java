@@ -27,7 +27,7 @@ import com.google.firebase.storage.UploadTask;
 import com.policestrategies.calm_stop.R;
 
 
-public class UploadActivity extends AppCompatActivity implements View.OnClickListener {
+public class UploadActivity extends AppCompatActivity /*implements View.OnClickListener*/ {
     private static final int chosenImage = 1;
     private static final String DOCS = "Documents";
     private static final String LICEN = "license";
@@ -51,7 +51,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private String ImageUploaded;
 
     private ProgressDialog mProgressDialog;
-
+/*
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -236,4 +236,5 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 .load(imageRef)
                 .into(photoView);
     }
+    */
 }
