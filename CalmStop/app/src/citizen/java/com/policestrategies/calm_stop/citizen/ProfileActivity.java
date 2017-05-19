@@ -2,8 +2,14 @@ package com.policestrategies.calm_stop.citizen;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,6 +50,10 @@ import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.RegexChecks;
 import com.policestrategies.calm_stop.SharedUtil;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -138,12 +148,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         }
 
-        mUserPhoto = mCurrentUser.getPhotoUrl();
-
-        if (mUserPhoto != null) {
-            mImageView.setImageURI(mUserPhoto);
-        }
-
         mProfileReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
@@ -168,6 +172,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         languageSetter.setSelection(getLang(Language));
                         ethnicitySetter.setSelection(getEth(Ethnicity));
                         genderSetter.setSelection(getGen(Gender));
+
+                        loadProfileImage();
 
                         SharedUtil.dismissProgressDialog(mProgressDialog);
                     }
@@ -233,13 +239,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == chosenImage && resultCode == RESULT_OK && data != null){
             mUserPhoto = data.getData();
-            mImageView.setImageURI(mUserPhoto);
+
+            Bitmap myImage = convertUriToBitmap(mUserPhoto);
+            myImage = getRoundedShape(myImage);
+
+            mImageView.setImageBitmap(myImage);
         }
         else
             Toast.makeText(ProfileActivity.this, "Error", Toast.LENGTH_LONG).show();
@@ -374,6 +383,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private void updatePhoto() {
         mProfileReference.child("photo").setValue(mUserPhoto);
+        saveProfileImage(mUserPhoto);
         UserProfileChangeRequest updatePhoto = new UserProfileChangeRequest.Builder()
                 .setPhotoUri(mUserPhoto)
                 .build();
@@ -427,16 +437,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private void updateGender(String gen) {
         mProfileReference.child("gender").setValue(gen);
-    }
-
-    private void toHomepage() {
-        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
-        startActivity(i);
-    }
-
-    private void toDocuments() {
-        Intent i = new Intent(getBaseContext(), DocumentsActivity.class);
-        startActivity(i);
     }
 
     private void toProfileDisplay() {
@@ -597,5 +597,78 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
         return 2;
     }
+
+    public Bitmap getRoundedShape(Bitmap scaleBitmapImage) {
+        int targetWidth = 500;
+        int targetHeight = 500;
+        Bitmap targetBitmap = Bitmap.createBitmap(targetWidth,
+                targetHeight,Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(targetBitmap);
+        Path path = new Path();
+        path.addCircle(((float) targetWidth - 1) / 2,
+                ((float) targetHeight - 1) / 2,
+                (Math.min(((float) targetWidth),
+                        ((float) targetHeight)) / 2),
+                Path.Direction.CCW);
+
+        canvas.clipPath(path);
+        Bitmap sourceBitmap = scaleBitmapImage;
+        canvas.drawBitmap(sourceBitmap,
+                new Rect(0, 0, sourceBitmap.getWidth(),
+                        sourceBitmap.getHeight()),
+                new Rect(0, 0, targetWidth, targetHeight), null);
+        return targetBitmap;
+    }
+
+    private void saveProfileImage(Uri data){
+        Bitmap image = convertUriToBitmap(data);
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File myfile = cw.getDir("ProfilePic", Context.MODE_PRIVATE);
+        File mypath = new File(myfile, "profilepic.JPG");
+
+        FileOutputStream fo;
+
+        //saving image into internal storage
+        try {
+            //myfile.createNewFile();
+            fo = new FileOutputStream(mypath);
+            fo.write(byteArray);
+            fo.flush();
+            fo.close();
+        } catch (Exception e) {
+            Toast.makeText(ProfileActivity.this, "Error with Profile Picture", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+
+    private Bitmap convertUriToBitmap(Uri data) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+    private void loadProfileImage() {
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("ProfilePic", Context.MODE_PRIVATE);
+
+        String path = directory.getAbsolutePath();
+        File f = new File(path, "profilepic.JPG");
+        //mProfileFilePath = f.toString();
+        mImageView.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
+    }
+
 
 } // end class ProfileActivity

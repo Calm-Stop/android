@@ -9,7 +9,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -56,8 +58,17 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         Title = (TextView) findViewById(R.id.WelcomeTitle);
 
-        //mProfileName = (TextView) ((nav_header_main)context).findViewById(R.id.nameDisplay);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View drawermenu = inflater.inflate(R.layout.nav_header_main, null);
+
+        //final EditText authEmail = (EditText) drawermenu.findViewById(R.id.email);
+
+        mProfileName = (TextView) drawermenu.findViewById(R.id.nameDisplay);
+
+        //mProfileName.setText("HELLO");
+
         Title.setTypeface(custom_font);
+        //mProfileName.setTypeface(custom_font);
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -85,7 +96,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                 //FIXME
                 //mProfileName.setText(name);
 
-               // SharedUtil.dismissProgressDialog(mProgressDialog);
+                //SharedUtil.dismissProgressDialog(mProgressDialog);
             }
 
             @Override
@@ -160,8 +171,8 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

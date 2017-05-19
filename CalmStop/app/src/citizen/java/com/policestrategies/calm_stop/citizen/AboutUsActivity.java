@@ -19,6 +19,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
 
+import static android.R.attr.data;
+
 /**
  * @author mariavizcaino
  */
@@ -42,6 +44,23 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         Title = (TextView) findViewById(R.id.AboutUsTitle);
         Title.setTypeface(custom_font);
+
+        TextView content = (TextView) findViewById(R.id.AboutUsContent);
+
+        content.setTypeface(custom_font);
+
+        content.setText("Police Strategies is a data and technology company that is focused" +
+                        " on using data science to drive policing reform and build community trust." +
+                        " The company offers the Police Force Analysis System℠ to help law enforcement " +
+                        "agencies identify risk and improve their policies and training. The Verbal VR™ " +
+                        "De-Escalator provides a realistic simulated environment where officers can " +
+                        "practice their verbal de-escalation skills. The Stopalog™ mobile application " +
+                        "improves communications between officers and the drivers that they stop.\n" +
+                         " \n" +
+                        "Police Strategies was formed by attorneys, law enforcement professionals and " +
+                        "data scientists who all have had decades of experience working in the public " +
+                        "safety arena. You can find more information about our company at www.policestrategies.com.");
+
 
         findViewById(R.id.menu_main).setOnClickListener(this);
 

@@ -1,9 +1,17 @@
 package com.policestrategies.calm_stop.citizen;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,7 +22,9 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +38,11 @@ import com.policestrategies.calm_stop.SharedUtil;
 import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
 
 import org.w3c.dom.Text;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import static android.os.Build.VERSION_CODES.N;
 
@@ -60,6 +75,9 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
     private TextView Ethntxt;
     private TextView Zipcodetxt;
 
+    private ImageView mProfileImageView;
+    private String mProfileFilePath;
+
     private FirebaseUser mCurrentUser;
     private DatabaseReference mProfileReference;
 
@@ -75,6 +93,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        mProfileImageView = (ImageView) findViewById(R.id.profilePicture);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -149,6 +168,8 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                 Gender.setText(gender);
                 Lang.setText(language);
 
+                loadProfileImage();
+
                 SharedUtil.dismissProgressDialog(mProgressDialog);
             }
 
@@ -201,69 +222,6 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
             super.onBackPressed();
         }
     }
-
-
-    /*
-    private String getEth(int id){
-        switch (id){
-            case 0:
-                return "Prefer Not to Answer";
-            case 1:
-                return "African American";
-            case 2:
-                return "American Indian";
-            case 3:
-                return "Asian";
-            case 4:
-                return "Hispanic";
-            case 5:
-                return "Pacific Islander";
-            case 6:
-                return "White";
-        }
-        return "Prefer Not to Answer";
-    }
-
-    private String getGen(int id){
-        switch (id){
-            case 0:
-                return "Female";
-            case 1:
-                return "Male";
-            case 2:
-                return "Prefer Not to Answer";
-        }
-        return "Prefer Not to Answer";
-    }
-
-    private String getLang(int id){
-        switch (id){
-            case 0:
-                return "Arabic";
-            case 1:
-                return "Chinese (Mandarin)";
-            case 2:
-                return "English";
-            case 3:
-                return "French";
-            case 4:
-                return "German";
-            case 5:
-                return "Italian";
-            case 6:
-                return "Portuguese";
-            case 7:
-                return "Russian";
-            case 8:
-                return "Spanish";
-            case 9:
-                return "Swedish";
-            case 10:
-                return "Vietnamese";
-        }
-        return "English";
-    }
-*/
 
     public void onClick(View v) {
         switch (v.getId()) {
@@ -381,6 +339,51 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         Intent i = new Intent(this, BeaconDetectionActivity.class);
         startActivity(i);
         finish();
+    }
+
+    private void loadProfileImage() {
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("ProfilePic", Context.MODE_PRIVATE);
+
+        String path = directory.getAbsolutePath();
+        File f = new File(path, "profilepic.JPG");
+        //mProfileFilePath = f.toString();
+        mProfileImageView.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
+    }
+
+    private Bitmap convertUriToBitmap(Uri data) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+    public Bitmap getRoundedShape(Bitmap scaleBitmapImage) {
+        int targetWidth = 500;
+        int targetHeight = 500;
+        Bitmap targetBitmap = Bitmap.createBitmap(targetWidth,
+                targetHeight,Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(targetBitmap);
+        Path path = new Path();
+        path.addCircle(((float) targetWidth - 1) / 2,
+                ((float) targetHeight - 1) / 2,
+                (Math.min(((float) targetWidth),
+                        ((float) targetHeight)) / 2),
+                Path.Direction.CCW);
+
+        canvas.clipPath(path);
+        Bitmap sourceBitmap = scaleBitmapImage;
+        canvas.drawBitmap(sourceBitmap,
+                new Rect(0, 0, sourceBitmap.getWidth(),
+                        sourceBitmap.getHeight()),
+                new Rect(0, 0, targetWidth, targetHeight), null);
+        return targetBitmap;
     }
 
 

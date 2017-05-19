@@ -48,7 +48,7 @@ public class HowToUseActivity extends AppCompatActivity implements View.OnClickL
                     "      approach your car\n" +
                     "     -You can send your documents (Note this \n" +
                     "      will not prevent the officer from coming\n" +
-                    "      to you \n" +
+                    "      to you) \n" +
                     "3. Wait for officer to send a chat/audio request\n" +
                     "4. Incident is followed through with the form of \n " +
                     "   communication choosen\n" +
