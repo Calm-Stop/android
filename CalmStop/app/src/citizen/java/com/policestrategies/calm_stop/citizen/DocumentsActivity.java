@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -27,13 +26,8 @@ import com.policestrategies.calm_stop.R;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.URI;
 
-/**
- * @author mariavizcaino
- */
 public class DocumentsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int RESULT_LICENSE_SELECTED = 100;
@@ -404,9 +398,9 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void ImagesToFirebase() {
-        ImageToFirebase("license");
-        ImageToFirebase("insurance");
-        ImageToFirebase("registration");
+        if (ImageToFirebase("license") == false) return;
+        if (ImageToFirebase("insurance") == false) return;
+        if (ImageToFirebase("registration") == false) return;
     }
 
 

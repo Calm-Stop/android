@@ -37,12 +37,9 @@
             android:name=".officer.AccountActivity"
             android:screenOrientation="portrait" />
 
-<<<<<<< HEAD
         <activity
             android:name=".officer.ImageActivity" />
 
-=======
->>>>>>> master
         <activity
             android:name=".officer.RatingActivity"
             android:screenOrientation="portrait" />
