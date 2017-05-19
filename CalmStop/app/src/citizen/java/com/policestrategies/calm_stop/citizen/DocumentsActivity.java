@@ -310,12 +310,18 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
     private boolean ImageToFirebase(String imageType) {
         //Error checking: if file doesn't exist, error out
         File tmpfile;
+        ContextWrapper cw;
+        File directory;
+        String path;
         if (imageType.equalsIgnoreCase("license")) {
             if (mLicenseFilePath == null) {
                 Toast.makeText(this, "Upload an image before sending", Toast.LENGTH_SHORT).show();
                 return false;
             } else {
-                tmpfile = new File(Environment.getExternalStorageDirectory() + mLicenseFilePath);
+                cw = new ContextWrapper(getApplicationContext());
+                directory = cw.getDir("License", Context.MODE_PRIVATE);
+                path = directory.getAbsolutePath();
+                tmpfile = new File(path, "license.JPG");
                 mProgressDialog.setMessage("Sending to Officer ...");
                 mProgressDialog.show();
                 mImagePath.child(imageType).putFile(Uri.fromFile(tmpfile)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -323,7 +329,7 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         mProgressDialog.dismiss();
                         mImageUploaded = true;
-                        Toast.makeText(DocumentsActivity.this, "Documents sent", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DocumentsActivity.this, "License sent", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -341,7 +347,10 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                 Toast.makeText(this, "Upload an image before sending", Toast.LENGTH_SHORT).show();
                 return false;
             } else {
-                tmpfile = new File(Environment.getExternalStorageDirectory() + mRegistrationFilePath);
+                cw = new ContextWrapper(getApplicationContext());
+                directory = cw.getDir("Registration", Context.MODE_PRIVATE);
+                path = directory.getAbsolutePath();
+                tmpfile = new File(path, "registration.JPG");
                 mProgressDialog.setMessage("Sending to Officer ...");
                 mProgressDialog.show();
                 mImagePath.child(imageType).putFile(Uri.fromFile(tmpfile)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -349,7 +358,7 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         mProgressDialog.dismiss();
                         mImageUploaded = true;
-                        Toast.makeText(DocumentsActivity.this, "Documents sent", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DocumentsActivity.this, "Registration Sent", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -367,7 +376,10 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                 Toast.makeText(this, "Upload an image before sending", Toast.LENGTH_SHORT).show();
                 return false;
             } else {
-                tmpfile = new File(Environment.getExternalStorageDirectory() + mInsuranceFilePath);
+                cw = new ContextWrapper(getApplicationContext());
+                directory = cw.getDir("Insurance", Context.MODE_PRIVATE);
+                path = directory.getAbsolutePath();
+                tmpfile = new File(path, "insurance.JPG");
                 mProgressDialog.setMessage("Sending to Officer ...");
                 mProgressDialog.show();
                 mImagePath.child(imageType).putFile(Uri.fromFile(tmpfile)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -375,14 +387,14 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         mProgressDialog.dismiss();
                         mImageUploaded = true;
-                        Toast.makeText(DocumentsActivity.this, "Failed to Send Insurance", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DocumentsActivity.this, "Insurance Sent", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         mProgressDialog.dismiss();
                         mImageUploaded = false;
-                        Toast.makeText(DocumentsActivity.this, "Failure", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DocumentsActivity.this, "Failed to Send Insurance", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

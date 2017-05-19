@@ -20,7 +20,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="0dp"
             android:fontFamily="monospace"
-            android:text="License: "
+            android:text="Driver's License: "
             android:textAlignment="center"
             android:textColor="@android:color/background_dark"
             android:textSize="18sp"
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
             android:fontFamily="monospace"
-            android:text="Registration: "
+            android:text="Proof of Vehicle Registration: "
             android:textColor="@android:color/background_dark"
             android:textSize="18sp"
             android:typeface="monospace" />
