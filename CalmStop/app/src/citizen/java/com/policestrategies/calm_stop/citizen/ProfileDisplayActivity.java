@@ -76,7 +76,10 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
     private TextView Zipcodetxt;
 
     private ImageView mProfileImageView;
-    private String mProfileFilePath;
+
+    private TextView mProfileName;
+    private ImageView mProfileImage;
+    private View navigView;
 
     private FirebaseUser mCurrentUser;
     private DatabaseReference mProfileReference;
@@ -125,6 +128,11 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         findViewById(R.id.EditButton).setOnClickListener(this);
         findViewById(R.id.menu_main).setOnClickListener(this);
 
+        navigView = navigationView.getHeaderView(0);
+        mProfileImage = (ImageView) navigView.findViewById(R.id.imageView);
+        mProfileName = (TextView) navigView.findViewById(R.id.nameDisplay);
+        mProfileName.setTypeface(custom_font);
+
         mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -156,7 +164,6 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                 String language = snapshot.child("language").getValue().toString();
                 String ethnicity = snapshot.child("ethnicity").getValue().toString();
 
-
                 String name = firstName + " " + lastName;
                 Zipcode.setText(zip);
                 Email.setText(email);
@@ -167,6 +174,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                 Ethn.setText(ethnicity);
                 Gender.setText(gender);
                 Lang.setText(language);
+                mProfileName.setText(name);
 
                 loadProfileImage();
 
@@ -351,6 +359,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         File f = new File(path, "profilepic.JPG");
         //mProfileFilePath = f.toString();
         mProfileImageView.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
+        mProfileImage.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
     }
 
     private Bitmap convertUriToBitmap(Uri data) {
