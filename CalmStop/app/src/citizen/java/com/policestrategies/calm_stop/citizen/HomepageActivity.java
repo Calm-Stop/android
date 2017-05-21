@@ -61,17 +61,13 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         LayoutInflater inflater = LayoutInflater.from(this);
         View drawermenu = inflater.inflate(R.layout.nav_header_main, null);
 
-        //final EditText authEmail = (EditText) drawermenu.findViewById(R.id.email);
-
         mProfileName = (TextView) drawermenu.findViewById(R.id.nameDisplay);
 
-        //mProfileName.setText("HELLO");
-
         Title.setTypeface(custom_font);
-        //mProfileName.setTypeface(custom_font);
+        mProfileName.setTypeface(custom_font);
 
+        mProfileName.setText("WHYYYY");
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-
         if (mCurrentUser == null) {
             FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(this, LoginActivity.class);
@@ -83,8 +79,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         }
 
-        navigationView.setNavigationItemSelectedListener(this);
-
         //mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
         mProfileReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -92,9 +86,9 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                 String firstName = snapshot.child("first_name").getValue().toString();
                 String lastName = snapshot.child("last_name").getValue().toString();
 
-                String name = firstName + lastName;
+                String name = firstName + " " + lastName;
                 //FIXME
-                //mProfileName.setText(name);
+                mProfileName.setText(name);
 
                 //SharedUtil.dismissProgressDialog(mProgressDialog);
             }
@@ -106,8 +100,9 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         });
 
-        findViewById(R.id.menu_main).setOnClickListener(new View.OnClickListener() {
+        navigationView.setNavigationItemSelectedListener(this);
 
+        findViewById(R.id.menu_main).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch(v.getId()) {
@@ -171,8 +166,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         }
 
-        //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

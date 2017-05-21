@@ -210,8 +210,6 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                 return true;
             }
         });
-
-
     }
 
     public void onBackPressed() {
@@ -344,12 +342,10 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
     private void loadProfileImage() {
 
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        // path to /data/data/yourapp/app_data/imageDir
         File directory = cw.getDir("ProfilePic", Context.MODE_PRIVATE);
 
         String path = directory.getAbsolutePath();
         File f = new File(path, "profilepic.JPG");
-        //mProfileFilePath = f.toString();
         mProfileImageView.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
     }
 
