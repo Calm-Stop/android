@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -19,7 +22,7 @@ import com.google.firebase.storage.StorageReference;
 import com.policestrategies.calm_stop.R;
 
 
-public class DocviewActivity extends AppCompatActivity {
+public class DocviewActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView mLicenseImageView;
     private ImageView mRegistrationImageView;
@@ -45,7 +48,7 @@ public class DocviewActivity extends AppCompatActivity {
         mLicenseImageView = (ImageView) findViewById(R.id.image_view_license);
         mRegistrationImageView = (ImageView) findViewById(R.id.image_view_registration);
         mInsuranceImageView = (ImageView) findViewById(R.id.image_view_insurance);
-        ;
+        findViewById(R.id.requestDocs).setOnClickListener(this);
     }
 
     public void onClick(View v) {
@@ -60,7 +63,17 @@ public class DocviewActivity extends AppCompatActivity {
     }
 
     private boolean waitDocs() {
+        SetImage(mLicenseImageView, "license");
+        SetImage(mRegistrationImageView, "registration");
+        SetImage(mInsuranceImageView, "insurance");
         return true;
     }
 
+    public void SetImage(ImageView imageView, String docType) {
+        StorageReference imageRef = mImagePath.child(docType);
+        Glide.with(this)
+                .using(new FirebaseImageLoader())
+                .load(imageRef)
+                .into(imageView);
+    }
 } // end class DocumentsActivity

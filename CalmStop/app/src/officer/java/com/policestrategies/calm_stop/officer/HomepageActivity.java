@@ -79,7 +79,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
             case R.id.button_make_stop:
                 Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
                 break;
-
             case R.id.button_image_dock:
                 i = new Intent(getBaseContext(), ImageActivity.class);
                 startActivity(i);
