@@ -16,19 +16,6 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <Button
-            android:id="@+id/requestDocs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/holo_blue_dark"
-            android:fontFamily="monospace"
-            android:text="Request Documents"
-            android:textAlignment="center"
-            android:textColor="@android:color/background_light"
-            android:textSize="@dimen/textSize"
-            android:typeface="monospace" />
-
-    </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -111,5 +98,6 @@
             android:scaleType="fitXY" />
 
     </LinearLayout>
+    </RelativeLayout>
 
 </ScrollView>
