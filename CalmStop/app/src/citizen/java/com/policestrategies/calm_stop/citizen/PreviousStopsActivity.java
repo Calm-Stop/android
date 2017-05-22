@@ -162,11 +162,6 @@ public class PreviousStopsActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void toHomepage() {
-        Intent i = new Intent(getBaseContext(), HomepageActivity.class);
-        startActivity(i);
-    }
-
     private void profile() {
         Intent i = new Intent(getBaseContext(), ProfileDisplayActivity.class);
         startActivity(i);
