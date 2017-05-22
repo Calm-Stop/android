@@ -103,16 +103,16 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
                 break;
 
             case R.id.sendLicense:
-                ImageToFirebase("license");
+                if (!ImageToFirebase("license")) break;
                 break;
             case R.id.sendInsurance:
-                ImageToFirebase("insurance");
+                if (!ImageToFirebase("insurance")) break;
                 break;
             case R.id.sendRegistration:
-                ImageToFirebase("registration");
+                if (!ImageToFirebase("registration")) break;
                 break;
             case R.id.sendAll:
-                ImagesToFirebase();
+                if (!ImagesToFirebase()) break;
             case R.id.image_view_insurance:
             case R.id.image_view_license:
             case R.id.image_view_registration:
@@ -303,6 +303,10 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
 
     private boolean ImageToFirebase(String imageType) {
         //Error checking: if file doesn't exist, error out
+        if (mStopID.equalsIgnoreCase("tempStopID")) {
+            Toast.makeText(this, "Officer not available to receive documents", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         File tmpfile;
         ContextWrapper cw;
         File directory;
@@ -397,10 +401,11 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
         return true;
     }
 
-    private void ImagesToFirebase() {
-        if (ImageToFirebase("license") == false) return;
-        if (ImageToFirebase("insurance") == false) return;
-        if (ImageToFirebase("registration") == false) return;
+    private boolean ImagesToFirebase() {
+        if (ImageToFirebase("license") == false) return false;
+        if (ImageToFirebase("insurance") == false) return false;
+        if (ImageToFirebase("registration") == false) return false;
+        return true;
     }
 
 
