@@ -168,7 +168,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                 Gender.setText(gender);
                 Lang.setText(language);
 
-                loadProfileImage();
+                //loadProfileImage();
 
                 SharedUtil.dismissProgressDialog(mProgressDialog);
             }
@@ -360,6 +360,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
     }
 
     public Bitmap getRoundedShape(Bitmap scaleBitmapImage) {
+        if (scaleBitmapImage == null) return null;
         int targetWidth = 500;
         int targetHeight = 500;
         Bitmap targetBitmap = Bitmap.createBitmap(targetWidth,

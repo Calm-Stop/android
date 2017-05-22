@@ -26,15 +26,6 @@
             android:textSize="18sp"
             android:typeface="monospace" />
 
-        <ImageView
-            android:id="@+id/image_view_license"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:adjustViewBounds="true"
-            android:background="@color/common_google_signin_btn_text_dark_disabled"
-            android:scaleType="fitXY" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -43,10 +34,22 @@
             android:orientation="horizontal"
             android:weightSum="1">
 
+            <ImageView
+                android:id="@+id/image_view_license"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:adjustViewBounds="true"
+                android:background="@color/common_google_signin_btn_text_dark_disabled"
+                android:scaleType="fitXY" />
+
             <Button
                 android:id="@+id/uploadLicense"
+                android:layout_below="@id/image_view_license"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/sendLicense"
+                android:layout_alignParentLeft="true"
                 android:background="@android:color/background_light"
                 android:fontFamily="monospace"
                 android:text="Upload"
@@ -54,11 +57,13 @@
                 android:textColor="@android:color/background_dark"
                 android:textSize="@dimen/textSize"
                 android:typeface="monospace" />
+
             <Button
                 android:id="@+id/sendLicense"
+                android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/uploadLicense"
+                android:layout_below="@id/image_view_license"
                 android:background="@android:color/background_light"
                 android:fontFamily="monospace"
                 android:text="Send"
@@ -86,15 +91,6 @@
             android:textSize="18sp"
             android:typeface="monospace" />
 
-        <ImageView
-            android:id="@+id/image_view_registration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:adjustViewBounds="true"
-            android:background="@color/common_google_signin_btn_text_dark_disabled"
-            android:scaleType="fitXY" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -103,11 +99,21 @@
             android:orientation="horizontal"
             android:weightSum="1">
 
+            <ImageView
+                android:id="@+id/image_view_registration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:adjustViewBounds="true"
+                android:background="@color/common_google_signin_btn_text_dark_disabled"
+                android:scaleType="fitXY" />
+
             <Button
                 android:id="@+id/uploadRegistration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/sendRegistration"
+                android:layout_alignParentLeft="true"
                 android:background="@android:color/background_light"
                 android:fontFamily="monospace"
                 android:text="Upload"
@@ -119,7 +125,8 @@
                 android:id="@+id/sendRegistration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/uploadRegistration"
+                android:layout_below="@id/image_view_registration"
+                android:layout_alignParentRight="true"
                 android:background="@android:color/background_light"
                 android:fontFamily="monospace"
                 android:text="Send"
@@ -147,15 +154,6 @@
             android:textSize="18sp"
             android:typeface="monospace" />
 
-        <ImageView
-            android:id="@+id/image_view_insurance"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:adjustViewBounds="true"
-            android:background="@color/common_google_signin_btn_text_dark_disabled"
-            android:scaleType="fitXY" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -164,10 +162,22 @@
             android:orientation="horizontal"
             android:weightSum="1">
 
+            <ImageView
+                android:id="@+id/image_view_insurance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:adjustViewBounds="true"
+                android:background="@color/common_google_signin_btn_text_dark_disabled"
+                android:scaleType="fitXY" />
+
             <Button
                 android:id="@+id/uploadInsurance"
+                android:layout_below="@id/image_view_insurance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/sendInsurance"
+                android:layout_alignParentLeft="true"
                 android:background="@android:color/background_light"
                 android:fontFamily="monospace"
                 android:text="Upload"
@@ -176,10 +186,11 @@
                 android:textSize="@dimen/textSize"
                 android:typeface="monospace" />
             <Button
-                android:layout_below="@id/uploadInsurance"
+                android:layout_below="@id/image_view_insurance"
                 android:id="@+id/sendInsurance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:background="@android:color/background_light"
                 android:fontFamily="monospace"
                 android:text="Send"
