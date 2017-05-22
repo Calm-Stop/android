@@ -21,11 +21,11 @@
                 android:layout_width="109dp"
                 android:layout_height="98dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="0.03"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/profile_drawing"
-                android:layout_weight="0.03" />
+                android:src="@drawable/profile_drawing" />
 
             <TextView
                 android:id="@+id/title"

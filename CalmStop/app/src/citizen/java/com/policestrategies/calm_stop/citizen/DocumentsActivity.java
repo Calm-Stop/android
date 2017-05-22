@@ -75,9 +75,9 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.sendInsurance).setOnClickListener(this);
         findViewById(R.id.sendRegistration).setOnClickListener(this);
 
-        findViewById(R.id.image_view_insurance).setOnClickListener(this);
-        findViewById(R.id.image_view_license).setOnClickListener(this);
-        findViewById(R.id.image_view_registration).setOnClickListener(this);
+        mLicenseImageView.setOnClickListener(this);
+        mInsuranceImageView.setOnClickListener(this);
+        mRegistrationImageView.setOnClickListener(this);
 
         loadLicImage();
         loadRegImage();
