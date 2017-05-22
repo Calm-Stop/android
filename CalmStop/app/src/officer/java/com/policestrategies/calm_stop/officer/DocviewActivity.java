@@ -32,6 +32,8 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
     private StorageReference mImagePath;
     private String mStopID;
 
+    private ProgressDialog mProgressDialog;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -41,6 +43,7 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
 
         setContentView(R.layout.activity_documents);
 
+        mProgressDialog = new ProgressDialog(this);
         mStopID = "tempStopID";
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mImagePath = mStorageRef.child(mStopID);
@@ -63,9 +66,12 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private boolean waitDocs() {
+        mProgressDialog.setMessage("Waiting for Images");
         SetImage(mLicenseImageView, "license");
         SetImage(mRegistrationImageView, "registration");
         SetImage(mInsuranceImageView, "insurance");
+        mProgressDialog.dismiss();
+        Toast.makeText(this, "Images Received", Toast.LENGTH_SHORT).show();
         return true;
     }
 
