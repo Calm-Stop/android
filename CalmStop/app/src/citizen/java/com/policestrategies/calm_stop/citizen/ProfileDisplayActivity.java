@@ -345,7 +345,8 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
 
         String path = directory.getAbsolutePath();
         File f = new File(path, "profilepic.JPG");
-        mProfileImageView.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
+        if(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))) != null)
+            mProfileImageView.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
     }
 
     private Bitmap convertUriToBitmap(Uri data) {
