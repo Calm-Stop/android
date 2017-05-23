@@ -156,7 +156,6 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                 String language = snapshot.child("language").getValue().toString();
                 String ethnicity = snapshot.child("ethnicity").getValue().toString();
 
-
                 String name = firstName + " " + lastName;
                 Zipcode.setText(zip);
                 Email.setText(email);

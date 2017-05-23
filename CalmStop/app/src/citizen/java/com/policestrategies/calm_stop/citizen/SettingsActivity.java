@@ -60,7 +60,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private static final String TAG = "SettingsActivity";
 
-
     private FirebaseUser user;
 
     @Override
@@ -84,7 +83,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         TextView helpT = (TextView) findViewById(R.id.helpTitle);
         helpT.setTypeface(custom_font);
-
 
         findViewById(R.id.menu_main).setOnClickListener(this);
 
