@@ -3,6 +3,7 @@ package com.policestrategies.calm_stop.citizen;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.RegexChecks;
 import com.policestrategies.calm_stop.SharedUtil;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -36,6 +38,7 @@ import java.util.Locale;
  */
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private Resources mRes;
     private Spinner genderSetter;
     private Spinner langSetter;
     private Spinner ethnicitySetter;
@@ -62,6 +65,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        mRes = getResources();
         genderSetter = (Spinner) findViewById(R.id.genderSetter);
         langSetter = (Spinner) findViewById(R.id.langSetter);
         ethnicitySetter = (Spinner) findViewById(R.id.ethnicitySetter);
@@ -169,9 +173,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             citizenDatabaseRef.child("license_number").setValue(licensenum);
                             citizenDatabaseRef.child("phone_number").setValue(phone);
                             citizenDatabaseRef.child("zip_code").setValue(zip);
-                            citizenDatabaseRef.child("gender").setValue(i_gender);
-                            citizenDatabaseRef.child("language").setValue(i_language);
-                            citizenDatabaseRef.child("ethnicity").setValue(i_ethnicity);
+                            citizenDatabaseRef.child("gender").setValue(mRes.getStringArray(R.array.Gender)[i_gender]);
+                            citizenDatabaseRef.child("language").setValue(mRes.getStringArray(R.array.Language)[i_language]);
+                            citizenDatabaseRef.child("ethnicity").setValue(mRes.getStringArray(R.array.Ethnicity)[i_ethnicity]);
                             citizenDatabaseRef.child("dob").setValue(dateOfBirth);
                             String photoPath;
                             if (i_gender == 0) {

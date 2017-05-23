@@ -136,7 +136,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         Title.setTypeface(custom_font);
 
-
         if (mCurrentUser == null) {
             FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(this, LoginActivity.class);

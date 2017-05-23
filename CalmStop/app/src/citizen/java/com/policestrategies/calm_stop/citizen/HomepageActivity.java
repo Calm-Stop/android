@@ -90,8 +90,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         }
 
-        navigationView.setNavigationItemSelectedListener(this);
-
         //mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
         mProfileReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -102,6 +100,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                 String name = firstName + " " + lastName;
                 mProfileName.setText(name);
                 loadProfileImage();
+
                 //SharedUtil.dismissProgressDialog(mProgressDialog);
             }
 
@@ -112,8 +111,9 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         });
 
-        findViewById(R.id.menu_main).setOnClickListener(new View.OnClickListener() {
+        navigationView.setNavigationItemSelectedListener(this);
 
+        findViewById(R.id.menu_main).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch(v.getId()) {
@@ -177,8 +177,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         }
 
-        //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
