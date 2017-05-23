@@ -244,8 +244,8 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         String path = directory.getAbsolutePath();
         File f = new File(path, "profilepic.JPG");
-        //mProfileFilePath = f.toString();
-        mProfileImage.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
+        if(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))) != null)
+            mProfileImage.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
     }
 
     private Bitmap convertUriToBitmap(Uri data) {

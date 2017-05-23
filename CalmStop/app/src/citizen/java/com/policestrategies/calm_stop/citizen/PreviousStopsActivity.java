@@ -98,7 +98,6 @@ public class PreviousStopsActivity extends AppCompatActivity implements View.OnC
                 String name = firstName + " " + lastName;
                 mProfileName.setText(name);
                 loadProfileImage();
-                //SharedUtil.dismissProgressDialog(mProgressDialog);
             }
 
             @Override
@@ -214,8 +213,8 @@ public class PreviousStopsActivity extends AppCompatActivity implements View.OnC
 
         String path = directory.getAbsolutePath();
         File f = new File(path, "profilepic.JPG");
-        //mProfileFilePath = f.toString();
-        mProfileImage.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
+        if(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))) != null)
+            mProfileImage.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
     }
 
     private Bitmap convertUriToBitmap(Uri data) {
