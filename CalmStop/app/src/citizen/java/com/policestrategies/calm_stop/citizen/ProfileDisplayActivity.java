@@ -20,6 +20,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -76,7 +77,8 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
     private TextView Zipcodetxt;
 
     private ImageView mProfileImageView;
-    private String mProfileFilePath;
+    private TextView mProfileName;
+    private ImageView mDrawerImage;
 
     private FirebaseUser mCurrentUser;
     private DatabaseReference mProfileReference;
@@ -95,6 +97,12 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
 
         mProfileImageView = (ImageView) findViewById(R.id.profilePicture);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View drawermenu = inflater.inflate(R.layout.nav_header_main, null);
+
+        mProfileName = (TextView) drawermenu.findViewById(R.id.nameDisplay);
+        mDrawerImage = (ImageView) drawermenu.findViewById(R.id.imageView);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
@@ -137,7 +145,6 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         } else {
             mProfileReference = FirebaseDatabase.getInstance().getReference("citizen")
                     .child(mCurrentUser.getUid()).child("profile");
-
         }
 
         customizeFont(custom_font);
@@ -156,7 +163,6 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                 String language = snapshot.child("language").getValue().toString();
                 String ethnicity = snapshot.child("ethnicity").getValue().toString();
 
-
                 String name = firstName + " " + lastName;
                 Zipcode.setText(zip);
                 Email.setText(email);
@@ -167,6 +173,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                 Ethn.setText(ethnicity);
                 Gender.setText(gender);
                 Lang.setText(language);
+                mProfileName.setText(name);
 
                 loadProfileImage();
 
@@ -205,8 +212,8 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                         break;
                 }
 
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
+                //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                //drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
@@ -247,6 +254,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         Langtxt.setTypeface(custom_font);
         Gendertxt.setTypeface(custom_font);
         Ethntxt.setTypeface(custom_font);
+        mProfileName.setTypeface(custom_font);
 
         Name.setTextColor(getResources().getColor(R.color.black));
         Name.setTypeface(custom_font);
@@ -347,6 +355,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         String path = directory.getAbsolutePath();
         File f = new File(path, "profilepic.JPG");
         mProfileImageView.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
+        mDrawerImage.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
     }
 
     private Bitmap convertUriToBitmap(Uri data) {
