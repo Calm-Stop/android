@@ -242,8 +242,8 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
         String path = directory.getAbsolutePath();
         File f = new File(path, "profilepic.JPG");
-        if(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))) != null)
-            mProfileImage.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
+        if(convertUriToBitmap(Uri.fromFile(f)) != null)
+            mProfileImage.setImageBitmap(convertUriToBitmap(Uri.fromFile(f)));
     }
 
     private Bitmap convertUriToBitmap(Uri data) {
@@ -256,26 +256,4 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         return bitmap;
     }
 
-    public Bitmap getRoundedShape(Bitmap scaleBitmapImage) {
-        int targetWidth = 500;
-        int targetHeight = 500;
-        Bitmap targetBitmap = Bitmap.createBitmap(targetWidth,
-                targetHeight,Bitmap.Config.ARGB_8888);
-
-        Canvas canvas = new Canvas(targetBitmap);
-        Path path = new Path();
-        path.addCircle(((float) targetWidth - 1) / 2,
-                ((float) targetHeight - 1) / 2,
-                (Math.min(((float) targetWidth),
-                        ((float) targetHeight)) / 2),
-                Path.Direction.CCW);
-
-        canvas.clipPath(path);
-        Bitmap sourceBitmap = scaleBitmapImage;
-        canvas.drawBitmap(sourceBitmap,
-                new Rect(0, 0, sourceBitmap.getWidth(),
-                        sourceBitmap.getHeight()),
-                new Rect(0, 0, targetWidth, targetHeight), null);
-        return targetBitmap;
-    }
 }
