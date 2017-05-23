@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.design.widget.NavigationView;
@@ -34,7 +33,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
-import com.policestrategies.calm_stop.SharedUtil;
 import com.policestrategies.calm_stop.chat.ChatActivity;
 import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
 import com.policestrategies.calm_stop.citizen.stop.StopActivity;
@@ -46,8 +44,13 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
     private DrawerLayout mDrawerLayout;
     private TextView mProfileName;
-    private ImageView mDrawerImage;
+
+    private ImageView mProfileImage;
     private TextView Title;
+
+    private View navigView;
+
+    private ProgressDialog mProgressDialog;
 
     private FirebaseUser mCurrentUser;
     private DatabaseReference mProfileReference;
@@ -59,23 +62,22 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
-        ActionBar actionBar = getSupportActionBar();;
+        ActionBar actionBar = getSupportActionBar();
+        ;
         actionBar.hide();
 
-        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/avenir-next.ttf");
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/avenir-next.ttf");
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         Title = (TextView) findViewById(R.id.WelcomeTitle);
 
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View drawermenu = inflater.inflate(R.layout.nav_header_main, null);
-
-        mProfileName = (TextView) drawermenu.findViewById(R.id.nameDisplay);
-        mDrawerImage = (ImageView) drawermenu.findViewById(R.id.imageView);
+        navigView = navigationView.getHeaderView(0);
+        mProfileImage = (ImageView) navigView.findViewById(R.id.imageView);
+        mProfileName = (TextView) navigView.findViewById(R.id.nameDisplay);
+        mProfileName.setTypeface(custom_font);
 
         Title.setTypeface(custom_font);
-        mProfileName.setTypeface(custom_font);
 
         mProfileName.setText("WHYYYY");
 
@@ -98,7 +100,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                 String lastName = snapshot.child("last_name").getValue().toString();
 
                 String name = firstName + " " + lastName;
-                //FIXME
                 mProfileName.setText(name);
                 loadProfileImage();
                 //SharedUtil.dismissProgressDialog(mProgressDialog);
@@ -116,7 +117,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         findViewById(R.id.menu_main).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch(v.getId()) {
+                switch (v.getId()) {
                     case R.id.menu_main:
                         mDrawerLayout.openDrawer(Gravity.LEFT);
                         break;
@@ -141,7 +142,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
 
             case R.id.profile:
                 profile();
@@ -212,7 +213,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         finish();
     }
 
-    private void detectBeacon(){
+    private void detectBeacon() {
         Intent i = new Intent(this, BeaconDetectionActivity.class);
         startActivity(i);
         finish();
@@ -236,11 +237,13 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
     private void loadProfileImage() {
 
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
         File directory = cw.getDir("ProfilePic", Context.MODE_PRIVATE);
 
         String path = directory.getAbsolutePath();
         File f = new File(path, "profilepic.JPG");
-        mDrawerImage.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
+        mProfileImage.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
+
     }
 
     private Bitmap convertUriToBitmap(Uri data) {
@@ -257,7 +260,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         int targetWidth = 500;
         int targetHeight = 500;
         Bitmap targetBitmap = Bitmap.createBitmap(targetWidth,
-                targetHeight,Bitmap.Config.ARGB_8888);
+                targetHeight, Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(targetBitmap);
         Path path = new Path();
@@ -275,5 +278,4 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                 new Rect(0, 0, targetWidth, targetHeight), null);
         return targetBitmap;
     }
-
 }

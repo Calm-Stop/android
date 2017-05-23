@@ -77,8 +77,10 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
     private TextView Zipcodetxt;
 
     private ImageView mProfileImageView;
+
     private TextView mProfileName;
-    private ImageView mDrawerImage;
+    private ImageView mProfileImage;
+    private View navigView;
 
     private FirebaseUser mCurrentUser;
     private DatabaseReference mProfileReference;
@@ -98,15 +100,14 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         mProfileImageView = (ImageView) findViewById(R.id.profilePicture);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View drawermenu = inflater.inflate(R.layout.nav_header_main, null);
-
-        mProfileName = (TextView) drawermenu.findViewById(R.id.nameDisplay);
-        mDrawerImage = (ImageView) drawermenu.findViewById(R.id.imageView);
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/avenir-next.ttf");
+
+        navigView = navigationView.getHeaderView(0);
+        mProfileImage = (ImageView) navigView.findViewById(R.id.imageView);
+        mProfileName = (TextView) navigView.findViewById(R.id.nameDisplay);
+        mProfileName.setTypeface(custom_font);
 
         Name = (TextView) findViewById(R.id.Nametxt);
         Email = (TextView) findViewById(R.id.Emailtxt);
@@ -132,6 +133,11 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         findViewById(R.id.viewDocs).setOnClickListener(this);
         findViewById(R.id.EditButton).setOnClickListener(this);
         findViewById(R.id.menu_main).setOnClickListener(this);
+
+        navigView = navigationView.getHeaderView(0);
+        mProfileImage = (ImageView) navigView.findViewById(R.id.imageView);
+        mProfileName = (TextView) navigView.findViewById(R.id.nameDisplay);
+        mProfileName.setTypeface(custom_font);
 
         mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
 
@@ -355,7 +361,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         String path = directory.getAbsolutePath();
         File f = new File(path, "profilepic.JPG");
         mProfileImageView.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
-        mDrawerImage.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
+        mProfileImage.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
     }
 
     private Bitmap convertUriToBitmap(Uri data) {
