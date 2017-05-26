@@ -22,6 +22,7 @@ class StopManager {
     private Activity mActivityReference;
     private DatabaseReference mDatabaseReference;
     private StorageReference mStorageReference;
+    private static DatabaseReference officerProfileRef;
 
     private OfficerInfo mOfficerInfo;
 
@@ -66,6 +67,7 @@ class StopManager {
     private void retieveOfficerInfo() {
         DatabaseReference officerProfileReference = mDatabaseReference.child("officer")
                 .child(mOfficerDepartment).child(mOfficerUid).child("profile").getRef();
+        officerProfileRef = officerProfileReference;
         officerProfileReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -95,6 +97,10 @@ class StopManager {
 
     private boolean chatEnabled() {
         return (mThreadId != null && !mThreadId.isEmpty());
+    }
+
+    public static DatabaseReference getOfficerReference(){
+        return officerProfileRef;
     }
 
 } // end class StopManager

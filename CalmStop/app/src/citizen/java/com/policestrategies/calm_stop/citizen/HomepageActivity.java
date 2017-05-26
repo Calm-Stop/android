@@ -17,7 +17,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,6 +35,7 @@ import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.chat.ChatActivity;
 import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
 import com.policestrategies.calm_stop.citizen.stop.StopActivity;
+import com.policestrategies.calm_stop.citizen.stop.SurveyActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -159,6 +159,9 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
             case R.id.settings:
                 settings();
                 break;
+            case R.id.survey:
+                survey();
+                break;
 
             case R.id.logout:
                 logout();
@@ -195,6 +198,12 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
     private void aboutUs() {
         Intent i = new Intent(getBaseContext(), AboutUsActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void survey(){
+        Intent i = new Intent(getBaseContext(), SurveyActivity.class);
         startActivity(i);
         finish();
     }

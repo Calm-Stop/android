@@ -59,7 +59,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".DocumentViewActivity" />
         <activity
-            android:name=".citizen.SurveyActivity"
+            android:name=".citizen.stop.SurveyActivity"
             android:label="@string/title_activity_survey"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
