@@ -2,11 +2,17 @@ package com.policestrategies.calm_stop.citizen;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -23,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +41,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
+
+import java.io.File;
+import java.io.IOException;
 
 import static android.R.attr.targetActivity;
 import static android.R.attr.value;
@@ -60,6 +75,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private static final String TAG = "SettingsActivity";
 
+    private TextView mProfileName;
+    private ImageView mProfileImage;
+    private View navigView;
+
+    private FirebaseUser mCurrentUser;
+    private DatabaseReference mProfileReference;
 
     private FirebaseUser user;
 
@@ -85,7 +106,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         TextView helpT = (TextView) findViewById(R.id.helpTitle);
         helpT.setTypeface(custom_font);
 
-
         findViewById(R.id.menu_main).setOnClickListener(this);
 
         Button changePass = (Button) findViewById(R.id.changePassword);
@@ -102,6 +122,43 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         howToUse.setOnClickListener(this);
         howToUse.setText("How to Use");
         howToUse.setTypeface(custom_font);
+
+        navigView = navigationView.getHeaderView(0);
+        mProfileImage = (ImageView) navigView.findViewById(R.id.imageView);
+        mProfileName = (TextView) navigView.findViewById(R.id.nameDisplay);
+        mProfileName.setTypeface(custom_font);
+
+        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (mCurrentUser == null) {
+            FirebaseAuth.getInstance().signOut();
+            Intent i = new Intent(this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        } else {
+            mProfileReference = FirebaseDatabase.getInstance().getReference("citizen")
+                    .child(mCurrentUser.getUid()).child("profile");
+
+        }
+
+        mProfileReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                String firstName = snapshot.child("first_name").getValue().toString();
+                String lastName = snapshot.child("last_name").getValue().toString();
+
+                String name = firstName + " " + lastName;
+                mProfileName.setText(name);
+                loadProfileImage();
+                //SharedUtil.dismissProgressDialog(mProgressDialog);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.e(TAG, "Failed to read app title value.", error.toException());
+            }
+
+        });
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -336,6 +393,28 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
             }
         });
+    }
+
+    private void loadProfileImage() {
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("ProfilePic", Context.MODE_PRIVATE);
+
+        String path = directory.getAbsolutePath();
+        File f = new File(path, "profilepic.JPG");
+        if(convertUriToBitmap(Uri.fromFile(f)) != null)
+            mProfileImage.setImageBitmap(convertUriToBitmap(Uri.fromFile(f)));
+    }
+
+    private Bitmap convertUriToBitmap(Uri data) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
 }
