@@ -87,10 +87,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
-
         setContentView(R.layout.activity_settings);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -228,6 +224,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private void howToUse() {
         Intent i = new Intent(getBaseContext(), HowToUseActivity.class);
         startActivity(i);
+        finish();
     }
 
     private void profile() {

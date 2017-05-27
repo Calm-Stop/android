@@ -1,10 +1,14 @@
 package com.policestrategies.calm_stop.citizen.stop;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,9 +26,12 @@ import com.policestrategies.calm_stop.SharedUtil;
 
 import java.text.DecimalFormat;
 
+import static android.widget.Toast.LENGTH_SHORT;
 import static com.policestrategies.calm_stop.R.id.question1;
 
 public class SurveyActivity extends AppCompatActivity {
+
+    private Activity mActivityReference;
 
     private RadioGroup radioGroup;
     private ImageView officerPicture;
@@ -40,7 +47,7 @@ public class SurveyActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabaseReference;
 
-    private ProgressDialog mProgressDialog;
+    private static final String TAG = "SurveyActivity";
 
 
     @Override
@@ -60,13 +67,16 @@ public class SurveyActivity extends AppCompatActivity {
         question1.setTypeface(custom_font);
         title.setTypeface(custom_font);
 
-        /* USE THIS ONCE PROPERLY IMPLEMENTED:
-         mDatabaseReference = StopManager.getOfficerReference();
-         */
-
         //hardcoded
         mDatabaseReference = FirebaseDatabase.getInstance().getReference("officer")
                 .child("14567").child("Tl4pCcIjlxTXQgCcoLp4IB4Hzti2").child("profile");
+
+        /* USE THIS ONCE PROPERLY IMPLEMENTED:
+         loadOfficerReference();
+         */
+
+        //Toast.makeText(this, "mDatabase: " + mDatabaseReference.toString(), Toast.LENGTH_SHORT).show();
+
 
         /* Get Officer info from Firebase */
         mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -78,6 +88,8 @@ public class SurveyActivity extends AppCompatActivity {
                 badgeNumber = dataSnapshot.child("badge").getValue().toString();
                 photoURL = dataSnapshot.child("photo").getValue().toString();
 
+                Toast.makeText(getApplicationContext(), "officerNAme: " + officerName + " ", LENGTH_SHORT).show();
+
                 officerInfo.setText(" Officer " + officerName + "\n#" + badgeNumber + "\nPolice Department: " + departmentNumber);
                 question1.setText("Please rate your encounter with Officer " + lastName);
                 //FIXME - not showing up
@@ -85,10 +97,31 @@ public class SurveyActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.d(TAG, "not getting shit from firebase", databaseError.toException());
             }
         });
 
+        setUpQuestion();
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.submitButton:
+                        recalculateAverage(rating);
+                        startNextQuestion();
+                        break;
+                }
+            }
+        });
+    }
+
+    private void loadOfficerReference() {
+        Intent currentIntent = mActivityReference.getIntent();
+        mDatabaseReference = (DatabaseReference) currentIntent.getExtras().get("officer_firebase_reference");
+    }
+
+    private void setUpQuestion(){
         radioGroup = (RadioGroup) findViewById(R.id.question1);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -97,56 +130,35 @@ public class SurveyActivity extends AppCompatActivity {
                 switch(checkedRadioButtonId){
                     case R.id.verySatButton:
                         rating = 5;
-                        //Toast.makeText(SurveyActivity.this, "Button1", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.somewhatSatButton:
                         rating = 4;
-                        //Toast.makeText(SurveyActivity.this, "Button2", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.satButton:
                         rating = 3;
-                        //Toast.makeText(SurveyActivity.this, "Button3", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.somewhatDisButton:
                         rating = 2;
-                        //Toast.makeText(SurveyActivity.this, "Button4", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.disButton:
                         rating = 1;
-                        //Toast.makeText(SurveyActivity.this, "Button5", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.noOpButton:
                         rating = 0;
-                        Toast.makeText(SurveyActivity.this, "Button6", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        });
-
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.submitButton:
-                        recalculateAverage(rating);
-                        Toast.makeText(SurveyActivity.this, "Button2", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
         });
     }
 
-    private String officerCurrentAverage;
-    private String numOfRatings;
-    private String officerCurrentOp;
-
-    private void recalculateAverage(int newValue) {
+    private void recalculateAverage(final int newValue) {
 
         if (newValue == 0) {
             mDatabaseReference.getParent().child("ratings").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    officerCurrentOp = dataSnapshot.child("no_opinion_count").getValue().toString();
+                    String officerCurrentOp = dataSnapshot.child("no_opinion_count").getValue().toString();
+                    updateOpinionCount(officerCurrentOp);
                 }
 
                 @Override
@@ -155,20 +167,13 @@ public class SurveyActivity extends AppCompatActivity {
                 }
             });
 
-            int opinionCount = Integer.parseInt(officerCurrentOp);
-
-
-            mDatabaseReference.getParent().child("ratings").child("no_opinion_count").setValue(opinionCount + 1);
         } else {
-            //mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
-            //Toast.makeText(SurveyActivity.this, "button: " + mDatabaseReference.getParent().child("ratings").toString(), Toast.LENGTH_SHORT).show();
-
             mDatabaseReference.getParent().child("ratings").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    officerCurrentAverage = dataSnapshot.child("avg_rating").getValue().toString();
-                    numOfRatings = dataSnapshot.child("number_of_ratings").getValue().toString();
-                    //SharedUtil.dismissProgressDialog(mProgressDialog);
+                    String officerCurrentAverage = dataSnapshot.child("avg_rating").getValue().toString();
+                    String numOfRatings = dataSnapshot.child("number_of_ratings").getValue().toString();
+                    math(officerCurrentAverage, numOfRatings, newValue);
                 }
 
                 @Override
@@ -176,43 +181,45 @@ public class SurveyActivity extends AppCompatActivity {
 
                 }
             });
-
-            //NOW FOR MATH
-            Toast.makeText(SurveyActivity.this, "OfficerAVG: " + officerCurrentAverage + " RATINGS: " + numOfRatings, Toast.LENGTH_SHORT).show();
-/*
-            double average = Double.parseDouble(officerCurrentAverage);
-            double totalRatings = Double.parseDouble(numOfRatings);
-            double newTotalRatings = totalRatings + 1;
-
-            double newAverage = (average * totalRatings + newValue) / (totalRatings + 1);
-
-            DecimalFormat df = new DecimalFormat("#.##");
-            //Toast.makeText(SurveyActivity.this, "New Average: " + df.format(newAverage), Toast.LENGTH_SHORT).show();
-
-            mDatabaseReference.child("number_of_ratings").setValue(newTotalRatings, new DatabaseReference.CompletionListener() {
-                @Override
-                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                    if (databaseError != null) {
-                        Toast.makeText(SurveyActivity.this, "Data could not be saved1 ", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(SurveyActivity.this, "Data saved successfully1.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
-            mDatabaseReference.child("avg_rating").setValue(df.format(newAverage), new DatabaseReference.CompletionListener() {
-                @Override
-                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                    if (databaseError != null) {
-                        System.out.println("Data could not be saved " + databaseError.getMessage());
-                    } else {
-                        System.out.println("Data saved successfully.");
-                    }
-                }
-            });
-*/
-
         }
+    }
+
+
+    private void startNextQuestion() {
+        Intent i = new Intent(this, AddCommentActivity.class);
+        i.putExtra("officer_firebase_reference", mDatabaseReference.toString());
+        startActivity(i);
+        finish();
+    }
+
+    private void math(String average, String num, int newValue) {
+        double ave = Double.parseDouble(average);
+        double totalRatings = Double.parseDouble(num);
+        double newTotalRatings = totalRatings + 1;
+
+        double newAverage = (ave * totalRatings + newValue) / (newTotalRatings);
+
+        DecimalFormat df = new DecimalFormat("#.##");
+
+        updateAverage(df.format(newAverage));
+        updateRatingNumber((int) newTotalRatings);  //It will be an integer
+
+    }
+
+    private void updateAverage(String average){
+        double ave = Double.parseDouble(average);
+        mDatabaseReference.child("avg_rating").setValue(ave);
+        mDatabaseReference.getParent().child("ratings").child("avg_rating").setValue(ave);
+    }
+
+    private void updateRatingNumber(int rating){
+        mDatabaseReference.getParent().child("ratings").child("number_of_ratings").setValue(rating);
+        mDatabaseReference.child("number_of_ratings").setValue(rating);
+    }
+
+    private void updateOpinionCount(String opinion) {
+        double opinCount = Integer.parseInt(opinion);
+        mDatabaseReference.getParent().child("ratings").child("no_opinion_count").setValue(opinCount + 1);
     }
 
 }

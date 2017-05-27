@@ -60,9 +60,6 @@ public class PreviousStopsActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_previousstops);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/avenir-next.ttf");
 

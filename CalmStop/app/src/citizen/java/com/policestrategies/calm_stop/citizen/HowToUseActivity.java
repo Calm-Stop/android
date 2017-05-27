@@ -25,9 +25,6 @@ public class HowToUseActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
-
         setContentView(R.layout.activity_howtouse);
 
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/avenir-next.ttf");

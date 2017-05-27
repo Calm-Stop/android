@@ -57,6 +57,12 @@ class StopManager {
         }
     }
 
+    void loadSurvey(){
+        Intent i = new Intent(mActivityReference, StopActivity.class);
+        i.putExtra("officer_firebase_reference", mDatabaseReference.toString());
+        mActivityReference.startActivity(i);
+    }
+
     private void loadIntentExtras() {
         Intent currentIntent = mActivityReference.getIntent();
         mOfficerDepartment = currentIntent.getExtras().getString("officer_department");

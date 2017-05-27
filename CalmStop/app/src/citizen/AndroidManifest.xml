@@ -25,28 +25,36 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".citizen.DocumentsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".citizen.HomepageActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".citizen.ProfileActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".citizen.ProfileDisplayActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
             android:name=".citizen.PreviousStopsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
             android:name=".citizen.HowToUseActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
             android:name=".citizen.AboutUsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
             android:name=".citizen.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
             android:name=".citizen.beacon_detection.BeaconDetectionActivity"
@@ -56,12 +64,18 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".citizen.stop.StopActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".DocumentViewActivity" />
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".DocumentViewActivity"/>
+
         <activity
             android:name=".citizen.stop.SurveyActivity"
             android:label="@string/title_activity_survey"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".citizen.stop.AddCommentActivity"
+            android:label="@string/title_activity_add_comment"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

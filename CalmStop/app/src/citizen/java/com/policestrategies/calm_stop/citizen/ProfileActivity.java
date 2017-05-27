@@ -101,11 +101,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_profile);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
 
         mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
 
@@ -173,6 +170,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 genderSetter.setSelection(getGen(Gender));
 
                 loadProfileImage();
+
                 SharedUtil.dismissProgressDialog(mProgressDialog);
             }
 

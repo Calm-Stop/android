@@ -91,11 +91,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_profiledisplay);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
 
         mProfileImageView = (ImageView) findViewById(R.id.profilePicture);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

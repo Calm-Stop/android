@@ -50,8 +50,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
     private View navigView;
 
-    private ProgressDialog mProgressDialog;
-
     private FirebaseUser mCurrentUser;
     private DatabaseReference mProfileReference;
 
@@ -61,10 +59,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
-
-        ActionBar actionBar = getSupportActionBar();
-        ;
-        actionBar.hide();
 
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/avenir-next.ttf");
 
