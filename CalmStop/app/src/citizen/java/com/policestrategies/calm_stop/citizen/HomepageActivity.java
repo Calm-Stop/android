@@ -1,9 +1,17 @@
 package com.policestrategies.calm_stop.citizen;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +19,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,19 +33,23 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
-import com.policestrategies.calm_stop.SharedUtil;
 import com.policestrategies.calm_stop.chat.ChatActivity;
 import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
 import com.policestrategies.calm_stop.citizen.stop.StopActivity;
+
+import java.io.File;
+import java.io.IOException;
 
 public class HomepageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout mDrawerLayout;
     private TextView mProfileName;
+    private ImageView mProfileImage;
     private TextView Title;
 
-    private ProgressDialog mProgressDialog;
+    private View navigView;
 
+    private ProgressDialog mProgressDialog;
 
     private FirebaseUser mCurrentUser;
     private DatabaseReference mProfileReference;
@@ -58,16 +70,15 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         Title = (TextView) findViewById(R.id.WelcomeTitle);
 
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View drawermenu = inflater.inflate(R.layout.nav_header_main, null);
-
-        mProfileName = (TextView) drawermenu.findViewById(R.id.nameDisplay);
-
-        Title.setTypeface(custom_font);
+        navigView = navigationView.getHeaderView(0);
+        mProfileImage = (ImageView) navigView.findViewById(R.id.imageView);
+        mProfileName = (TextView) navigView.findViewById(R.id.nameDisplay);
         mProfileName.setTypeface(custom_font);
 
-        mProfileName.setText("WHYYYY");
+        Title.setTypeface(custom_font);
+
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+
         if (mCurrentUser == null) {
             FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(this, LoginActivity.class);
@@ -87,8 +98,8 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                 String lastName = snapshot.child("last_name").getValue().toString();
 
                 String name = firstName + " " + lastName;
-                //FIXME
                 mProfileName.setText(name);
+                loadProfileImage();
 
                 //SharedUtil.dismissProgressDialog(mProgressDialog);
             }
@@ -219,6 +230,29 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         i.putExtra("officer_id", "Tl4pCcIjlxTXQgCcoLp4IB4Hzti2");
         i.putExtra("stop_id", "-Kj9XharhDa88IxXePwx");
         startActivity(i);
+    }
+
+
+    private void loadProfileImage() {
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("ProfilePic", Context.MODE_PRIVATE);
+
+        String path = directory.getAbsolutePath();
+        File f = new File(path, "profilepic.JPG");
+        if(convertUriToBitmap(Uri.fromFile(f)) != null)
+            mProfileImage.setImageBitmap(convertUriToBitmap(Uri.fromFile(f)));
+    }
+
+    private Bitmap convertUriToBitmap(Uri data) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
 }
