@@ -101,11 +101,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_profile);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
 
         mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
 
@@ -136,6 +133,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         Title.setTypeface(custom_font);
 
+        //Toast.makeText(ProfileActivity.this, "Error1", Toast.LENGTH_SHORT).show();
         if (mCurrentUser == null) {
             FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(this, LoginActivity.class);
@@ -144,50 +142,52 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         } else {
             mProfileReference = FirebaseDatabase.getInstance().getReference("citizen")
                     .child(mCurrentUser.getUid()).child("profile");
-
         }
 
         mProfileReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        String zip = snapshot.child("zip_code").getValue().toString();
-                        String email = snapshot.child("email").getValue().toString();
-                        String firstName = snapshot.child("first_name").getValue().toString();
-                        String lastName = snapshot.child("last_name").getValue().toString();
-                        String license = snapshot.child("license_number").getValue().toString();
-                        String phoneNumber = snapshot.child("phone_number").getValue().toString();
-                        String dateOfBirth = snapshot.child("dob").getValue().toString();
-                        Language = snapshot.child("language").getValue().toString();
-                        Ethnicity = snapshot.child("ethnicity").getValue().toString();
-                        Gender = snapshot.child("gender").getValue().toString();
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                String zip = snapshot.child("zip_code").getValue().toString();
+                String email = snapshot.child("email").getValue().toString();
+                String firstName = snapshot.child("first_name").getValue().toString();
+                String lastName = snapshot.child("last_name").getValue().toString();
+                String license = snapshot.child("license_number").getValue().toString();
+                String phoneNumber = snapshot.child("phone_number").getValue().toString();
+                String dateOfBirth = snapshot.child("dob").getValue().toString();
+                Language = snapshot.child("language").getValue().toString();
+                Ethnicity = snapshot.child("ethnicity").getValue().toString();
+                Gender = snapshot.child("gender").getValue().toString();
 
-                        mZipField.setText(zip);
-                        mEmailField.setText(email);
-                        mFirstNameField.setText(firstName);
-                        mLastNameField.setText(lastName);
-                        mLicenseNumberField.setText(license);
-                        mPhoneNumberField.setText(phoneNumber);
-                        mDateOfBirthField.setText(dateOfBirth);
-                        languageSetter.setSelection(getLang(Language));
-                        ethnicitySetter.setSelection(getEth(Ethnicity));
-                        genderSetter.setSelection(getGen(Gender));
+                mZipField.setText(zip);
+                mEmailField.setText(email);
+                mFirstNameField.setText(firstName);
+                mLastNameField.setText(lastName);
+                mLicenseNumberField.setText(license);
+                mPhoneNumberField.setText(phoneNumber);
+                mDateOfBirthField.setText(dateOfBirth);
+                languageSetter.setSelection(getLang(Language));
+                ethnicitySetter.setSelection(getEth(Ethnicity));
+                genderSetter.setSelection(getGen(Gender));
 
-                        loadProfileImage();
+                loadProfileImage();
 
-                        SharedUtil.dismissProgressDialog(mProgressDialog);
-                    }
+                SharedUtil.dismissProgressDialog(mProgressDialog);
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        Log.e(TAG, "Failed to read app title value.", error.toException());
-                    }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.e(TAG, "Failed to read app title value.", error.toException());
+            }
 
-                });
+        });
+        //Toast.makeText(ProfileActivity.this, "LANGUAGE: " + Language + Ethnicity + Gender, Toast.LENGTH_SHORT).show();
 
         setUpCalendar();
         setUpGenderSetter();
         setUpEthnicitySetter();
         setUpLanguageSetter();
+
+        //Toast.makeText(ProfileActivity.this, "Error3", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -287,6 +287,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 //i_ethnicity = position;
                 Ethnicity = ethnicityAdapter.getItem(position).toString();
             }
+
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });

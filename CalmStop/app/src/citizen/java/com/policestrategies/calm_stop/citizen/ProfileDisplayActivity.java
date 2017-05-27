@@ -20,6 +20,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -90,11 +91,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_profiledisplay);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
 
         mProfileImageView = (ImageView) findViewById(R.id.profilePicture);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -102,6 +99,11 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/avenir-next.ttf");
+
+        navigView = navigationView.getHeaderView(0);
+        mProfileImage = (ImageView) navigView.findViewById(R.id.imageView);
+        mProfileName = (TextView) navigView.findViewById(R.id.nameDisplay);
+        mProfileName.setTypeface(custom_font);
 
         Name = (TextView) findViewById(R.id.Nametxt);
         Email = (TextView) findViewById(R.id.Emailtxt);
@@ -145,7 +147,6 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         } else {
             mProfileReference = FirebaseDatabase.getInstance().getReference("citizen")
                     .child(mCurrentUser.getUid()).child("profile");
-
         }
 
         customizeFont(custom_font);
@@ -213,8 +214,8 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                         break;
                 }
 
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
+                //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                //drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
@@ -255,6 +256,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         Langtxt.setTypeface(custom_font);
         Gendertxt.setTypeface(custom_font);
         Ethntxt.setTypeface(custom_font);
+        mProfileName.setTypeface(custom_font);
 
         Name.setTextColor(getResources().getColor(R.color.black));
         Name.setTypeface(custom_font);

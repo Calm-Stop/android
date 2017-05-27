@@ -61,11 +61,8 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
-
         setContentView(R.layout.activity_about_us);
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/avenir-next.ttf");
 
