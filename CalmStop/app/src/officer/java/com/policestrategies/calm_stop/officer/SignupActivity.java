@@ -166,7 +166,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             officerDatabaseRef.child("last_name").setValue(lastname);
                             officerDatabaseRef.child("gender").setValue(i_gender);
                             officerDatabaseRef.child("department").setValue(department);
-                            officerDatabaseRef.child("badge").setValue(badge);
+                            officerDatabaseRef.child("badge_number").setValue(badge);
 
                             String photoPath;
                             if (i_gender == 0) {
