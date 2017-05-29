@@ -113,7 +113,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                     case R.id.menu_main:
                         mDrawerLayout.openDrawer(Gravity.LEFT);
                         break;
-
                 }
 
             }

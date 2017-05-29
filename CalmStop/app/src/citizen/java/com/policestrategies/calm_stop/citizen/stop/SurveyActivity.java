@@ -67,16 +67,7 @@ public class SurveyActivity extends AppCompatActivity {
         question1.setTypeface(custom_font);
         title.setTypeface(custom_font);
 
-        //hardcoded
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("officer")
-                .child("14567").child("Tl4pCcIjlxTXQgCcoLp4IB4Hzti2").child("profile");
-
-        /* USE THIS ONCE PROPERLY IMPLEMENTED:
          loadOfficerReference();
-         */
-
-        //Toast.makeText(this, "mDatabase: " + mDatabaseReference.toString(), Toast.LENGTH_SHORT).show();
-
 
         /* Get Officer info from Firebase */
         mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -88,7 +79,7 @@ public class SurveyActivity extends AppCompatActivity {
                 badgeNumber = dataSnapshot.child("badge").getValue().toString();
                 photoURL = dataSnapshot.child("photo").getValue().toString();
 
-                Toast.makeText(getApplicationContext(), "officerNAme: " + officerName + " ", LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "officerNAme: " + officerName + " ", LENGTH_SHORT).show();
 
                 officerInfo.setText(" Officer " + officerName + "\n#" + badgeNumber + "\nPolice Department: " + departmentNumber);
                 question1.setText("Please rate your encounter with Officer " + lastName);
@@ -117,8 +108,9 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
     private void loadOfficerReference() {
-        Intent currentIntent = mActivityReference.getIntent();
-        mDatabaseReference = (DatabaseReference) currentIntent.getExtras().get("officer_firebase_reference");
+        Intent currentIntent = getIntent();
+        String officerURL = currentIntent.getExtras().getString("officer_firebase_reference");
+        mDatabaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(officerURL);
     }
 
     private void setUpQuestion(){
@@ -183,7 +175,6 @@ public class SurveyActivity extends AppCompatActivity {
             });
         }
     }
-
 
     private void startNextQuestion() {
         Intent i = new Intent(this, AddCommentActivity.class);

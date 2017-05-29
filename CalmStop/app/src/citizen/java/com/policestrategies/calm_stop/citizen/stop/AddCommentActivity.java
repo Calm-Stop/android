@@ -17,9 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.citizen.HomepageActivity;
-import com.policestrategies.calm_stop.citizen.HowToUseActivity;
 
 import org.w3c.dom.Text;
 
@@ -32,8 +32,6 @@ public class AddCommentActivity extends AppCompatActivity implements View.OnClic
     private TextView response;
     private Button submit;
     private Button home;
-
-    private Activity mActivityReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,23 +86,15 @@ public class AddCommentActivity extends AppCompatActivity implements View.OnClic
 
 
     private void submitComment() {
-
         //save comment
-        //Intent currentIntent = mActivityReference.getIntent();
-        //DatabaseReference officer = (DatabaseReference) currentIntent.getExtras().get("officer_firebase_reference");
-
-        //Toast.makeText(getApplicationContext(), "database: " + officer, Toast.LENGTH_SHORT).show();
-
-        //officer.getParent().child("comments").setValue(comments.getText().toString());
-
+        Intent currentIntent = getIntent();
+        String officerRef = currentIntent.getExtras().getString("officer_firebase_reference");
+        DatabaseReference mOfficerReference = FirebaseDatabase.getInstance().getReferenceFromUrl(officerRef);
+        mOfficerReference.getParent().child("comments").push().child("text").setValue(comments.getText().toString());
         comments.setVisibility(View.INVISIBLE);
         submit.setVisibility(View.INVISIBLE);
 
         response.setVisibility(View.VISIBLE);
-
-
-
-
     }
 
 }
