@@ -49,7 +49,6 @@ public class SurveyActivity extends AppCompatActivity {
 
     private static final String TAG = "SurveyActivity";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +66,10 @@ public class SurveyActivity extends AppCompatActivity {
         question1.setTypeface(custom_font);
         title.setTypeface(custom_font);
 
-         loadOfficerReference();
+         //loadOfficerReference();
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("officer")
+                .child("007").child("keaKL66wJjTDGae0cLcTKMC7zMt1").child("profile");
 
         /* Get Officer info from Firebase */
         mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
