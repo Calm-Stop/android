@@ -153,11 +153,10 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
             case R.id.survey:
                 survey();
                 break;
-
             case R.id.logout:
                 logout();
                 break;
-
+/*
             case R.id.detect_beacon_debug:
                 detectBeacon();
                 break;
@@ -169,7 +168,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
             case R.id.stop_activity_debug:
                 debugStop();
                 break;
-
+*/
         }
 
         return true;

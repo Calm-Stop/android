@@ -217,7 +217,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 //WRITE TO FIREBASE
                 updateFName(firstName);
                 updateLName(lastName);
-                updatePhoto();
+                //updatePhoto();
                 updatePhoneNumber(phoneNumber);
                 updateEmail(email);
                 updateLicense(license);
