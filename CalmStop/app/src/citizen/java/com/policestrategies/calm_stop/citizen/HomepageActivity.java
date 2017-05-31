@@ -17,7 +17,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,6 +35,7 @@ import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.chat.ChatActivity;
 import com.policestrategies.calm_stop.citizen.beacon_detection.BeaconDetectionActivity;
 import com.policestrategies.calm_stop.citizen.stop.StopActivity;
+import com.policestrategies.calm_stop.citizen.stop.SurveyActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,12 +44,11 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
     private DrawerLayout mDrawerLayout;
     private TextView mProfileName;
+
     private ImageView mProfileImage;
     private TextView Title;
 
     private View navigView;
-
-    private ProgressDialog mProgressDialog;
 
     private FirebaseUser mCurrentUser;
     private DatabaseReference mProfileReference;
@@ -61,10 +60,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
-        ActionBar actionBar = getSupportActionBar();;
-        actionBar.hide();
-
-        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/avenir-next.ttf");
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/avenir-next.ttf");
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -76,7 +72,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         mProfileName.setTypeface(custom_font);
 
         Title.setTypeface(custom_font);
-
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (mCurrentUser == null) {
@@ -87,7 +82,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         } else {
             mProfileReference = FirebaseDatabase.getInstance().getReference("citizen")
                     .child(mCurrentUser.getUid()).child("profile");
-
         }
 
         //mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
@@ -100,7 +94,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                 String name = firstName + " " + lastName;
                 mProfileName.setText(name);
                 loadProfileImage();
-
                 //SharedUtil.dismissProgressDialog(mProgressDialog);
             }
 
@@ -116,11 +109,10 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         findViewById(R.id.menu_main).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch(v.getId()) {
+                switch (v.getId()) {
                     case R.id.menu_main:
                         mDrawerLayout.openDrawer(Gravity.LEFT);
                         break;
-
                 }
 
             }
@@ -141,7 +133,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
 
             case R.id.profile:
                 profile();
@@ -157,6 +149,9 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
             case R.id.settings:
                 settings();
+                break;
+            case R.id.survey:
+                survey();
                 break;
 
             case R.id.logout:
@@ -197,6 +192,12 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         finish();
     }
 
+    private void survey(){
+        Intent i = new Intent(getBaseContext(), SurveyActivity.class);
+        startActivity(i);
+        finish();
+    }
+
     private void settings() {
         Intent i = new Intent(getBaseContext(), SettingsActivity.class);
         startActivity(i);
@@ -211,7 +212,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         finish();
     }
 
-    private void detectBeacon(){
+    private void detectBeacon() {
         Intent i = new Intent(this, BeaconDetectionActivity.class);
         startActivity(i);
         finish();
@@ -231,7 +232,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         i.putExtra("stop_id", "-Kj9XharhDa88IxXePwx");
         startActivity(i);
     }
-
 
     private void loadProfileImage() {
 

@@ -16,8 +16,8 @@
             android:title="Settings" />
 
         <item
-            android:checkable="false"
-            android:enabled="false"/>
+            android:id="@+id/survey"
+            android:title="Survey" />
 
         <item
             android:id="@+id/logout"

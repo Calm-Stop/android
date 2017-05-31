@@ -7,4 +7,6 @@
     <color name="starColor">#F6A623</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="grey">#fecfd0ca</color>
+    <color name="lightGrey">#f4f4f4</color>
 </resources>
