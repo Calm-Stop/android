@@ -243,7 +243,6 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
 
         //saving image into internal storage
         try {
-            //myfile.createNewFile();
             fo = new FileOutputStream(mypath);
             fo.write(byteArray);
             fo.flush();
