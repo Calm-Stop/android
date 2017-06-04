@@ -201,7 +201,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 Intent i = getIntent();
                 startActivity(i);
                 finish();
-                
+
                 break;
 
             case R.id.profilePicture:

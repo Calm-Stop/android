@@ -72,6 +72,9 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         mProfileName.setTypeface(custom_font);
 
         Title.setTypeface(custom_font);
+        Title.setText("\n\n\n\nWelcome Back, Driver \n" +
+                "Remember to drive safely!");
+        Title.setTextSize(25);
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (mCurrentUser == null) {
@@ -150,9 +153,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
             case R.id.settings:
                 settings();
                 break;
-            case R.id.survey:
-                survey();
-                break;
+
             case R.id.logout:
                 logout();
                 break;
