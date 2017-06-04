@@ -144,9 +144,9 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
                     case R.id.logout:
                         logout();
                         break;
-                    case R.id.detect_beacon_debug:
+                    /*case R.id.detect_beacon_debug:
                         detectBecon();
-                        break;
+                        break;*/
                 }
 
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

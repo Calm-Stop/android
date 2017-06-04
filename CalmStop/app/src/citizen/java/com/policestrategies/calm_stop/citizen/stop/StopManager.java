@@ -105,8 +105,4 @@ class StopManager {
         return (mThreadId != null && !mThreadId.isEmpty());
     }
 
-    public static DatabaseReference getOfficerReference(){
-        return officerProfileRef;
-    }
-
 } // end class StopManager
