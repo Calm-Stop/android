@@ -3,6 +3,7 @@ package com.policestrategies.calm_stop.officer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -56,6 +57,7 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
         ratingDigits = (TextView) findViewById(R.id.star_rating_digits);
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        //((BottomNavigationMenuView) bottomNavigationView.getChildAt(0)).getChildAt(1).performClick();
         Log.d(TAG, "comments array:" + comments_array);
 
 
@@ -156,7 +158,6 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
-
         updateNavigationMenuSelection(1);
     }
 
@@ -190,10 +191,7 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void updateNavigationMenuSelection(int menu) {
-        for (int i = 0; i < 4; i++) {
-            MenuItem item = bottomNavigationView.getMenu().getItem(i);
-            item.setChecked(i == menu);
-        }
+        ((BottomNavigationMenuView) bottomNavigationView.getChildAt(0)).getChildAt(menu).performClick();
     }
 
 } // end RatingActivity
