@@ -66,10 +66,7 @@ public class SurveyActivity extends AppCompatActivity {
         question1.setTypeface(custom_font);
         title.setTypeface(custom_font);
 
-         //loadOfficerReference();
-
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("officer")
-                .child("007").child("keaKL66wJjTDGae0cLcTKMC7zMt1").child("profile");
+         loadOfficerReference();
 
         /* Get Officer info from Firebase */
         mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
