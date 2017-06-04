@@ -124,9 +124,9 @@ public class PreviousStopsActivity extends AppCompatActivity implements View.OnC
                     case R.id.logout:
                         logout();
                         break;
-                    case R.id.detect_beacon_debug:
+                    /*case R.id.detect_beacon_debug:
                         detectBecon();
-                        break;
+                        break; */
                 }
 
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

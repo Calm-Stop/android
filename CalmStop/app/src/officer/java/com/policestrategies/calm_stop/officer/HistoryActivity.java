@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.officer.dashboard.DashboardActivity;
@@ -52,7 +53,6 @@ public class HistoryActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
-
         updateNavigationMenuSelection(2);
     }
 
@@ -84,10 +84,17 @@ public class HistoryActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateNavigationMenuSelection(int menu) {
+        MenuItem item;
         for (int i = 0; i < 4; i++) {
-            MenuItem item = bottomNavigationView.getMenu().getItem(i);
-            item.setChecked(i == menu);
+            //item
+            item = bottomNavigationView.getMenu().getItem(i);
+            //item.getItemId();
+
+            Toast.makeText(this, "MENU: " + item.getItemId(), Toast.LENGTH_SHORT).show();
+            item.setChecked(menu == i);
+            item.expandActionView();
         }
+        //item.expandActionView();
     }
 
 } // end HistoryActivity
