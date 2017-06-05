@@ -3,13 +3,17 @@ package com.policestrategies.calm_stop.officer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.officer.dashboard.DashboardActivity;
+
+import static java.lang.Boolean.TRUE;
 
 public class HistoryActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -20,9 +24,11 @@ public class HistoryActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-
-
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -52,7 +58,6 @@ public class HistoryActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
-
         updateNavigationMenuSelection(2);
     }
 
@@ -84,10 +89,8 @@ public class HistoryActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateNavigationMenuSelection(int menu) {
-        for (int i = 0; i < 4; i++) {
-            MenuItem item = bottomNavigationView.getMenu().getItem(i);
-            item.setChecked(i == menu);
-        }
+        ((BottomNavigationMenuView) bottomNavigationView.getChildAt(0)).getChildAt(menu).performClick();
+
     }
 
 } // end HistoryActivity

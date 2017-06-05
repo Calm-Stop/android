@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -103,12 +104,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-
         mProgressDialog = ProgressDialog.show(this, "", "Loading", true, false);
 
         Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/avenir-next.ttf");
 
         TextView Title = (TextView) findViewById(R.id.title);
+        Title.setTypeface(custom_font);
 
         mFirstNameField = (EditText)findViewById(R.id.profile_input_firstname);
         mLastNameField = (EditText)findViewById(R.id.profile_input_lastname);
@@ -131,9 +132,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        Title.setTypeface(custom_font);
-
-        //Toast.makeText(ProfileActivity.this, "Error1", Toast.LENGTH_SHORT).show();
         if (mCurrentUser == null) {
             FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(this, LoginActivity.class);
@@ -180,14 +178,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
 
         });
-        //Toast.makeText(ProfileActivity.this, "LANGUAGE: " + Language + Ethnicity + Gender, Toast.LENGTH_SHORT).show();
 
         setUpCalendar();
         setUpGenderSetter();
         setUpEthnicitySetter();
         setUpLanguageSetter();
-
-        //Toast.makeText(ProfileActivity.this, "Error3", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -201,33 +196,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         switch(v.getId()) {
 
             case R.id.savebutton:
+                saveAll();
 
-                String firstName = mFirstNameField.getText().toString();
-                String lastName = mLastNameField.getText().toString();
-                String email = mEmailField.getText().toString();
-                String phoneNumber = mPhoneNumberField.getText().toString();
-                String license = mLicenseNumberField.getText().toString();
-                String zip = mZipField.getText().toString();
-                String dob = mDateOfBirthField.getText().toString();
+                Intent i = getIntent();
+                startActivity(i);
+                finish();
 
-                if (!validateInput(email, license, firstName, lastName, phoneNumber, zip, dob)) {
-                    return;
-                }
-
-                //WRITE TO FIREBASE
-                updateFName(firstName);
-                updateLName(lastName);
-                updatePhoto();
-                updatePhoneNumber(phoneNumber);
-                updateEmail(email);
-                updateLicense(license);
-                updateZip(zip);
-                updateDOB(dob);
-                updateLanguage(Language);
-                updateGender(Gender);
-                updateEthnicity(Ethnicity);
-
-                recreate();
                 break;
 
             case R.id.profilePicture:
@@ -243,11 +217,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == chosenImage && resultCode == RESULT_OK && data != null){
             mUserPhoto = data.getData();
+            mImageView.setImageURI(mUserPhoto);
 
-            Bitmap myImage = convertUriToBitmap(mUserPhoto);
-            myImage = getRoundedShape(myImage);
-
-            mImageView.setImageBitmap(myImage);
         }
         else
             Toast.makeText(ProfileActivity.this, "Error", Toast.LENGTH_LONG).show();
@@ -345,6 +316,36 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         authen.show();
     }
 
+    private void saveAll(){
+
+        String firstName = mFirstNameField.getText().toString();
+        String lastName = mLastNameField.getText().toString();
+        String email = mEmailField.getText().toString();
+        String phoneNumber = mPhoneNumberField.getText().toString();
+        String license = mLicenseNumberField.getText().toString();
+        String zip = mZipField.getText().toString();
+        String dob = mDateOfBirthField.getText().toString();
+
+        if (!validateInput(email, license, firstName, lastName, phoneNumber, zip, dob)) {
+            return;
+        }
+
+        //WRITE TO FIREBASE
+        updateFName(firstName);
+        updateLName(lastName);
+        updatePhoto();
+        updatePhoneNumber(phoneNumber);
+        updateEmail(email);
+        updateLicense(license);
+        updateZip(zip);
+        updateDOB(dob);
+        updateLanguage(Language);
+        updateGender(Gender);
+        updateEthnicity(Ethnicity);
+
+    }
+
+
     private void updateEmail(String email) {
         mCurrentUser.updateEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -358,9 +359,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 throw task.getException();
                             }
                             catch (FirebaseAuthRecentLoginRequiredException e){
-
                                 authentication();
-
                                 AuthCredential credential = EmailAuthProvider
                                         .getCredential(valueEmail, valuePassword );
                                 mCurrentUser.reauthenticate(credential)
@@ -382,24 +381,26 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     private void updatePhoto() {
-        mProfileReference.child("photo").setValue(mUserPhoto);
-        saveProfileImage(mUserPhoto);
-        UserProfileChangeRequest updatePhoto = new UserProfileChangeRequest.Builder()
-                .setPhotoUri(mUserPhoto)
-                .build();
+        if(mUserPhoto != null) {
+            saveProfileImage(mUserPhoto);
+            mProfileReference.child("photo").setValue(mUserPhoto);
+            UserProfileChangeRequest updatePhoto = new UserProfileChangeRequest.Builder()
+                    .setPhotoUri(mUserPhoto)
+                    .build();
 
-        mCurrentUser.updateProfile(updatePhoto)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User profile updated.");
+            mCurrentUser.updateProfile(updatePhoto)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "User profile updated.");
+                            } else
+                                Toast.makeText(ProfileActivity.this, "Error Uploading Image",
+                                        Toast.LENGTH_LONG).show();
                         }
-                        else
-                            Toast.makeText(ProfileActivity.this, "Error Uploading Image",
-                                    Toast.LENGTH_LONG).show();
-                    }
-                });
+                    });
+        }
+
     }
 
 
@@ -598,29 +599,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         return 2;
     }
 
-    public Bitmap getRoundedShape(Bitmap scaleBitmapImage) {
-        int targetWidth = 500;
-        int targetHeight = 500;
-        Bitmap targetBitmap = Bitmap.createBitmap(targetWidth,
-                targetHeight,Bitmap.Config.ARGB_8888);
-
-        Canvas canvas = new Canvas(targetBitmap);
-        Path path = new Path();
-        path.addCircle(((float) targetWidth - 1) / 2,
-                ((float) targetHeight - 1) / 2,
-                (Math.min(((float) targetWidth),
-                        ((float) targetHeight)) / 2),
-                Path.Direction.CCW);
-
-        canvas.clipPath(path);
-        Bitmap sourceBitmap = scaleBitmapImage;
-        canvas.drawBitmap(sourceBitmap,
-                new Rect(0, 0, sourceBitmap.getWidth(),
-                        sourceBitmap.getHeight()),
-                new Rect(0, 0, targetWidth, targetHeight), null);
-        return targetBitmap;
-    }
-
     private void saveProfileImage(Uri data){
         Bitmap image = convertUriToBitmap(data);
 
@@ -661,13 +639,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private void loadProfileImage() {
 
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        // path to /data/data/yourapp/app_data/imageDir
         File directory = cw.getDir("ProfilePic", Context.MODE_PRIVATE);
 
         String path = directory.getAbsolutePath();
         File f = new File(path, "profilepic.JPG");
-        //mProfileFilePath = f.toString();
-        mImageView.setImageBitmap(getRoundedShape(convertUriToBitmap(Uri.fromFile(f))));
+        if(convertUriToBitmap(Uri.fromFile(f)) != null)
+            mImageView.setImageBitmap(convertUriToBitmap(Uri.fromFile(f)));
     }
 
 

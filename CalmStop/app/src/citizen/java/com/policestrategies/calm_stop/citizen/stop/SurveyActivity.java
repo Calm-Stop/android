@@ -49,7 +49,6 @@ public class SurveyActivity extends AppCompatActivity {
 
     private static final String TAG = "SurveyActivity";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

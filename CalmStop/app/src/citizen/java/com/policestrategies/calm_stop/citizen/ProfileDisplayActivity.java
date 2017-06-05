@@ -209,9 +209,9 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                     case R.id.logout:
                         logout();
                         break;
-                    case R.id.detect_beacon_debug:
+                    /*case R.id.detect_beacon_debug:
                         detectBecon();
-                        break;
+                        break; */
                 }
 
                 //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -361,6 +361,8 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
             mProfileImageView.setImageBitmap(convertUriToBitmap(Uri.fromFile(f)));
             mProfileImage.setImageBitmap(convertUriToBitmap(Uri.fromFile(f)));
         }
+        else
+            Toast.makeText(this, "whyyyyy", Toast.LENGTH_SHORT).show();
     }
 
     private Bitmap convertUriToBitmap(Uri data) {

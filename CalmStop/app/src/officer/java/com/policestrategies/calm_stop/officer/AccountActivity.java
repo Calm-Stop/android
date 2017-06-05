@@ -3,6 +3,7 @@ package com.policestrategies.calm_stop.officer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -21,6 +22,10 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
@@ -61,7 +66,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
-
         updateNavigationMenuSelection(3);
     }
 
@@ -142,10 +146,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private void account() {}
 
     private void updateNavigationMenuSelection(int menu) {
-        for (int i = 0; i < 4; i++) {
-            MenuItem item = bottomNavigationView.getMenu().getItem(i);
-            item.setChecked(i == menu);
-        }
+        ((BottomNavigationMenuView) bottomNavigationView.getChildAt(0)).getChildAt(menu).performClick();
     }
 
 } // end AccountActivity

@@ -94,7 +94,6 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onResume() {
         super.onResume();
-        updateNavigationMenuSelection(0);
     }
 
     @Override
@@ -273,13 +272,6 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                         return true;
                     }
                 });
-    }
-
-    private void updateNavigationMenuSelection(int menu) {
-        for (int i = 0; i < 4; i++) {
-            MenuItem item = mBottomNavigationView.getMenu().getItem(i);
-            item.setChecked(i == menu);
-        }
     }
 
 } // end DashboardActivity
