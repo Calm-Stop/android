@@ -298,7 +298,7 @@ public class DocumentsActivity extends AppCompatActivity implements View.OnClick
     private boolean ImageToFirebase(String imageType) {
         //Error checking: if file doesn't exist, error out
         if (mStopID.equalsIgnoreCase("tempStopID")) {
-            Toast.makeText(this, "Officer not available to receive documents", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No officer to receive documents", Toast.LENGTH_SHORT).show();
             return false;
         }
         File tmpfile;
