@@ -67,6 +67,8 @@ public class DocviewActivity extends AppCompatActivity implements View.OnClickLi
 
     private boolean waitDocs() {
         mProgressDialog.setMessage("Waiting for Images");
+        //TODO: check firebase boolean variable to see if citizen has pressed sendDoc buttons
+        //TODO: send citizen prompt to send documents
         SetImage(mLicenseImageView, "license");
         SetImage(mRegistrationImageView, "registration");
         SetImage(mInsuranceImageView, "insurance");
