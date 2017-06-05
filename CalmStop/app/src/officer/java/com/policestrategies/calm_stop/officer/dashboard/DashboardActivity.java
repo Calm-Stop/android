@@ -124,7 +124,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
 
     private void manageBeacon() {
-        Intent i = new Intent(getBaseContext(), DocviewActivity.class);
+        Intent i = new Intent(getBaseContext(), BeaconRegistrationActivity.class);
         startActivity(i);
         finish();
     }
