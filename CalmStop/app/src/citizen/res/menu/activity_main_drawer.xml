@@ -23,6 +23,10 @@
             android:title="Logout" />
 <!--
         <item
+            android:id="@+id/image_upload_debug"
+            android:title="DEBUG - Image Upload"  />
+
+        <item
             android:id="@+id/detect_beacon_debug"
             android:title="DEBUG - Beacon Detection" />
 

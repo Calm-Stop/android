@@ -32,6 +32,9 @@
             android:name=".officer.AccountActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".officer.ImageActivity" />
+
+        <activity
             android:name=".officer.RatingActivity"
             android:screenOrientation="portrait" />
         <activity

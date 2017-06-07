@@ -24,6 +24,10 @@
             android:name=".citizen.SignupActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".citizen.UploadActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".citizen.DocumentsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>

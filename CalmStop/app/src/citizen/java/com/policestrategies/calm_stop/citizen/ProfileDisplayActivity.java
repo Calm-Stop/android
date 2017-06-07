@@ -177,7 +177,7 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
                 Lang.setText(language);
                 mProfileName.setText(name);
 
-                loadProfileImage();
+                //loadProfileImage();
 
                 SharedUtil.dismissProgressDialog(mProgressDialog);
             }
@@ -374,5 +374,4 @@ public class ProfileDisplayActivity extends AppCompatActivity implements View.On
         }
         return bitmap;
     }
-
 }

@@ -28,6 +28,7 @@ import com.policestrategies.calm_stop.BeaconSimulator;
 import com.policestrategies.calm_stop.R;
 import com.policestrategies.calm_stop.SharedUtil;
 import com.policestrategies.calm_stop.officer.AccountActivity;
+import com.policestrategies.calm_stop.officer.DocviewActivity;
 import com.policestrategies.calm_stop.officer.HistoryActivity;
 import com.policestrategies.calm_stop.officer.RatingActivity;
 import com.policestrategies.calm_stop.officer.beacon_registration.BeaconRegistrationActivity;
