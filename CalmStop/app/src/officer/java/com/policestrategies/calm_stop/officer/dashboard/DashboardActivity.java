@@ -259,14 +259,9 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                                 break;
 
                             case R.id.action_history:
-                                intent = new Intent(getBaseContext(), SurveyActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(intent);
-                                /*
                                 intent = new Intent(getBaseContext(), HistoryActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(intent);
-                                */
                                 break;
 
                             case R.id.action_account:
