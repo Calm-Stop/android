@@ -1,12 +1,10 @@
-package com.policestrategies.calm_stop.citizen.stop;
+package com.policestrategies.calm_stop.citizen.Survey;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +12,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,12 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.policestrategies.calm_stop.R;
-import com.policestrategies.calm_stop.SharedUtil;
 
 import java.text.DecimalFormat;
-
-import static android.widget.Toast.LENGTH_SHORT;
-import static com.policestrategies.calm_stop.R.id.question1;
 
 public class SurveyActivity extends AppCompatActivity {
 
@@ -98,7 +91,7 @@ public class SurveyActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.submitButton:
-                        recalculateAverage(rating);
+                        recalculateAverage();
                         startNextQuestion();
                         break;
                 }
@@ -176,7 +169,7 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
     private void startNextQuestion() {
-        Intent i = new Intent(this, AddCommentActivity.class);
+        Intent i = new Intent(this, com.policestrategies.calm_stop.citizen.Survey.AddCommentActivity.class);
         i.putExtra("officer_firebase_reference", mDatabaseReference.toString());
         startActivity(i);
         finish();

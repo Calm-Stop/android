@@ -1,4 +1,4 @@
-package com.policestrategies.calm_stop.citizen.stop;
+package com.policestrategies.calm_stop.citizen.Survey;
 
 import android.app.Activity;
 import android.content.Intent;

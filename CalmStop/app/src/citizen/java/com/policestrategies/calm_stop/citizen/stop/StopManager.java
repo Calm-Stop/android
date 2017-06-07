@@ -58,7 +58,7 @@ class StopManager {
     }
 
     void loadSurvey(){
-        Intent i = new Intent(mActivityReference, StopActivity.class);
+        Intent i = new Intent(mActivityReference, com.policestrategies.calm_stop.citizen.survey.SurveyActivity.class);
         i.putExtra("officer_firebase_reference", mDatabaseReference.toString());
         mActivityReference.startActivity(i);
     }

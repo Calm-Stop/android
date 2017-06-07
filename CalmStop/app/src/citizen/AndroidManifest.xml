@@ -69,11 +69,11 @@
         <activity android:name=".DocumentViewActivity"/>
 
         <activity
-            android:name=".citizen.stop.SurveyActivity"
+            android:name=".citizen.Survey.SurveyActivity"
             android:label="@string/title_activity_survey"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".citizen.stop.AddCommentActivity"
+            android:name=".citizen.Survey.AddCommentActivity"
             android:label="@string/title_activity_add_comment"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>

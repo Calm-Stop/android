@@ -31,6 +31,7 @@ import com.policestrategies.calm_stop.officer.AccountActivity;
 import com.policestrategies.calm_stop.officer.HistoryActivity;
 import com.policestrategies.calm_stop.officer.RatingActivity;
 import com.policestrategies.calm_stop.officer.beacon_registration.BeaconRegistrationActivity;
+import com.policestrategies.calm_stop.officer.survey.SurveyActivity;
 
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
@@ -257,9 +258,14 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                                 break;
 
                             case R.id.action_history:
+                                intent = new Intent(getBaseContext(), SurveyActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                                /*
                                 intent = new Intent(getBaseContext(), HistoryActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(intent);
+                                */
                                 break;
 
                             case R.id.action_account:

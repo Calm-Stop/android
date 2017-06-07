@@ -12,6 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.policestrategies.calm_stop.chat.Message;
+import com.policestrategies.calm_stop.officer.survey.SurveyActivity;
 
 /**
  * Handles backend of traffic stop in {@link StopActivity}
@@ -90,6 +91,12 @@ class StopManager {
 
             }
         });
+    }
+
+    void loadSurvey(){
+        Intent i = new Intent(mActivityReference, SurveyActivity.class);
+        i.putExtra("driver_firebase_reference", mDatabaseReference.toString());
+        mActivityReference.startActivity(i);
     }
 
 } // end class StopManager
